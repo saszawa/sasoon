@@ -193,6 +193,37 @@ var STAGES = [
 	]
 ];
 
+//チュートリアル用のステージ配列
+var TUTOSTAGES = [
+	[
+		{ x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
+		{ x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
+		{ x:7 ,y:4 ,name: 'tutoGoal',color:'green'}
+	],
+	[
+		{ x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
+		{ x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
+		{ x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
+	],
+	[
+		{ x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
+		{ x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
+		{ x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
+	]
+];
+
+function browserLanguage() {
+  try {
+    return (navigator.browserLanguage || navigator.language || navigator.userLanguage).substr(0,2)
+  }
+  catch(e) {
+    return undefined;
+  }
+}
+
+var COUNTRYCODE = browserLanguage();
+
+
 // var userData = [
 // 	3,2,3,1,1,3,2,0,2,1,0,1,3
 // ];

@@ -128,7 +128,7 @@ window.onload = function () {
 		titleLabel.y = 150;
 		titleScene.addChild(titleLabel);
 
-		var gameStartLabel = new ExLabel('ゲーム開始',320,60);
+		var gameStartLabel = new ExLabel(LANGUAGE[COUNTRYCODE].gameStart,320,60);
 		gameStartLabel.setClassName('gameStart');
 		gameStartLabel.x = 160;
 		gameStartLabel.y = 360;
@@ -137,10 +137,13 @@ window.onload = function () {
 		});
 
 
-		var tutorialLabel  = new ExLabel('遊び方',320,60);
+		var tutorialLabel  = new ExLabel(LANGUAGE[COUNTRYCODE].howToPlay,320,60);
 		tutorialLabel.setClassName('tutorial');
 		tutorialLabel.x = 160;
 		tutorialLabel.y = 440;
+		tutorialLabel.on('touchend',function(){
+			GAME.replaceScene(tutorialScene);
+		});
 
 
 		// var deleteLabel = new ExLabel('セーブデータの削除',480,60);
@@ -283,32 +286,80 @@ window.onload = function () {
 			}
 		}
 
-		// ステージ構築の補助
-		function　StageBuilder(gimmick){
+		//とりあえずtutorialここに追加しちった
+		var tutorialScene = new Scene();
+		var pointerArrow1 = new Sprite();
+		pointerArrow1.x = 65;
+		pointerArrow1.y = 290;
+		pointerArrow1._element = document.createElement('div');
+		pointerArrow1._element.className  = 'pointerArrow';
+		pointerArrow1.width = 30;
+		pointerArrow1.rotate(300);
 
-			switch(gimmick.name){
-				case 'block':
-					return new Block(gimmick.color);
-				case 'start':
-					return new Start();
-				case 'goal' :
-					stageScene.goal = new Goal();
-					return stageScene.goal;
-				case 'star':
-					return new Star();
-				case 'count':
-					return new CountBlock(gimmick.color,gimmick.count);
-				case 'diffusioner':
-					return new Diffusioner();
-				case 'slanter':
-					return new Slanter();
-				case 'linker':
-					return new Linker(gimmick.color);
-			}
+		var sirotamaLabel = new ExLabel(LANGUAGE[COUNTRYCODE].sirotama);
+		sirotamaLabel.setClassName('tuto_siro_msg');
+		sirotamaLabel.x = 90;
+		sirotamaLabel.y = 170;
+		tutorialScene.addChild(sirotamaLabel);
 
-		};
+		//文言変えるようのフラグ郡(汚いやり方、本来は状態を持たせて上手い事やるべきかな)
+		tutorialScene.aotamaEndFlg = false;
+
+
+		//背景を黒にする
+		tutorialScene.backgroundColor = "#555555";
+
+		// /*=== ステージの読み込み ===*/
+		// var i = 0;
+		TUTOSTAGES[0].forEach(function(blockInfo){
+			var block = StageBuilder(blockInfo);
+			block.x = blockInfo.x*BOX_SIZE;
+			block.y = blockInfo.y*BOX_SIZE;
+			currentStage.push(block);
+			tutorialScene.addChild(block);
+		});
+		tutorialScene.addChild(pointerArrow1);
+
+		// とりあえず0番目を撃つ
+		pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT);
+		pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT);
+		pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT).then(function(){
+			currentStage[0].run(0);
+			currentStage.splice(0,1);
+			tutorialScene.removeChild(sirotamaLabel);
+			tutorialScene.removeChild(pointerArrow1);
+		});
 
 		GAME.pushScene(titleScene);
 	};
 	GAME.start();
+}
+
+
+// ステージ構築の補助
+function　StageBuilder(gimmick){
+
+	switch(gimmick.name){
+		case 'block':
+			return new Block(gimmick.color);
+		case 'start':
+			return new Start();
+		case 'goal' :
+			stageScene.goal = new Goal();
+			return stageScene.goal;
+		case 'star':
+			return new Star();
+		case 'count':
+			return new CountBlock(gimmick.color,gimmick.count);
+		case 'diffusioner':
+			return new Diffusioner();
+		case 'slanter':
+			return new Slanter();
+		case 'linker':
+			return new Linker(gimmick.color);
+		case 'tutoGoal':
+			return new TutoGoal();
+		case 'tutoBlock':
+			return new TutoBlock(gimmick.color);
+	}
 }
