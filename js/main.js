@@ -223,7 +223,7 @@ window.onload = function () {
 		//==========================================================
 		//	stage
 		//==========================================================
-		var stageScene = new Scene();
+		stageScene = new Scene();
 		stageScene.initStage = function(){
 			var that = this;
 			this.star = 0;
@@ -345,8 +345,7 @@ function　StageBuilder(gimmick){
 		case 'start':
 			return new Start();
 		case 'goal' :
-			stageScene.goal = new Goal();
-			return stageScene.goal;
+			return new Goal();
 		case 'star':
 			return new Star();
 		case 'count':
