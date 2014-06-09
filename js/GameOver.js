@@ -30,7 +30,6 @@ var GameOver = Class.create(Group,{
 				that.parentNode.removeChild(star);
 			});
 
-			that.parentNode.removeChild(that.parentNode.goal);
 			that.parentNode.initStage();
 			that.removeChild(that.gameOverLabel);
 			that.removeChild(that.again);
