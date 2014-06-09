@@ -155,6 +155,7 @@ window.onload = function () {
 		//==========================================================
 		// select
 		//==========================================================
+    //
 		var selectScene = new Scene();
 		var stageGroup;
 		var stageBoxes = [];
