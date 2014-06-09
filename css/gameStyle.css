@@ -61,7 +61,7 @@ div.stageSelectText {
   font-size: 80px;
   color: #555555 !important;
   text-shadow: -1px -1px 0px #ecf0f1, 1px -1px 0px #ecf0f1, 1px 1px 0px #ecf0f1, -1px 1px 0px #ecf0f1, 1px 2px 3px rgba(255, 255, 255, 0.5);
-  background: rgba(54, 215, 183, 0.5) !important;
+  background: rgba(255, 255, 255, 0.8) !important;
 }
 
 /* line 110, ../scss/gameStyle.scss */
@@ -80,8 +80,18 @@ div.stageBox.last {
   box-sizing: border-box;
 }
 
+/* line 123, ../scss/gameStyle.scss */
+div.backToTopText {
+  text-align: center;
+  font-size: 30px;
+  line-height: 50px;
+  background: rgba(236, 240, 241, 0.8);
+  border-radius: 5px;
+  border: solid 5px rgba(56, 181, 254, 0.5);
+}
+
 /*========  box  ========*/
-/* line 127, ../scss/gameStyle.scss */
+/* line 136, ../scss/gameStyle.scss */
 div.box {
   -webkit-transition: background 0.2s ease-out;
   -moz-transition: background 0.2s ease-out;
@@ -89,7 +99,7 @@ div.box {
   transition: background 0.2s ease-out;
   background: transparent;
 }
-/* line 130, ../scss/gameStyle.scss */
+/* line 139, ../scss/gameStyle.scss */
 div.box.touched {
   background: rgba(56, 181, 254, 0.5);
 }
@@ -101,11 +111,11 @@ div.black {
   border-radius: 50%;
 }
 
-/* line 137, ../scss/gameStyle.scss */
+/* line 146, ../scss/gameStyle.scss */
 div.black {
   text-align: center !important;
 }
-/* line 139, ../scss/gameStyle.scss */
+/* line 148, ../scss/gameStyle.scss */
 div.black i {
   color: white;
   width: 64px;
@@ -150,17 +160,17 @@ div.purple {
 }
 
 /*======== beam ========*/
-/* line 163, ../scss/gameStyle.scss */
+/* line 172, ../scss/gameStyle.scss */
 div.beam {
   border-radius: 50%;
 }
 
-/* line 166, ../scss/gameStyle.scss */
+/* line 175, ../scss/gameStyle.scss */
 div.start {
   border-radius: 50%;
 }
 
-/* line 170, ../scss/gameStyle.scss */
+/* line 179, ../scss/gameStyle.scss */
 div.goal {
   position: relative;
   width: 100%;
@@ -168,7 +178,7 @@ div.goal {
   border-radius: 50%;
 }
 
-/* line 177, ../scss/gameStyle.scss */
+/* line 186, ../scss/gameStyle.scss */
 div.count {
   font-size: 48px !important;
   text-align: center !important;
@@ -177,7 +187,7 @@ div.count {
   height: 64px !important;
 }
 
-/* line 184, ../scss/gameStyle.scss */
+/* line 193, ../scss/gameStyle.scss */
 div.clearText {
   text-align: center !important;
   font-family: Mplus;
@@ -187,16 +197,16 @@ div.clearText {
   text-shadow: -1px -1px 0px #ecf0f1, 1px -1px 0px #ecf0f1, 1px 1px 0px #ecf0f1, -1px 1px 0px #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.6);
 }
 
-/* line 197, ../scss/gameStyle.scss */
+/* line 206, ../scss/gameStyle.scss */
 div.forResultBlock {
   background: rgba(0, 0, 0, 0) !important;
 }
-/* line 199, ../scss/gameStyle.scss */
+/* line 208, ../scss/gameStyle.scss */
 div.forResultBlock i {
   color: rgba(0, 0, 0, 0) !important;
 }
 
-/* line 203, ../scss/gameStyle.scss */
+/* line 212, ../scss/gameStyle.scss */
 div.gameOverText {
   text-align: center !important;
   font-family: Mplus;
@@ -213,12 +223,12 @@ div.gameOverText {
 	@include transform(translateY(-50%));
 }
 */
-/* line 223, ../scss/gameStyle.scss */
+/* line 232, ../scss/gameStyle.scss */
 #load {
   opacity: 0;
 }
 
-/* line 228, ../scss/gameStyle.scss */
+/* line 237, ../scss/gameStyle.scss */
 div.pointerArrow {
   position: relative;
   width: 0;
@@ -227,7 +237,7 @@ div.pointerArrow {
   border-right-color: yellow;
 }
 
-/* line 236, ../scss/gameStyle.scss */
+/* line 245, ../scss/gameStyle.scss */
 div.pointerArrow:after {
   position: absolute;
   content: '';
@@ -238,24 +248,24 @@ div.pointerArrow:after {
   background: yellow;
 }
 
-/* line 246, ../scss/gameStyle.scss */
+/* line 255, ../scss/gameStyle.scss */
 .TutoMessaFirst {
   font-size: 30px;
 }
 
-/* line 250, ../scss/gameStyle.scss */
+/* line 259, ../scss/gameStyle.scss */
 .tuto_siro_msg {
   font-size: 20px;
   color: white;
 }
 
-/* line 255, ../scss/gameStyle.scss */
+/* line 264, ../scss/gameStyle.scss */
 .tuto_aotama_msg {
   font-size: 20px;
   color: black;
 }
 
-/* line 260, ../scss/gameStyle.scss */
+/* line 269, ../scss/gameStyle.scss */
 .msg {
   font-size: 20px;
 }

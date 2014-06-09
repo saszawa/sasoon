@@ -221,6 +221,11 @@ window.onload = function () {
 			stageScene.initStage();
 		}
 
+		// backbutton branch 追加分 (0609)
+		selectScene.backToTop = function(){
+			GAME.replaceScene(titleScene);
+		}
+
 		//==========================================================
 		//	stage
 		//==========================================================

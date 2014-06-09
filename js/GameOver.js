@@ -14,7 +14,7 @@ var GameOver = Class.create(Group,{
 		this.again = new Block('black');
 		this.again._element.className = 'black';
 		this.again._element.innerHTML = '<i class="icon-repeat">';
-		this.again.x = 4*64+32;
+		this.again.x = 5*64+32;
 		this.again.y = 480;
 
 		this.addChild(this.again);
@@ -33,7 +33,31 @@ var GameOver = Class.create(Group,{
 			that.parentNode.initStage();
 			that.removeChild(that.gameOverLabel);
 			that.removeChild(that.again);
+			that.removeChild(that.stageSelect);
 			that.parentNode.removeChild(that);
+		});
+
+		this.stageSelect = new Block('black');
+		this.stageSelect._element.className = 'black';
+		this.stageSelect._element.innerHTML = '<i class="icon-th">';
+		this.stageSelect.x = 3*64+32;
+		this.stageSelect.y = 480;
+
+		this.addChild(this.stageSelect);
+		this.stageSelect.addEventListener('touchend',function(){
+
+			that.parentNode.removeChild(BACKGROUND_ARC);
+			that.parentNode.stars.forEach(function(star){
+				star.run = function(){}
+				that.parentNode.removeChild(star);
+			});
+
+			that.removeChild(that.gameOverLabel);
+			that.removeChild(that.again);
+			that.removeChild(that.stageSelect);
+			that.parentNode.removeChild(that);
+
+			GAME.currentScene.stageSelect();
 		});
 	},
 	onaddedtoscene: function(){
