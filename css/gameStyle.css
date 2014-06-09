@@ -217,3 +217,45 @@ div.gameOverText {
 #load {
   opacity: 0;
 }
+
+/* line 228, ../scss/gameStyle.scss */
+div.pointerArrow {
+  position: relative;
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  border-right-color: yellow;
+}
+
+/* line 236, ../scss/gameStyle.scss */
+div.pointerArrow:after {
+  position: absolute;
+  content: '';
+  top: -14px;
+  left: 55px;
+  width: 50px;
+  height: 28px;
+  background: yellow;
+}
+
+/* line 246, ../scss/gameStyle.scss */
+.TutoMessaFirst {
+  font-size: 30px;
+}
+
+/* line 250, ../scss/gameStyle.scss */
+.tuto_siro_msg {
+  font-size: 20px;
+  color: white;
+}
+
+/* line 255, ../scss/gameStyle.scss */
+.tuto_aotama_msg {
+  font-size: 20px;
+  color: black;
+}
+
+/* line 260, ../scss/gameStyle.scss */
+.msg {
+  font-size: 20px;
+}
