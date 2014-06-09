@@ -1,0 +1,225 @@
+/*要素のスタイルをSCSSで*/
+@import "compass";
+
+@font-face {
+  font-family: Mplus;
+  src: url('../font/mplus-1c-regular.ttf');
+}
+
+$col-black:  #555555;
+$col-white:  #ecf0f1;
+$col-blue:   #38B5FE;
+$col-green:  #36D7B7;
+$col-red:    #ff6666;
+$col-purple: #BF77EC;
+$col-yellow: #f1c40f;
+*{
+	font-family: Mplus;
+}
+body{
+	background: $col-black;
+}
+
+//=======================//
+//         mixin         //
+//=======================//
+$prefixes: ("-webkit-", "-moz-","-ms-","-o-",null);
+@mixin keyframes($name){
+  @-webkit-keyframes $name {
+    @content;
+  }
+  @-moz-keyframes $name {
+    @content;
+  }
+  @keyframes $name {
+    @content;
+  }
+}
+@mixin animation($name, $duration, $timing, $delay, $count, $direction: null) {
+  @each $prefix in $prefixes {
+      #{$prefix}#{animation}: $name $duration $timing $delay $count $direction;
+  }
+}
+@mixin blockAndBeam($color,$hex){
+	div.#{$color}{
+		background: rgba($hex,1);
+		border-radius: 50%;
+	}
+}
+//=======================//
+//         style         //
+//=======================//
+
+
+//===========================================
+// TITLE SCENE
+//===========================================
+div.titleText{
+	text-align: center !important;
+	font-family: Mplus;
+	font-size: 100px !important;
+	color: $col-yellow !important;
+	text-shadow:
+	-1px -1px 0px $col-white,
+	1px -1px 0px $col-white,
+	1px 1px 0px $col-white,
+	-1px 1px 0px $col-white,
+	1px 2px 3px rgba(255, 255, 255, 0.6)
+}
+
+div.gameStart{
+    font-size: 40px;
+    line-height: 60px;
+    text-align: center;
+    border-radius: 10px;
+    color: $col-green;
+    background: $col-white;
+}
+div.tutorial{
+    font-size: 40px;
+    line-height: 60px;
+    text-align: center;
+    border-radius: 10px;
+    color: $col-green;
+    background: $col-white;
+}
+div.delete{
+    font-size: 40px;
+    line-height: 60px;
+    text-align: center;
+    border-radius: 10px;
+    color: $col-green;
+    background: $col-white;
+}
+//===========================================
+// SELECT SCENE
+//===========================================
+div.stageSelectText{
+	text-align: center !important;
+	font-family: Mplus;
+	font-size: 80px;
+	color: $col-black !important;
+	text-shadow:
+	-1px -1px 0px $col-white,
+	1px -1px 0px $col-white,
+	1px 1px 0px $col-white,
+	-1px 1px 0px $col-white,
+	1px 2px 3px rgba(255, 255, 255, 0.5);
+	background: rgba($col-green,0.5) !important;
+}
+div.stageBox{
+	text-align: center !important;
+	font-family: Mplus;
+	font-size: 64px;
+	line-height: 64px ;
+	color: $col-yellow !important;
+	border-radius: 10px;
+}
+div.stageBox.last{
+    border:solid 5px $col-green;
+    box-sizing: border-box;
+}
+
+//===========================================
+// STAGE SCENE
+//===========================================
+/*========  box  ========*/
+div.box{
+	@include transition(background 0.2s ease-out);
+	background: transparent;
+	&.touched{
+		background: rgba($col-blue,0.5);
+	}
+}
+
+/*======== black ========*/
+@include blockAndBeam(black,$col-black);
+div.black{
+	text-align: center !important;
+	i{
+		color: white;
+		width: 64px;
+		height: 64px;
+		font-size: 32px;
+		line-height: 64px;
+	}
+}
+/*======== white ========*/
+@include blockAndBeam(white,$col-white);
+
+/*======== red ========*/
+@include blockAndBeam(red,$col-red);
+
+/*======== blue-effect ========*/
+@include blockAndBeam(blue,$col-blue);
+
+/*======== lime-effect ========*/
+@include blockAndBeam(green,$col-green);
+
+/*======== purple-effect ========*/
+@include blockAndBeam(purple,$col-purple);
+
+/*======== beam ========*/
+div.beam{
+	border-radius: 50%;
+}
+div.start{
+	border-radius: 50%;
+}
+
+div.goal{
+	position: relative;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+}
+
+div.count{
+	font-size: 48px !important;
+	text-align: center !important;
+	line-height: 64px !important;
+	width: 64px !important;
+	height: 64px !important;
+}
+div.clearText{
+	text-align: center !important;
+	font-family: Mplus;
+	font-size: 60px !important;
+	font-weight: bold;
+	color: $col-black !important;
+	text-shadow:
+	-1px -1px 0px $col-white,
+	1px -1px 0px $col-white,
+	1px 1px 0px $col-white,
+	-1px 1px 0px $col-white,
+	1px 2px 3px rgba(0, 0, 0, 0.6);
+}
+div.forResultBlock{
+	background: rgba(0,0,0,0) !important;
+	i{
+		color: rgba(0,0,0,0) !important;
+	}
+}
+div.gameOverText{
+	text-align: center !important;
+	font-family: Mplus;
+	font-size: 100px !important;
+	font-weight: bold;
+	color: $col-black !important;
+	text-shadow:
+	-1px -1px 0px $col-white,
+	1px -1px 0px $col-white,
+	1px 1px 0px $col-white,
+	-1px 1px 0px $col-white,
+	1px 2px 3px rgba(0, 0, 0, 0.6)
+}
+/*
+#enchant-stage{
+	position: relative;
+	top: 50%;
+	@include transform(translateY(-50%));
+}
+*/
+#load{
+	opacity: 0;
+}
