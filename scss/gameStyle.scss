@@ -223,3 +223,40 @@ div.gameOverText{
 #load{
 	opacity: 0;
 }
+
+
+div.pointerArrow{
+  position: relative;
+  width: 0;
+  height: 0;
+  border: 30px solid transparent;
+  border-right-color: yellow;
+}
+
+div.pointerArrow:after{
+  position: absolute;
+  content: '';
+  top: -14px;
+  left: 55px;
+  width: 50px;
+  height: 28px;
+  background: yellow;
+}
+
+.TutoMessaFirst{
+  font-size: 30px;
+}
+
+.tuto_siro_msg{
+	font-size:  20px;
+	color: white;
+}
+
+.tuto_aotama_msg{
+	font-size:  20px;
+	color: black;	
+}
+.msg
+{
+	font-size: 20px;
+}
