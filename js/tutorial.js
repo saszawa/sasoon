@@ -2,6 +2,17 @@ var TUTORIALBEAM = [];
 //矢印管理用配列
 var ARROWARRAY = [];
 
+var gameOverLabel = new ExLabel(LANGUAGE[COUNTRYCODE].gameOver,640,100);
+gameOverLabel.setClassName('gameOverText');
+gameOverLabel.x = 0;
+gameOverLabel.y = -80;
+gameOverLabel.tl.moveTo(0,230,30,BOUNCE_EASEOUT);
+
+var thirdStartMsg = new ExLabel(LANGUAGE[COUNTRYCODE].tutoThirdStartMsg);
+thirdStartMsg.x = 100;
+thirdStartMsg.y = 160;
+thirdStartMsg.setClassName('tuto_black_msg');
+
 //チュートリアル用のBlockクラス
 var TutoBlock = Class.create(Sprite,{
 	initialize: function(color){
@@ -17,6 +28,7 @@ var TutoBlock = Class.create(Sprite,{
 
 		var specFix = (BEAM_SIZE - HIGH_SPECTRUM)/2;
 		this.lastFlg = false;
+    this.thirdLastFlg = false;
 
 		// Beam用ステータス
 		this.beamStatus = {
@@ -38,8 +50,8 @@ var TutoBlock = Class.create(Sprite,{
 			}
 		};
 	},
+
 	/**
-	* Block.run()
 	* 	4方向にBeamを出します
 	*/
 	run: function(){
@@ -50,6 +62,9 @@ var TutoBlock = Class.create(Sprite,{
 		this.parentNode.addChild(arc);
 		var that = this;
 		var i = 0;
+
+    this.parentNode.removeChild(thirdStartMsg);
+
 		for(var beam in this.beamStatus){
 			if(DIRECTIONS[this.color][i]){
 				// 初期設定的な
@@ -67,36 +82,45 @@ var TutoBlock = Class.create(Sprite,{
 		}
 		//最後の場合
 		if(this.lastFlg){
+      var thatNode = this.parentNode;
+      this.parentNode.tl.delay(70).then(function(){
+        thatNode.addChild(gameOverLabel);
+      });
+
 			//メッセージラベル作成
-			var loseMsg = new Label();
-			loseMsg.text = LANGUAGE[COUNTRYCODE].loseMsg;
-			loseMsg.x = 200;		
+			var loseMsg = new ExLabel(LANGUAGE[COUNTRYCODE].loseMsg);
+			loseMsg.x = 200;
 			loseMsg.y = 200;
-			loseMsg.tl.delay(100).then(function(){
+      loseMsg.setClassName('tuto_black_msg');
+
+      //ゲームオーバの文字の後にメッセージ
+			gameOverLabel.tl.delay(100).then(function(){
 				//おくらせたい
-				that.parentNode.addChild(loseMsg);
+        thatNode.removeChild(gameOverLabel);
+				thatNode.addChild(loseMsg);
 			});
 			loseMsg.tl.delay(40).then(function(){
-				loseMsg.text =  LANGUAGE[COUNTRYCODE].yourMission;
+        loseMsg.x = 160;
+				loseMsg._element.innerHTML = LANGUAGE[COUNTRYCODE].yourMission;
 			});
-			loseMsg.tl.delay(60).then(function(){
-				loseMsg.text = LANGUAGE[COUNTRYCODE].letsWin;
+			loseMsg.tl.delay(100).then(function(){
+				loseMsg._element.innerHTML = LANGUAGE[COUNTRYCODE].letsWin;
 			});
 			tutoThirdScene = new Scene();
 			//次のシーン作成
 			// ============= BOX構築 =============== //
-			for(var x = 0; x < 10; x++){
-				for(var y = 0; y < 10; y++){
-					var box = new TutoBox(tutoThirdScene);
-					box.x = x*BOX_SIZE;
-					box.y = y*BOX_SIZE;
-					tutoThirdScene.addChild(box); 
-				}
-			}
+			//for(var x = 0; x < 10; x++){
+			//	for(var y = 0; y < 10; y++){
+			//		var box = new TutoBox(tutoThirdScene);
+			//		box.x = x*BOX_SIZE;
+			//		box.y = y*BOX_SIZE;
+			//		tutoThirdScene.addChild(box); 
+			//	}
+			//}
 
 			//一回空に
 			currentStage = [];
-			loseMsg.tl.delay(80).then(function(){
+			loseMsg.tl.delay(120).then(function(){
 				var j = 0;
 				TUTOSTAGES[1].forEach(function(blockInfo){
 					var block = StageBuilder(blockInfo);
@@ -113,10 +137,6 @@ var TutoBlock = Class.create(Sprite,{
 					tutoThirdScene.addChild(block);
 					j++;
 				});
-				var thirdStartMsg = new Label();
-				thirdStartMsg.text = LANGUAGE[COUNTRYCODE].tutoThirdStartMsg;
-				thirdStartMsg.x = 180;
-				thirdStartMsg.y = 200;
 
 				var pointerArrow = new PointerArrow();
 				pointerArrow.x = 428;
@@ -130,6 +150,8 @@ var TutoBlock = Class.create(Sprite,{
 
 				tutoThirdScene.addChild(pointerArrow);
 				tutoThirdScene.addChild(thirdStartMsg);
+
+        this.parentNode.removeChild(this);
 				GAME.replaceScene(tutoThirdScene);
 			});
 		}
@@ -174,12 +196,6 @@ var TutoGoal = Class.create(Sprite,{
 			stageScene.canTap = true;
 			stageScene.endTimer = null;
 
-			// // ステージの初期化
-			// currentStage.forEach(function(gimmick){
-			// 	that.removeChild(gimmick);
-			// });
-			// currentStage = [];
-
 
 			// タイマーのセット
 			var timer = new Timer();
@@ -194,12 +210,82 @@ var TutoGoal = Class.create(Sprite,{
 				stageScene.addChild(block);
 			});
 
-			var endLabel = new ExLabel(LANGUAGE[COUNTRYCODE].title);
-			endLabel.y = 150;
+			var endLabel = new ExLabel(LANGUAGE[COUNTRYCODE].tutoClearMsg);
+			endLabel.x = 100;
+      endLabel.y = 150;
+      endLabel.setClassName('tuto_clear_msg');
+      
 			
 			GAME.currentScene.addChild(endLabel);
-			this.tl.delay(10).then(function(){
-				GAME.replaceScene(stageScene);
+
+      //文字表示
+      this.tl.delay(60).then(function(){
+        endLabel.setClassName('tuto_black_msg');
+        endLabel._element.innerHTML = LANGUAGE[COUNTRYCODE].tutoClearMsg2;
+      });
+      
+      this.tl.delay(100).then(function(){
+        endLabel._element.innerHTML = LANGUAGE[COUNTRYCODE].tutoClearMsg3;
+      });
+
+
+			this.tl.delay(100).then(function(){
+
+        var pointerArrow1 = new Sprite();
+        pointerArrow1.x = 65;
+        pointerArrow1.y = 290;
+        pointerArrow1._element = document.createElement('div');
+        pointerArrow1._element.className  = 'pointerArrow';
+        pointerArrow1.width = 30;
+        pointerArrow1.rotate(300);
+
+        //最初の文
+        var startTutorialLabel = new ExLabel(LANGUAGE[COUNTRYCODE].startTutorial);
+        startTutorialLabel.setClassName('tuto_white_msg');
+        startTutorialLabel.x = 90;
+        startTutorialLabel.y = 170;
+        tutorialScene.addChild(startTutorialLabel);
+
+        var sirotamaLabel = new ExLabel(LANGUAGE[COUNTRYCODE].sirotama);
+        sirotamaLabel.setClassName('tuto_white_msg');
+        sirotamaLabel.x = 90;
+        sirotamaLabel.y = 170;
+        startTutorialLabel.tl.delay(80).then(function(){
+          tutorialScene.removeChild(startTutorialLabel);
+          tutorialScene.addChild(sirotamaLabel);
+          tutorialScene.addChild(pointerArrow1);
+        });
+
+        //文言変えるようのフラグ郡(汚いやり方、本来は状態を持たせて上手い事やるべきかな)
+        tutorialScene.aotamaEndFlg = false;
+
+        //背景を黒にする
+        tutorialScene.backgroundColor = "#555555";
+
+        // /*=== ステージの読み込み ===*/
+        // var i = 0;
+        //カスを消す
+        currentStage = [];
+        TUTOSTAGES[0].forEach(function(blockInfo){
+          var block = StageBuilder(blockInfo);
+          block.x = blockInfo.x*BOX_SIZE;
+          block.y = blockInfo.y*BOX_SIZE;
+          currentStage.push(block);
+          tutorialScene.addChild(block);
+        });
+
+        // とりあえず0番目を撃つ
+        pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT);
+        pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT);
+        pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT).then(function(){
+          currentStage[0].run(0);
+          currentStage.splice(0,1);
+          tutorialScene.removeChild(sirotamaLabel);
+          tutorialScene.removeChild(pointerArrow1);
+        });
+
+
+        GAME.replaceScene(tmpTitleScene);
 			})
 
 		}else{
@@ -240,13 +326,20 @@ var TutoGoal = Class.create(Sprite,{
 				tutoSecondScene.addChild(losePatternText);
 				tutoSecondScene.loseAotamaFlg = true;
 
+        
+
 				that.tl.delay(100).then(function(){
-					GAME.replaceScene(tutoSecondScene);
+				
+          tutorialScene.removeChild(that);
+          GAME.replaceScene(tutoSecondScene);
 					losePatternText.tl.delay(100).then(function(){
+
 						currentStage[0].run()
 						currentStage.splice(0,1);
+
 						tutoSecondScene.removeChild(losePatternText);
-					});
+				
+          });
 				});
 			});
 		}
@@ -311,13 +404,13 @@ var TutoBeam = Class.create(Sprite,{
 
 						if(this.parentNode.aotamaEndFlg){
 							var prevGoalLabel = new ExLabel(LANGUAGE[COUNTRYCODE].prevGoal);
-							prevGoalLabel.setClassName('tuto_siro_msg');
+							prevGoalLabel.setClassName('tuto_white_msg');
 							prevGoalLabel.x = 120;
 							prevGoalLabel.y = 170;
 							this.parentNode.addChild(prevGoalLabel);
 						}else if(this.parentNode.loseAotamaFlg){
 							var endChainLabel = new ExLabel(LANGUAGE[COUNTRYCODE].endChain);
-							endChainLabel.setClassName('tuto_aotama_msg');
+							endChainLabel.setClassName('tuto_black_msg');
 							endChainLabel.x = 110;
 							endChainLabel.y = 170;
 							this.parentNode.addChild(endChainLabel);
@@ -325,7 +418,7 @@ var TutoBeam = Class.create(Sprite,{
 						}
 						else{
 							var aotamaLabel = new ExLabel(LANGUAGE[COUNTRYCODE].aotama);
-							aotamaLabel.setClassName('tuto_aotama_msg');
+							aotamaLabel.setClassName('tuto_black_msg');
 							aotamaLabel.x = 110;
 							aotamaLabel.y = 170;
 							this.parentNode.addChild(aotamaLabel);
@@ -387,12 +480,6 @@ var TutoBox = Class.create(Sprite,{
 		block.y = this.y;
 		currentStage.push(block);
 		this.scene.addChild(block);
-		if(this.x == 448 && this.y == 256 ){
-			currentStage[0].run();
-			currentStage.splice(0,1);
-			ARROWARRAY[0].erase();
-			ARROWARRAY.splice(0,1);
-		}
 	}
 });
 
@@ -404,11 +491,16 @@ var PointerArrow = Class.create(Sprite,{
 		this.parentNode.removeChild(this);
 	},
 	ontouchend: function(){
-		var block = new Block('white');
+		var block = new TutoBlock('white');
 		block.x = 448;
 		block.y = 256;
 		currentStage.push(block);
 		this.scene.addChild(block);
+
+    //ゴール時に説明文でないように
+    currentStage[2].arrowFlg = false;
+    //しろたまに当たって説明文でないように
+    currentStage[3].arrowFlg = false;
 		currentStage[0].run();
 		currentStage.splice(0,1);
 		ARROWARRAY[0].erase();
