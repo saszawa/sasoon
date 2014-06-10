@@ -244,18 +244,24 @@ div.pointerArrow:after {
 }
 
 /* line 250, ../scss/gameStyle.scss */
-.tuto_siro_msg {
+.tuto_white_msg {
   font-size: 20px;
   color: white;
 }
 
 /* line 255, ../scss/gameStyle.scss */
-.tuto_aotama_msg {
+.tuto_black_msg {
   font-size: 20px;
   color: black;
 }
 
 /* line 260, ../scss/gameStyle.scss */
+.tuto_clear_msg {
+  font-size: 40px;
+  color: black;
+}
+
+/* line 266, ../scss/gameStyle.scss */
 .msg {
   font-size: 20px;
 }

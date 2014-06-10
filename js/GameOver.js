@@ -5,7 +5,7 @@ var GameOver = Class.create(Group,{
 
 		this._element = document.createElement('div');
 
-		this.gameOverLabel = new ExLabel('Game Over',640,100);
+		this.gameOverLabel = new ExLabel(LANGUAGE[COUNTRYCODE].gameOver,640,100);
 		this.gameOverLabel.setClassName('gameOverText');
 		this.gameOverLabel.x = 0;
 		this.gameOverLabel.y = -80;
