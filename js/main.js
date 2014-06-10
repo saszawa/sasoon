@@ -1,3 +1,8 @@
+//チュートリアルからタイトルに戻るときに使う
+var tmpTitleScene = null;
+//チュートリアルを連続でyareruyouni
+var tutorialScene = null;
+
 enchant();
 window.onload = function () {
 	GAME = new Game(640, 640);
@@ -123,7 +128,7 @@ window.onload = function () {
 			titleScene.addChild(gameStartLabel);
 			titleScene.addChild(tutorialLabel);
 		});
-		var titleLabel = new ExLabel('たいとる');
+		var titleLabel = new ExLabel(LANGUAGE[COUNTRYCODE].title);
 		titleLabel.setClassName('titleText');
 		titleLabel.y = 150;
 		titleScene.addChild(titleLabel);
@@ -135,7 +140,6 @@ window.onload = function () {
 		gameStartLabel.on('touchend',function(){
 			GAME.replaceScene(selectScene);
 		});
-
 
 		var tutorialLabel  = new ExLabel(LANGUAGE[COUNTRYCODE].howToPlay,320,60);
 		tutorialLabel.setClassName('tutorial');
@@ -293,7 +297,7 @@ window.onload = function () {
 		}
 
 		//とりあえずtutorialここに追加しちった
-		var tutorialScene = new Scene();
+	  tutorialScene = new Scene();
 		var pointerArrow1 = new Sprite();
 		pointerArrow1.x = 65;
 		pointerArrow1.y = 290;
@@ -302,15 +306,25 @@ window.onload = function () {
 		pointerArrow1.width = 30;
 		pointerArrow1.rotate(300);
 
+    //最初の文
+    var startTutorialLabel = new ExLabel(LANGUAGE[COUNTRYCODE].startTutorial);
+    startTutorialLabel.setClassName('tuto_white_msg');
+    startTutorialLabel.x = 90;
+    startTutorialLabel.y = 170;
+    tutorialScene.addChild(startTutorialLabel);
+
 		var sirotamaLabel = new ExLabel(LANGUAGE[COUNTRYCODE].sirotama);
-		sirotamaLabel.setClassName('tuto_siro_msg');
+		sirotamaLabel.setClassName('tuto_white_msg');
 		sirotamaLabel.x = 90;
 		sirotamaLabel.y = 170;
-		tutorialScene.addChild(sirotamaLabel);
+    startTutorialLabel.tl.delay(80).then(function(){
+      tutorialScene.removeChild(startTutorialLabel);
+      tutorialScene.addChild(sirotamaLabel);
+      tutorialScene.addChild(pointerArrow1);
+    });
 
 		//文言変えるようのフラグ郡(汚いやり方、本来は状態を持たせて上手い事やるべきかな)
 		tutorialScene.aotamaEndFlg = false;
-
 
 		//背景を黒にする
 		tutorialScene.backgroundColor = "#555555";
@@ -324,7 +338,6 @@ window.onload = function () {
 			currentStage.push(block);
 			tutorialScene.addChild(block);
 		});
-		tutorialScene.addChild(pointerArrow1);
 
 		// とりあえず0番目を撃つ
 		pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT);
@@ -335,6 +348,9 @@ window.onload = function () {
 			tutorialScene.removeChild(sirotamaLabel);
 			tutorialScene.removeChild(pointerArrow1);
 		});
+
+    //チュートリアル用にとっておく
+    tmpTitleScene = titleScene;
 
 		GAME.pushScene(titleScene);
 	};
