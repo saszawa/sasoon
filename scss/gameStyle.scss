@@ -105,7 +105,7 @@ div.stageSelectText{
 	1px 1px 0px $col-white,
 	-1px 1px 0px $col-white,
 	1px 2px 3px rgba(255, 255, 255, 0.5);
-	background: rgba($col-green,0.5) !important;
+	background: rgba(white,0.8) !important; // backbutton branch 変更分 (0609)
 }
 div.stageBox{
 	text-align: center !important;
@@ -118,6 +118,15 @@ div.stageBox{
 div.stageBox.last{
     border:solid 5px $col-green;
     box-sizing: border-box;
+}
+// backbutton branch 追加分 (0609)
+div.backToTopText{
+    text-align: center;
+    font-size: 30px;
+    line-height: 50px;
+    background: rgba($col-white,0.8);
+    border-radius: 5px;
+    border: solid 5px rgba($col-blue,0.5);
 }
 
 //===========================================
@@ -254,7 +263,7 @@ div.pointerArrow:after{
 
 .tuto_black_msg{
 	font-size:  20px;
-	color: black;	
+	color: black;
 }
 
 .tuto_clear_msg{
