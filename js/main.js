@@ -335,7 +335,7 @@ window.onload = function () {
 			var block = StageBuilder(blockInfo);
 			block.x = blockInfo.x*BOX_SIZE;
 			block.y = blockInfo.y*BOX_SIZE;
-			currentStage.push(block);
+			tutoCurrentStage.push(block);
 			tutorialScene.addChild(block);
 		});
 
@@ -343,8 +343,8 @@ window.onload = function () {
 		pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT);
 		pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT);
 		pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT).then(function(){
-			currentStage[0].run(0);
-			currentStage.splice(0,1);
+			tutoCurrentStage[0].run(0);
+			tutoCurrentStage.splice(0,1);
 			tutorialScene.removeChild(sirotamaLabel);
 			tutorialScene.removeChild(pointerArrow1);
 		});
