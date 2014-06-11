@@ -119,7 +119,7 @@ var TutoBlock = Class.create(Sprite,{
 			//}
 
 			//一回空に
-			currentStage = [];
+			tutoCurrentStage = [];
 			loseMsg.tl.delay(120).then(function(){
 				var j = 0;
 				TUTOSTAGES[1].forEach(function(blockInfo){
@@ -133,7 +133,7 @@ var TutoBlock = Class.create(Sprite,{
 					if(blockInfo.name == "tutoGoal"){
 						block.nextEndFlg = true;
 					}
-					currentStage.push(block);
+					tutoCurrentStage.push(block);
 					tutoThirdScene.addChild(block);
 					j++;
 				});
@@ -182,7 +182,7 @@ var TutoGoal = Class.create(Sprite,{
 		arc.x = this.x-128;
 		arc.y = this.y-128;
 		this.parentNode.addChild(arc);
-		if(currentStage.length > 1){
+		if(tutoCurrentStage.length > 1){
 			return;
 		}
 
@@ -206,7 +206,7 @@ var TutoGoal = Class.create(Sprite,{
 				var block = StageBuilder(blockInfo);
 				block.x = blockInfo.x*BOX_SIZE;
 				block.y = blockInfo.y*BOX_SIZE;
-				currentStage.push(block);
+				tutoCurrentStage.push(block);
 				stageScene.addChild(block);
 			});
 
@@ -219,7 +219,7 @@ var TutoGoal = Class.create(Sprite,{
 			GAME.currentScene.addChild(endLabel);
 
       //文字表示
-      this.tl.delay(60).then(function(){
+      this.tl.delay(40).then(function(){
         endLabel.setClassName('tuto_black_msg');
         endLabel._element.innerHTML = LANGUAGE[COUNTRYCODE].tutoClearMsg2;
       });
@@ -265,12 +265,12 @@ var TutoGoal = Class.create(Sprite,{
         // /*=== ステージの読み込み ===*/
         // var i = 0;
         //カスを消す
-        currentStage = [];
+        tutoCurrentStage = [];
         TUTOSTAGES[0].forEach(function(blockInfo){
           var block = StageBuilder(blockInfo);
           block.x = blockInfo.x*BOX_SIZE;
           block.y = blockInfo.y*BOX_SIZE;
-          currentStage.push(block);
+          tutoCurrentStage.push(block);
           tutorialScene.addChild(block);
         });
 
@@ -278,8 +278,8 @@ var TutoGoal = Class.create(Sprite,{
         pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT);
         pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT);
         pointerArrow1.tl.scaleTo(0.9,0.9,20,CUBIC_EASEIN).scaleTo(1.0,1.0,10,CUBIC_EASEOUT).then(function(){
-          currentStage[0].run(0);
-          currentStage.splice(0,1);
+          tutoCurrentStage[0].run(0);
+          tutoCurrentStage.splice(0,1);
           tutorialScene.removeChild(sirotamaLabel);
           tutorialScene.removeChild(pointerArrow1);
         });
@@ -301,7 +301,7 @@ var TutoGoal = Class.create(Sprite,{
 			var tutoSecondScene = null;
 			this.tl.delay(100).then(function(){
 				that._element.innerHTML = LANGUAGE[COUNTRYCODE].nextLosePattern;
-				currentStage.splice(0,1);
+				tutoCurrentStage.splice(0,1);
 				tutoSecondScene = new Scene();
 				// /*=== ステージの読み込み ===*/
 				//終わりフラグ用の変数
@@ -313,7 +313,7 @@ var TutoGoal = Class.create(Sprite,{
 					if(i == TUTOSTAGES[1].length - 2){
 						block.lastFlg = true;
 					}
-					currentStage.push(block);
+					tutoCurrentStage.push(block);
 
 					tutoSecondScene.addChild(block);
 					i++;
@@ -334,8 +334,8 @@ var TutoGoal = Class.create(Sprite,{
           GAME.replaceScene(tutoSecondScene);
 					losePatternText.tl.delay(100).then(function(){
 
-						currentStage[0].run()
-						currentStage.splice(0,1);
+						tutoCurrentStage[0].run()
+						tutoCurrentStage.splice(0,1);
 
 						tutoSecondScene.removeChild(losePatternText);
 				
@@ -369,7 +369,7 @@ var TutoBeam = Class.create(Sprite,{
 		this.makeArrowFlg = false;
 		this.aotamaFlg = true;
 
-		this.currentStage = currentStage;
+		this.tutoCurrentStage = tutoCurrentStage;
 		this.parentBlock = init.parentBlock;
 
 		this.beamLength = BEAM_LENGTH*BOX_SIZE; //- (BOX_SIZE-BEAM_SIZE)/2;
@@ -380,12 +380,12 @@ var TutoBeam = Class.create(Sprite,{
 	onenterframe: function(){
 		// 衝突検知
 		// やっぱこうなるの・・・
-		var gimmicks = this.currentStage.length;
-		thatCurrentStage = this.currentStage;
+		var gimmicks = this.tutoCurrentStage.length;
+		thatCurrentStage = this.tutoCurrentStage;
 		for(var i = 0; i < thatCurrentStage.length; i++){
 				
-			if ( (this.within(this.currentStage[i], this.currentStage[i].width - 13)) && (this.currentStage[i] !== this.parentBlock) ){
-				var thatBlock = this.currentStage[i];
+			if ( (this.within(this.tutoCurrentStage[i], this.tutoCurrentStage[i].width - 13)) && (this.tutoCurrentStage[i] !== this.parentBlock) ){
+				var thatBlock = this.tutoCurrentStage[i];
 				var thatI = i;
 
 				if(!this.makeArrowFlg ){
@@ -437,13 +437,13 @@ var TutoBeam = Class.create(Sprite,{
 							that.parentNode.removeChild(that);
 							thatBlock.run();
 							this.moveFlg = true;
-							that.currentStage.splice(thatI ,1);
+							that.tutoCurrentStage.splice(thatI ,1);
 						});
 						this.makeArrowFlg = true;
 					}else{
 						this.parentNode.removeChild(that);
 						thatBlock.run();
-						this.currentStage.splice(i ,1);
+						this.tutoCurrentStage.splice(i ,1);
 					}
 				}
 			}
@@ -478,7 +478,7 @@ var TutoBox = Class.create(Sprite,{
 		var block = new Block('white');
 		block.x = this.x;
 		block.y = this.y;
-		currentStage.push(block);
+		tutoCurrentStage.push(block);
 		this.scene.addChild(block);
 	}
 });
@@ -494,15 +494,15 @@ var PointerArrow = Class.create(Sprite,{
 		var block = new TutoBlock('white');
 		block.x = 448;
 		block.y = 256;
-		currentStage.push(block);
+		tutoCurrentStage.push(block);
 		this.scene.addChild(block);
 
     //ゴール時に説明文でないように
-    currentStage[2].arrowFlg = false;
+    tutoCurrentStage[2].arrowFlg = false;
     //しろたまに当たって説明文でないように
-    currentStage[3].arrowFlg = false;
-		currentStage[0].run();
-		currentStage.splice(0,1);
+    tutoCurrentStage[3].arrowFlg = false;
+		tutoCurrentStage[0].run();
+		tutoCurrentStage.splice(0,1);
 		ARROWARRAY[0].erase();
 		ARROWARRAY.splice(0,1);
 	}
