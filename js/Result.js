@@ -116,15 +116,19 @@ var Result = Class.create(Group,{
 				});
 		}
 		this.tl.delay(95).then(function(){
-			that.parentNode.addChild(that.prevStage);
-			that.prevStage.tl.scaleTo(0,0,0).then(function(){
-				that.prevStage._element.className = 'black';
-			}).scaleTo(1,1,15,BOUNCE_EASEOUT);
+			if(LEVEL){
+				that.parentNode.addChild(that.prevStage);
+				that.prevStage.tl.scaleTo(0,0,0).then(function(){
+					that.prevStage._element.className = 'black';
+				}).scaleTo(1,1,15,BOUNCE_EASEOUT);
+			}
 
-			that.parentNode.addChild(that.nextStage);
-			that.nextStage.tl.scaleTo(0,0,0).then(function(){
-				that.nextStage._element.className = 'black';
-			}).scaleTo(1,1,15,BOUNCE_EASEOUT);
+			if(LEVEL !== STAGES.length - 1){
+				that.parentNode.addChild(that.nextStage);
+				that.nextStage.tl.scaleTo(0,0,0).then(function(){
+					that.nextStage._element.className = 'black';
+				}).scaleTo(1,1,15,BOUNCE_EASEOUT);
+			}
 
 			that.parentNode.addChild(that.stageSelect);
 			that.stageSelect.tl.scaleTo(0,0,0).then(function(){

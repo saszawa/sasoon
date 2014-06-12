@@ -1,13 +1,13 @@
 var StageBox = Class.create(Sprite,{
-	initialize: function(level,star){
+	initialize: function(level,star,isLock){
 		Sprite.call(this,BOX_SIZE*2,BOX_SIZE*2);
 		this._element = document.createElement('div');
-		this._element.className = 'stageBox';
 		this._element.innerHTML = level+1;
 		this.backgroundColor = COLORS.white;
 		this.image = SCORE_STARS[star];
 		this.level = level;
 		this.moved = false;
+		this.isLock = isLock;
 	},
 	ontouchstart: function(e){
 		this.startEvent = e;
@@ -19,7 +19,7 @@ var StageBox = Class.create(Sprite,{
 		}
 	},
 	ontouchend: function(e){
-		if(this.moved){
+		if(this.moved || this.isLock){
 			return;
 		}
 		GAME.currentScene.selectedStage(this.level);

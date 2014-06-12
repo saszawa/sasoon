@@ -10,7 +10,7 @@ var TitleBackAnim = Class.create(Group,{
 
         this.blocks = [new Block('red') ,new Block('blue') ,new Block('green')];
 
-        this.positions = [{x:3,y:3},{x:6,y:3},{x:6,y:6},{x:3,y:6}];
+        this.positions = [{x:2,y:2},{x:7,y:2},{x:7,y:7},{x:2,y:7}];
 
     },
     onaddedtoscene: function(){
@@ -64,6 +64,6 @@ var TitleBackAnim = Class.create(Group,{
         var that = this;
         this.parentNode.loopTimer = setInterval(function(){
             that.blocks[that.next].run();
-        },1500);
+        },2000);
     }
 });

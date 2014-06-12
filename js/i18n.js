@@ -1,6 +1,6 @@
 var LANGUAGE = {
 	ja:{
-		title:"Touch<br />Bloomy",
+		title:"Touch<br /><span>Bloomy</span>",
 		gameStart:"ゲーム開始",
     gameOver:"Game Over",
 		howToPlay:"遊び方",
@@ -21,7 +21,7 @@ var LANGUAGE = {
     tutoClearMsg3:"それでは、ゲームをお楽しみ下さい"
 	},
 	en:{
-		title:"Touch<br />Bloomy",
+		title:"Touch<br /><span>Bloomy</span>",
 		gameStart:"Start Game",
     gameOver:"Game Over",
 		howToPlay:"How to play",

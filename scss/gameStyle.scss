@@ -14,6 +14,7 @@ $col-green:  #36D7B7;
 $col-red:    #ff6666;
 $col-purple: #BF77EC;
 $col-yellow: #f1c40f;
+$col-pink: #FFCCFF;
 *{
 	font-family: Mplus;
 }
@@ -59,13 +60,24 @@ div.titleText{
 	text-align: center !important;
 	font-family: 'Bitter', serif;
 	font-size: 100px !important;
-	color: $col-black !important;
+    line-height: 100px;
+	color: $col-blue !important;
 	text-shadow:
-	-1px -1px 1px $col-white,
-	1px -1px 1px $col-white,
-	1px 1px 1px $col-white,
-	-1px 1px 1px $col-white,
-	1px 2px 3px rgba(0, 0, 0, 0.6)
+	-1px -1px 0 $col-white,
+	1px -1px 0 $col-white,
+	1px 1px 0 $col-white,
+	-1px 1px 0 $col-white,
+    -2px -2px 0 $col-white,
+    2px -2px 0 $col-white,
+    2px 2px 0 $col-white,
+    -2px 2px 0 $col-white,
+	1px 2px 3px rgba(0, 0, 0, 0.6);
+    z-index:9999 !important;
+    span{
+        font-family: 'Bitter', serif;
+        color: $col-red !important;
+    }
+
 }
 
 div.gameStart{
@@ -74,7 +86,8 @@ div.gameStart{
     text-align: center;
     border-radius: 10px;
     color: $col-green;
-    background: $col-white;
+    background: rgba($col-white,0.9);
+    z-index:9999 !important;
 }
 div.tutorial{
     font-size: 40px;
@@ -82,7 +95,8 @@ div.tutorial{
     text-align: center;
     border-radius: 10px;
     color: $col-green;
-    background: $col-white;
+    background: rgba($col-white,0.9);
+    z-index:9999 !important;
 }
 div.delete{
     font-size: 40px;
@@ -97,7 +111,7 @@ div.delete{
 //===========================================
 div.stageSelectText{
 	text-align: center !important;
-	font-family: Mplus;
+	font-family: 'Bitter', serif;
 	font-size: 80px;
 	color: $col-black !important;
 	text-shadow:
@@ -115,10 +129,26 @@ div.stageBox{
 	line-height: 64px ;
 	color: $col-yellow !important;
 	border-radius: 10px;
-}
-div.stageBox.last{
-    border:solid 5px $col-green;
-    box-sizing: border-box;
+    &.nextStage{
+        border:solid 5px $col-green;
+        box-sizing: border-box;
+    }
+    &.lock{
+        &:before{
+            font-family:'WebHostingHub-Glyphs';
+            content:'\f0be';
+            text-align: center;
+            position: absolute;
+            color: $col-white;
+            top: 0;
+            left: 0;
+            width: 128px;
+            height: 128px;
+            line-height: 128px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.5);;
+        }
+    }
 }
 // backbutton branch 追加分 (0609)
 div.backToTopText{
@@ -172,6 +202,7 @@ div.black{
 /*======== beam ========*/
 div.beam{
 	border-radius: 50%;
+    z-index:1;
 }
 div.start{
 	border-radius: 50%;
