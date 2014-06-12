@@ -18,7 +18,8 @@ var LANGUAGE = {
 		tutoThirdStartMsg:"画面をタップしてオブジェクトを置き,<br/>ゴールオブジェクトまで連鎖させましょう",
     tutoClearMsg:"ゲームクリアです!",
     tutoClearMsg2:"本番のステージでは<br/>オブジェクトを置くまでに時間制限があります",
-    tutoClearMsg3:"それでは、ゲームをお楽しみ下さい"
+    tutoClearMsg3:"それでは、ゲームをお楽しみ下さい",
+    backToTop:"TOPへ戻る"
 	},
 	en:{
 		title:"Touch<br /><span>Bloomy</span>",
@@ -39,6 +40,7 @@ var LANGUAGE = {
 		tutoThirdStartMsg:"You can put one Circle to Chain to Goal",
     tutoClearMsg:"You did it!",
     tutoClearMsg2:"If this is real game,It have a time limit",
-    tutoClearMsg3:"Enjoy your game!"
+    tutoClearMsg3:"Enjoy your game!",
+    backToTop:"Back to Top"
 	}
 }
