@@ -1,5 +1,3 @@
-//チュートリアルからタイトルに戻るときに使う
-var tmpTitleScene = null;
 //チュートリアルを連続でyareruyouni
 var tutorialScene = null;
 
@@ -126,8 +124,6 @@ window.onload = function () {
     var titleScene = createTitleScene();
 
     initTutorialScene();
-    //チュートリアル用にとっておく
-    tmpTitleScene = titleScene;
     GAME.pushScene(titleScene);
   };
   GAME.start();
