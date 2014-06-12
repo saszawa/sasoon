@@ -1,5 +1,6 @@
 /*要素のスタイルをSCSSで*/
 @import "compass";
+@import url(http://fonts.googleapis.com/css?family=Bitter);
 
 @font-face {
   font-family: Mplus;
@@ -56,15 +57,15 @@ $prefixes: ("-webkit-", "-moz-","-ms-","-o-",null);
 //===========================================
 div.titleText{
 	text-align: center !important;
-	font-family: Mplus;
+	font-family: 'Bitter', serif;
 	font-size: 100px !important;
-	color: $col-yellow !important;
+	color: $col-black !important;
 	text-shadow:
-	-1px -1px 0px $col-white,
-	1px -1px 0px $col-white,
-	1px 1px 0px $col-white,
-	-1px 1px 0px $col-white,
-	1px 2px 3px rgba(255, 255, 255, 0.6)
+	-1px -1px 1px $col-white,
+	1px -1px 1px $col-white,
+	1px 1px 1px $col-white,
+	-1px 1px 1px $col-white,
+	1px 2px 3px rgba(0, 0, 0, 0.6)
 }
 
 div.gameStart{

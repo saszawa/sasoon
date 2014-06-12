@@ -11,7 +11,18 @@ var StageGroup = Class.create(Group,{
 		backToTop.x = 0.5 * 64;
 		backToTop.y = 8.5 * 64;
 		backToTop.on('touchend',function(){
+
+			// 子ノードを削除して遷移
+			var childLength = that.childNodes.length;
+			for(var i = 0 ; i < childLength;i++){
+				that.removeChild(that.childNodes[childLength-i-1]);
+			}
+
 			that.parentNode.backToTop();
+			var sceneChild = that.parentNode.childNodes.length;
+			for(var i = 0 ; i < sceneChild;i++){
+				that.parentNode.removeChild(that.childNodes[sceneChild-i-1]);
+			}
 		});
 
 		this.parentNode.addChild(backToTop);
