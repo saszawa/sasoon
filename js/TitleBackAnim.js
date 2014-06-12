@@ -10,7 +10,7 @@ var TitleBackAnim = Class.create(Group,{
 
         this.blocks = [new Block('red') ,new Block('blue') ,new Block('green')];
 
-        this.positions = [{x:2,y:2},{x:7,y:2},{x:7,y:7},{x:2,y:7}];
+        this.positions = [{x:1,y:1},{x:8,y:1},{x:8,y:8},{x:1,y:8}];
 
     },
     onaddedtoscene: function(){
@@ -28,6 +28,8 @@ var TitleBackAnim = Class.create(Group,{
                 if(!this.parentNode){
                     return;
                 }
+
+                var thatBlock = this;
                 var arc = new HitArc(this.color);
                 arc.x = this.x-128;
                 arc.y = this.y-128;
@@ -50,9 +52,11 @@ var TitleBackAnim = Class.create(Group,{
                     this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
                 }
                 //	出したら移動
-                this.x = that.positions[that.count].x * BOX_SIZE;
-                this.y = that.positions[that.count].y * BOX_SIZE;
-                that.count++;
+                setTimeout(function(){
+                    thatBlock.x = that.positions[that.count].x * BOX_SIZE;
+                    thatBlock.y = that.positions[that.count].y * BOX_SIZE;
+                    that.count++;
+                },500);
 
                 if(that.count === 4){
                     that.count = 0;
@@ -64,6 +68,6 @@ var TitleBackAnim = Class.create(Group,{
         var that = this;
         this.parentNode.loopTimer = setInterval(function(){
             that.blocks[that.next].run();
-        },2000);
+        },2500);
     }
 });

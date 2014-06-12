@@ -113,13 +113,13 @@ div.stageSelectText{
 	text-align: center !important;
 	font-family: 'Bitter', serif;
 	font-size: 80px;
-	color: $col-black !important;
+	color: $col-green !important;
 	text-shadow:
 	-1px -1px 0px $col-white,
 	1px -1px 0px $col-white,
 	1px 1px 0px $col-white,
 	-1px 1px 0px $col-white,
-	1px 2px 3px rgba(255, 255, 255, 0.5);
+	1px 2px 3px rgba(0, 0, 0, 0.5);
 	background: rgba(white,0.8) !important; // backbutton branch 変更分 (0609)
 }
 div.stageBox{

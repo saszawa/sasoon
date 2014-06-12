@@ -6,7 +6,7 @@ var tutorialScene = null;
 enchant();
 window.onload = function () {
 	GAME = new Game(640, 640);
-	GAME.fps = 26;
+	GAME.fps = 27;
 	GAME.onload = function () {
 
 		GAME.rootScene.backgroundColor = 'white';
