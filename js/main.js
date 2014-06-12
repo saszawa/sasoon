@@ -9,7 +9,7 @@ window.onload = function () {
 	GAME.fps = 30;
 	GAME.onload = function () {
 
-		GAME.rootScene.backgroundColor = 'white';
+		GAME.rootScene.backgroundColor = COLORS.black;
 		//==========================================================
 		// setting
 		//==========================================================
@@ -128,9 +128,22 @@ window.onload = function () {
 			titleScene.addChild(gameStartLabel);
 			titleScene.addChild(tutorialLabel);
 		});
+
+		// title-looks branch 変更文(0611)
+		var titleBackAnim = new TitleBackAnim();
+		titleScene.addChild(titleBackAnim);
+		// title-looks branch 変更文(0611)
+		titleScene.on('enter',function(){
+			titleBackAnim.startAnim();
+		});
+		titleScene.on('exit',function(){
+			clearInterval(titleScene.loopTimer);
+		});
+				// title-looks branch 変更文(0611)
 		var titleLabel = new ExLabel(LANGUAGE[COUNTRYCODE].title);
+
 		titleLabel.setClassName('titleText');
-		titleLabel.y = 150;
+		titleLabel.y = 100;
 		titleScene.addChild(titleLabel);
 
 		var gameStartLabel = new ExLabel(LANGUAGE[COUNTRYCODE].gameStart,320,60);
