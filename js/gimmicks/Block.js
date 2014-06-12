@@ -7,7 +7,7 @@ var Block = Class.create(Sprite,{
 		this._element.className = color;
 
 		this.color = color;
-		
+
 		// Beam用ステータス
 		this.beamStatus = {
 			top:{
