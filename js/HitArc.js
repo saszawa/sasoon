@@ -3,7 +3,7 @@ var HitArc = Class.create(Sprite,{
 		Sprite.call(this,320,320);
 		this.scaleX = 0.1;
 		this.scaleY = 0.1;
-		
+
 		var arc = new Surface(320,320);
 		arc.context.beginPath();
 		arc.context.fillStyle = COLORS[color];
@@ -11,15 +11,13 @@ var HitArc = Class.create(Sprite,{
 		arc.context.fill();
 		this.image = arc;
 
-		this.BACKGROUND_ARC = BACKGROUND_ARC;
-
 	},
 	onaddedtoscene: function(){
 		var that = this;
 		this.tl.scaleTo(5,5,20)
 			.then(function(){
-				that.parentNode.removeChild(that.BACKGROUND_ARC);
-				BACKGROUND_ARC = that;
+				that.parentNode.removeChild(BACKGROUND_ARC);
+					BACKGROUND_ARC = that;
 			});
 	}
 });
