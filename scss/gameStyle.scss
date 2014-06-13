@@ -19,7 +19,7 @@ $col-pink: #FFCCFF;
 	font-family: Mplus;
 }
 body{
-	background: $col-black;
+	// background: $col-black;
 }
 
 //=======================//
@@ -79,15 +79,27 @@ div.titleText{
     }
 
 }
-
+div.touchStart{
+  font-size: 50px;
+  line-height: 60px;
+  text-align: center;
+  color: $col-black;
+  z-index:9999 !important;
+  text-shadow:
+  -1px -1px 0px $col-white,
+  1px -1px 0px $col-white,
+  1px 1px 0px $col-white,
+  -1px 1px 0px $col-white,
+  1px 2px 3px rgba(0, 0, 0, 0.5);
+}
 div.gameStart{
-    font-size: 40px;
-    line-height: 60px;
-    text-align: center;
-    border-radius: 10px;
-    color: $col-green;
-    background: rgba($col-white,0.9);
-    z-index:9999 !important;
+  font-size: 40px;
+  line-height: 60px;
+  text-align: center;
+  border-radius: 10px;
+  color: $col-green;
+  background: rgba($col-white,0.9);
+  z-index:9999 !important;
 }
 div.tutorial{
     font-size: 40px;
@@ -99,12 +111,12 @@ div.tutorial{
     z-index:9999 !important;
 }
 div.delete{
-    font-size: 40px;
-    line-height: 60px;
-    text-align: center;
-    border-radius: 10px;
-    color: $col-green;
-    background: $col-white;
+  font-size: 40px;
+  line-height: 60px;
+  text-align: center;
+  border-radius: 10px;
+  color: $col-green;
+  background: $col-white;
 }
 //===========================================
 // SELECT SCENE
@@ -254,13 +266,6 @@ div.gameOverText{
 	-1px 1px 0px $col-white,
 	1px 2px 3px rgba(0, 0, 0, 0.6)
 }
-/*
-#enchant-stage{
-	position: relative;
-	top: 50%;
-	@include transform(translateY(-50%));
-}
-*/
 #load{
 	opacity: 0;
 }

@@ -11,11 +11,6 @@
   font-family: Mplus;
 }
 
-/* line 21, ../scss/gameStyle.scss */
-body {
-  background: #555555;
-}
-
 /* line 59, ../scss/gameStyle.scss */
 div.titleText {
   text-align: center !important;
@@ -32,7 +27,17 @@ div.titleText span {
   color: #ff6666 !important;
 }
 
-/* line 83, ../scss/gameStyle.scss */
+/* line 82, ../scss/gameStyle.scss */
+div.touchStart {
+  font-size: 50px;
+  line-height: 60px;
+  text-align: center;
+  color: #555555;
+  z-index: 9999 !important;
+  text-shadow: -1px -1px 0px #ecf0f1, 1px -1px 0px #ecf0f1, 1px 1px 0px #ecf0f1, -1px 1px 0px #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* line 95, ../scss/gameStyle.scss */
 div.gameStart {
   font-size: 40px;
   line-height: 60px;
@@ -43,7 +48,7 @@ div.gameStart {
   z-index: 9999 !important;
 }
 
-/* line 92, ../scss/gameStyle.scss */
+/* line 104, ../scss/gameStyle.scss */
 div.tutorial {
   font-size: 40px;
   line-height: 60px;
@@ -54,7 +59,7 @@ div.tutorial {
   z-index: 9999 !important;
 }
 
-/* line 101, ../scss/gameStyle.scss */
+/* line 113, ../scss/gameStyle.scss */
 div.delete {
   font-size: 40px;
   line-height: 60px;
@@ -64,7 +69,7 @@ div.delete {
   background: #ecf0f1;
 }
 
-/* line 112, ../scss/gameStyle.scss */
+/* line 124, ../scss/gameStyle.scss */
 div.stageSelectText {
   text-align: center !important;
   font-family: 'Bitter', serif;
@@ -74,7 +79,7 @@ div.stageSelectText {
   background: rgba(255, 255, 255, 0.8) !important;
 }
 
-/* line 125, ../scss/gameStyle.scss */
+/* line 137, ../scss/gameStyle.scss */
 div.stageBox {
   text-align: center !important;
   font-family: Mplus;
@@ -83,12 +88,12 @@ div.stageBox {
   color: #f1c40f !important;
   border-radius: 10px;
 }
-/* line 132, ../scss/gameStyle.scss */
+/* line 144, ../scss/gameStyle.scss */
 div.stageBox.nextStage {
   border: solid 5px #36d7b7;
   box-sizing: border-box;
 }
-/* line 137, ../scss/gameStyle.scss */
+/* line 149, ../scss/gameStyle.scss */
 div.stageBox.lock:before {
   font-family: 'WebHostingHub-Glyphs';
   content: '\f0be';
@@ -104,7 +109,7 @@ div.stageBox.lock:before {
   background: rgba(0, 0, 0, 0.5);
 }
 
-/* line 154, ../scss/gameStyle.scss */
+/* line 166, ../scss/gameStyle.scss */
 div.backToTopText {
   text-align: center;
   font-size: 30px;
@@ -115,7 +120,7 @@ div.backToTopText {
 }
 
 /*========  box  ========*/
-/* line 167, ../scss/gameStyle.scss */
+/* line 179, ../scss/gameStyle.scss */
 div.box {
   -webkit-transition: background 0.2s ease-out;
   -moz-transition: background 0.2s ease-out;
@@ -123,7 +128,7 @@ div.box {
   transition: background 0.2s ease-out;
   background: transparent;
 }
-/* line 170, ../scss/gameStyle.scss */
+/* line 182, ../scss/gameStyle.scss */
 div.box.touched {
   background: rgba(56, 181, 254, 0.5);
 }
@@ -135,11 +140,11 @@ div.black {
   border-radius: 50%;
 }
 
-/* line 177, ../scss/gameStyle.scss */
+/* line 189, ../scss/gameStyle.scss */
 div.black {
   text-align: center !important;
 }
-/* line 179, ../scss/gameStyle.scss */
+/* line 191, ../scss/gameStyle.scss */
 div.black i {
   color: white;
   width: 64px;
@@ -184,18 +189,18 @@ div.purple {
 }
 
 /*======== beam ========*/
-/* line 203, ../scss/gameStyle.scss */
+/* line 215, ../scss/gameStyle.scss */
 div.beam {
   border-radius: 50%;
   z-index: 1;
 }
 
-/* line 207, ../scss/gameStyle.scss */
+/* line 219, ../scss/gameStyle.scss */
 div.start {
   border-radius: 50%;
 }
 
-/* line 211, ../scss/gameStyle.scss */
+/* line 223, ../scss/gameStyle.scss */
 div.goal {
   position: relative;
   width: 100%;
@@ -203,7 +208,7 @@ div.goal {
   border-radius: 50%;
 }
 
-/* line 218, ../scss/gameStyle.scss */
+/* line 230, ../scss/gameStyle.scss */
 div.count {
   font-size: 48px !important;
   text-align: center !important;
@@ -212,7 +217,7 @@ div.count {
   height: 64px !important;
 }
 
-/* line 225, ../scss/gameStyle.scss */
+/* line 237, ../scss/gameStyle.scss */
 div.clearText {
   text-align: center !important;
   font-family: Mplus;
@@ -222,16 +227,16 @@ div.clearText {
   text-shadow: -1px -1px 0px #ecf0f1, 1px -1px 0px #ecf0f1, 1px 1px 0px #ecf0f1, -1px 1px 0px #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.6);
 }
 
-/* line 238, ../scss/gameStyle.scss */
+/* line 250, ../scss/gameStyle.scss */
 div.forResultBlock {
   background: rgba(0, 0, 0, 0) !important;
 }
-/* line 240, ../scss/gameStyle.scss */
+/* line 252, ../scss/gameStyle.scss */
 div.forResultBlock i {
   color: rgba(0, 0, 0, 0) !important;
 }
 
-/* line 244, ../scss/gameStyle.scss */
+/* line 256, ../scss/gameStyle.scss */
 div.gameOverText {
   text-align: center !important;
   font-family: Mplus;
@@ -241,19 +246,12 @@ div.gameOverText {
   text-shadow: -1px -1px 0px #ecf0f1, 1px -1px 0px #ecf0f1, 1px 1px 0px #ecf0f1, -1px 1px 0px #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.6);
 }
 
-/*
-#enchant-stage{
-	position: relative;
-	top: 50%;
-	@include transform(translateY(-50%));
-}
-*/
-/* line 264, ../scss/gameStyle.scss */
+/* line 269, ../scss/gameStyle.scss */
 #load {
   opacity: 0;
 }
 
-/* line 269, ../scss/gameStyle.scss */
+/* line 274, ../scss/gameStyle.scss */
 div.pointerArrow {
   position: relative;
   width: 0;
@@ -262,7 +260,7 @@ div.pointerArrow {
   border-right-color: yellow;
 }
 
-/* line 277, ../scss/gameStyle.scss */
+/* line 282, ../scss/gameStyle.scss */
 div.pointerArrow:after {
   position: absolute;
   content: '';
@@ -273,30 +271,30 @@ div.pointerArrow:after {
   background: yellow;
 }
 
-/* line 287, ../scss/gameStyle.scss */
+/* line 292, ../scss/gameStyle.scss */
 .TutoMessaFirst {
   font-size: 30px;
 }
 
-/* line 291, ../scss/gameStyle.scss */
+/* line 296, ../scss/gameStyle.scss */
 .tuto_white_msg {
   font-size: 20px;
   color: white;
 }
 
-/* line 296, ../scss/gameStyle.scss */
+/* line 301, ../scss/gameStyle.scss */
 .tuto_black_msg {
   font-size: 20px;
   color: black;
 }
 
-/* line 301, ../scss/gameStyle.scss */
+/* line 306, ../scss/gameStyle.scss */
 .tuto_clear_msg {
   font-size: 40px;
   color: black;
 }
 
-/* line 307, ../scss/gameStyle.scss */
+/* line 312, ../scss/gameStyle.scss */
 .msg {
   font-size: 20px;
 }

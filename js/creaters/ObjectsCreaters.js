@@ -66,6 +66,14 @@ function createTitleLabel(){
 
   return titleLabel;
 }
+//タイトル画面のタッチスタートのラベル
+function createTouchStartLabel(){
+  var touchStartLabel = new ExLabel(LANGUAGE[COUNTRYCODE].touchStart,640,60);
+  touchStartLabel.setClassName('touchStart');
+  touchStartLabel.x = 0;
+  touchStartLabel.y = 400;
+  return touchStartLabel;
+}
 
 //タイトル画面のゲーム開始のラベル
 function createGameStartLabel(){

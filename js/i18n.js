@@ -1,6 +1,7 @@
 var LANGUAGE = {
 	ja:{
 		title:"Touch<br /><span>Bloomy</span>",
+		touchStart: "画面をタッチ",
 		gameStart:"ゲーム開始",
     gameOver:"Game Over",
 		howToPlay:"遊び方",
@@ -23,6 +24,7 @@ var LANGUAGE = {
 	},
 	en:{
 		title:"Touch<br /><span>Bloomy</span>",
+		touchStart: "Touch Screen",
 		gameStart:"Start Game",
     gameOver:"Game Over",
 		howToPlay:"How to play",
