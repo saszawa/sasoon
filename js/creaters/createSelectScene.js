@@ -30,30 +30,35 @@ function createSelectScene(){
 
     var row = 1.5;
     var column = 0
-    for(var i = 0,x=0,y=1.5 ;i < userData.length ;i++){
+			for(var i = 0,x=0,y=1.5 ;i < STAGES.length ;i++){
 
-      var stageBox = new StageBox(i,userData[i]);
-      stageBox.x = BOX_SIZE/4+x*BOX_SIZE*2.5;
-      stageBox.y = y*BOX_SIZE*1.25;
-      stageGroup.addChild(stageBox);
-      stageBoxes.push(stageBox);
+				var star = 0;
+				var isLock = true;
+				var className = 'stageBox lock';
+				if(userData.length > i){
+					star = userData[i];
+					className ='stageBox';
+					isLock = false;
+				}else if(userData.length === i){
+					className ='stageBox nextStage';
+					isLock = false;
+				}
 
-      x++;
-      if(x===4){x = 0;}
-      if(i%4 === 3){y += 2;}
+				var stageBox = new StageBox(i,star,isLock);
+				stageBox._element.className = className;
+				stageBox.x = BOX_SIZE/4+x*BOX_SIZE*2.5;
+				stageBox.y = y*BOX_SIZE*1.25;
+				stageGroup.addChild(stageBox);
+				stageBoxes.push(stageBox);
 
-      column = x;
-      row = y;
+				x++;
+				if(x===4){x = 0;}
+				if(i%4 === 3){y += 2;}
 
-    }
+				column = x;
+				row = y;
 
-    //次のステージを表示する
-    var nextBox = new StageBox(userData.length,0);
-    nextBox._element.className = 'stageBox last';
-    nextBox.x = BOX_SIZE/4+column*BOX_SIZE*2.5;
-    nextBox.y = row*BOX_SIZE*1.25;
-    stageGroup.addChild(nextBox);
-    stageBoxes.push(nextBox);
+			}
 
     var selectLabel = new ExLabel('STAGE SELECT',640,110);
     selectLabel.setClassName('stageSelectText');
