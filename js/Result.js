@@ -41,16 +41,16 @@ var Result = Class.create(Group,{
 		});
 
 		//===============================//
-		//  prev,next,stage
+		//  prev,next,stage,retry
 		//===============================//
 		this.nextStage = new Block('black');
-		this.nextStage._element.innerHTML = '<i class="icon-pageforward">';
 		this.nextStage._element.className = 'black forResultBlock';
+		this.nextStage._element.innerHTML = '<i class="icon-pageforward">';
 		this.nextStage.x = 7 * 64;
 		this.nextStage.y = 480;
 		this.nextStage.addEventListener('touchend',function(){
 
-			var arc = new HitArc('pureWhite');
+			var arc = new HitArc('black');
 			arc.x = that.nextStage.x-128;
 			arc.y = that.nextStage.y-128;
 			that.parentNode.addChild(arc);
@@ -60,13 +60,13 @@ var Result = Class.create(Group,{
 		});
 
 		this.prevStage = new Block('black');
-		this.prevStage._element.innerHTML = '<i class="icon-pageback">';
 		this.prevStage._element.className = 'black forResultBlock';
+		this.prevStage._element.innerHTML = '<i class="icon-pageback">';
 		this.prevStage.x = 2 * 64;
 		this.prevStage.y = 480;
 		this.prevStage.addEventListener('touchend',function(){
 
-			var arc = new HitArc('pureWhite');
+			var arc = new HitArc('black');
 			arc.x = that.prevStage.x-128;
 			arc.y = that.prevStage.y-128;
 			that.parentNode.addChild(arc);
@@ -79,11 +79,25 @@ var Result = Class.create(Group,{
 		this.stageSelect._element.className = 'black forResultBlock';
 		this.stageSelect._element.innerHTML = '<i class="icon-th">';
 		this.stageSelect.x = 4*64+32;
-		this.stageSelect.y = 480;
+		this.stageSelect.y = 432;
 		this.stageSelect.addEventListener('touchend',function(){
 			that.parentNode.removeChild(BACKGROUND_ARC);
 			removeResult();
 			GAME.currentScene.stageSelect();
+		});
+
+		this.retry = new Block('black');
+		this.retry._element.className = 'black forResultBlock';
+		this.retry._element.innerHTML = '<i class="icon-repeat">';
+		this.retry.x = 4*64+32;
+		this.retry.y = 528;
+		this.retry.addEventListener('touchend',function(){
+			var arc = new HitArc('black');
+			arc.x = that.retry.x-128;
+			arc.y = that.retry.y-128;
+			that.parentNode.addChild(arc);
+			that.parentNode.initStage();
+			removeResult();
 		});
 
 
@@ -96,6 +110,7 @@ var Result = Class.create(Group,{
 			that.parentNode.removeChild(that.prevStage);
 			that.parentNode.removeChild(that.nextStage);
 			that.parentNode.removeChild(that.stageSelect);
+			that.parentNode.removeChild(that.retry);
 			that.parentNode.removeChild(that);
 		}
 
@@ -133,6 +148,11 @@ var Result = Class.create(Group,{
 			that.parentNode.addChild(that.stageSelect);
 			that.stageSelect.tl.scaleTo(0,0,0).then(function(){
 				that.stageSelect._element.className = 'black';
+			}).scaleTo(1,1,15,BOUNCE_EASEOUT);
+
+			that.parentNode.addChild(that.retry);
+			that.retry.tl.scaleTo(0,0,0).then(function(){
+				that.retry._element.className = 'black';
 			}).scaleTo(1,1,15,BOUNCE_EASEOUT);
 		});
 	}
