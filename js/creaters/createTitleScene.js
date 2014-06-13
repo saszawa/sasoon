@@ -42,7 +42,7 @@ function createTitleScene(){
   function handleVisibilityChange() {
   	if (document[hidden]) {
   		clearInterval(titleScene.loopTimer);
-  	} else {
+  	} else if(GAME.currentScene === titleScene){
   		titleBackAnim.startAnim();
   	}
   }
