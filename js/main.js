@@ -9,6 +9,7 @@ window.onload = function () {
 	GAME.fps = 27;
 	GAME.onload = function () {
 
+
 		GAME.rootScene.backgroundColor = 'white';
 		//==========================================================
 		// setting
