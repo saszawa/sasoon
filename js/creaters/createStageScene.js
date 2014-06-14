@@ -7,6 +7,7 @@ function createStageScene(){
     this.stars = [];
     this.canTap = true;
     this.endTimer = null;
+    this.cleared = false;
 
     // ステージの初期化
     currentStage.forEach(function(gimmick){
