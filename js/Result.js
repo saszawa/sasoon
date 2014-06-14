@@ -130,7 +130,7 @@ var Result = Class.create(Group,{
 					that.resultStars[cnt++].image = YELLOW_STAR;
 				});
 		}
-		this.tl.delay(95).then(function(){
+		this.tl.delay(50 + i*15).then(function(){
 			if(LEVEL){
 				that.parentNode.addChild(that.prevStage);
 				that.prevStage.tl.scaleTo(0,0,0).then(function(){

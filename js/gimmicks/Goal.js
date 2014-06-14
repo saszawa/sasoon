@@ -7,11 +7,13 @@ var Goal = Class.create(Sprite,{
 		this.backgroundColor = '#F4D03F';
 		this.scaleX = 0.8;
 		this.scaleY = 0.8;
+		this.distance = BOX_HALF/2;
 
 		this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).loop();
 	},
 	run: function(){
 		clearTimeout(this.parentNode.endTimer);
+		this.parentNode.cleared = true;
 		var that = this;
 
 		// 星の削除
