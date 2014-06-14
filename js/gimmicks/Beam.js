@@ -26,8 +26,9 @@ var Beam = Class.create(Sprite,{
 		// 衝突検知
 		// やっぱこうなるの・・・
 		var gimmicks = this.currentStage.length;
+		var distance = BOX_HALF+16;
 		for(var i = 0; i < gimmicks; i++){
-			if(this.intersect(this.currentStage[i]) && this.currentStage[i] !== this.parentBlock){
+			if(this.within(this.currentStage[i],this.currentStage[i].distance || distance) && this.currentStage[i] !== this.parentBlock && !this.parentNode.cleared){
 				// 発射！
 				this.currentStage[i].run();
 
@@ -39,7 +40,7 @@ var Beam = Class.create(Sprite,{
 		}
 
 		// Beamの移動と生存期間
-		if(Math.abs(this.initX-this.x) < this.beamLength 
+		if(Math.abs(this.initX-this.x) < this.beamLength
 			&&  Math.abs(this.initY-this.y) < this.beamLength){
 			this.x += this.direction.moveX;
 			this.y += this.direction.moveY;
