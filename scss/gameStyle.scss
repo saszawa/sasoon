@@ -14,7 +14,8 @@ $col-green:  #36D7B7;
 $col-red:    #ff6666;
 $col-purple: #BF77EC;
 $col-yellow: #f1c40f;
-$col-pink: #FFCCFF;
+$col-orange: #FFA533;
+$col-pink:   #FFCCFF;
 *{
 	font-family: Mplus;
 }
@@ -184,7 +185,6 @@ div.box{
 	}
 }
 
-/*======== black ========*/
 @include blockAndBeam(black,$col-black);
 div.black{
 	text-align: center !important;
@@ -196,20 +196,12 @@ div.black{
 		line-height: 64px;
 	}
 }
-/*======== white ========*/
 @include blockAndBeam(white,$col-white);
-
-/*======== red ========*/
 @include blockAndBeam(red,$col-red);
-
-/*======== blue-effect ========*/
 @include blockAndBeam(blue,$col-blue);
-
-/*======== lime-effect ========*/
 @include blockAndBeam(green,$col-green);
-
-/*======== purple-effect ========*/
 @include blockAndBeam(purple,$col-purple);
+@include blockAndBeam(orange,$col-orange);
 
 /*======== beam ========*/
 div.beam{
@@ -218,6 +210,8 @@ div.beam{
 }
 div.start{
 	border-radius: 50%;
+  box-sizing: border-box;
+  border: double 24px $col-yellow;
 }
 
 div.goal{

@@ -5,7 +5,7 @@ var Start = Class.create(Sprite,{
 		// DOMモード
 		this._element = document.createElement('div');
 		this._element.className = 'start';
-		this.backgroundColor = COLORS['white'];
+		this.backgroundColor = COLORS.white;
 
 		// Beam用ステータス
 		this.beamStatus = {
