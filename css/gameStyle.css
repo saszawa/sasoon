@@ -6,12 +6,12 @@
   src: url("../font/mplus-1c-regular.ttf");
 }
 
-/* line 18, ../scss/gameStyle.scss */
+/* line 19, ../scss/gameStyle.scss */
 * {
   font-family: Mplus;
 }
 
-/* line 59, ../scss/gameStyle.scss */
+/* line 60, ../scss/gameStyle.scss */
 div.titleText {
   text-align: center !important;
   font-family: 'Bitter', serif;
@@ -21,13 +21,13 @@ div.titleText {
   text-shadow: -1px -1px 0 #ecf0f1, 1px -1px 0 #ecf0f1, 1px 1px 0 #ecf0f1, -1px 1px 0 #ecf0f1, -2px -2px 0 #ecf0f1, 2px -2px 0 #ecf0f1, 2px 2px 0 #ecf0f1, -2px 2px 0 #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.6);
   z-index: 9999 !important;
 }
-/* line 76, ../scss/gameStyle.scss */
+/* line 77, ../scss/gameStyle.scss */
 div.titleText span {
   font-family: 'Bitter', serif;
   color: #ff6666 !important;
 }
 
-/* line 82, ../scss/gameStyle.scss */
+/* line 83, ../scss/gameStyle.scss */
 div.touchStart {
   font-size: 50px;
   line-height: 60px;
@@ -37,7 +37,7 @@ div.touchStart {
   text-shadow: -1px -1px 0px #ecf0f1, 1px -1px 0px #ecf0f1, 1px 1px 0px #ecf0f1, -1px 1px 0px #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.5);
 }
 
-/* line 95, ../scss/gameStyle.scss */
+/* line 96, ../scss/gameStyle.scss */
 div.gameStart {
   font-size: 40px;
   line-height: 60px;
@@ -48,7 +48,7 @@ div.gameStart {
   z-index: 9999 !important;
 }
 
-/* line 104, ../scss/gameStyle.scss */
+/* line 105, ../scss/gameStyle.scss */
 div.tutorial {
   font-size: 40px;
   line-height: 60px;
@@ -59,7 +59,7 @@ div.tutorial {
   z-index: 9999 !important;
 }
 
-/* line 113, ../scss/gameStyle.scss */
+/* line 114, ../scss/gameStyle.scss */
 div.delete {
   font-size: 40px;
   line-height: 60px;
@@ -69,7 +69,7 @@ div.delete {
   background: #ecf0f1;
 }
 
-/* line 124, ../scss/gameStyle.scss */
+/* line 125, ../scss/gameStyle.scss */
 div.stageSelectText {
   text-align: center !important;
   font-family: 'Bitter', serif;
@@ -79,7 +79,7 @@ div.stageSelectText {
   background: rgba(255, 255, 255, 0.8) !important;
 }
 
-/* line 137, ../scss/gameStyle.scss */
+/* line 138, ../scss/gameStyle.scss */
 div.stageBox {
   text-align: center !important;
   font-family: Mplus;
@@ -88,12 +88,12 @@ div.stageBox {
   color: #f1c40f !important;
   border-radius: 10px;
 }
-/* line 144, ../scss/gameStyle.scss */
+/* line 145, ../scss/gameStyle.scss */
 div.stageBox.nextStage {
   border: solid 5px #36d7b7;
   box-sizing: border-box;
 }
-/* line 149, ../scss/gameStyle.scss */
+/* line 150, ../scss/gameStyle.scss */
 div.stageBox.lock:before {
   font-family: 'WebHostingHub-Glyphs';
   content: '\f0be';
@@ -109,7 +109,7 @@ div.stageBox.lock:before {
   background: rgba(0, 0, 0, 0.5);
 }
 
-/* line 166, ../scss/gameStyle.scss */
+/* line 167, ../scss/gameStyle.scss */
 div.backToTopText {
   text-align: center;
   font-size: 30px;
@@ -120,7 +120,7 @@ div.backToTopText {
 }
 
 /*========  box  ========*/
-/* line 179, ../scss/gameStyle.scss */
+/* line 180, ../scss/gameStyle.scss */
 div.box {
   -webkit-transition: background 0.2s ease-out;
   -moz-transition: background 0.2s ease-out;
@@ -128,13 +128,12 @@ div.box {
   transition: background 0.2s ease-out;
   background: transparent;
 }
-/* line 182, ../scss/gameStyle.scss */
+/* line 183, ../scss/gameStyle.scss */
 div.box.touched {
   background: rgba(56, 181, 254, 0.5);
 }
 
-/*======== black ========*/
-/* line 46, ../scss/gameStyle.scss */
+/* line 47, ../scss/gameStyle.scss */
 div.black {
   background: #555555;
   border-radius: 50%;
@@ -153,54 +152,57 @@ div.black i {
   line-height: 64px;
 }
 
-/*======== white ========*/
-/* line 46, ../scss/gameStyle.scss */
+/* line 47, ../scss/gameStyle.scss */
 div.white {
   background: #ecf0f1;
   border-radius: 50%;
 }
 
-/*======== red ========*/
-/* line 46, ../scss/gameStyle.scss */
+/* line 47, ../scss/gameStyle.scss */
 div.red {
   background: #ff6666;
   border-radius: 50%;
 }
 
-/*======== blue-effect ========*/
-/* line 46, ../scss/gameStyle.scss */
+/* line 47, ../scss/gameStyle.scss */
 div.blue {
   background: #38b5fe;
   border-radius: 50%;
 }
 
-/*======== lime-effect ========*/
-/* line 46, ../scss/gameStyle.scss */
+/* line 47, ../scss/gameStyle.scss */
 div.green {
   background: #36d7b7;
   border-radius: 50%;
 }
 
-/*======== purple-effect ========*/
-/* line 46, ../scss/gameStyle.scss */
+/* line 47, ../scss/gameStyle.scss */
 div.purple {
   background: #bf77ec;
   border-radius: 50%;
 }
 
+/* line 47, ../scss/gameStyle.scss */
+div.orange {
+  background: #ffa533;
+  border-radius: 50%;
+}
+
 /*======== beam ========*/
-/* line 215, ../scss/gameStyle.scss */
+/* line 207, ../scss/gameStyle.scss */
 div.beam {
   border-radius: 50%;
   z-index: 1;
 }
 
-/* line 219, ../scss/gameStyle.scss */
+/* line 211, ../scss/gameStyle.scss */
 div.start {
   border-radius: 50%;
+  box-sizing: border-box;
+  border: double 24px #f1c40f;
 }
 
-/* line 223, ../scss/gameStyle.scss */
+/* line 217, ../scss/gameStyle.scss */
 div.goal {
   position: relative;
   width: 100%;
@@ -208,7 +210,7 @@ div.goal {
   border-radius: 50%;
 }
 
-/* line 230, ../scss/gameStyle.scss */
+/* line 224, ../scss/gameStyle.scss */
 div.count {
   font-size: 48px !important;
   text-align: center !important;
@@ -217,7 +219,7 @@ div.count {
   height: 64px !important;
 }
 
-/* line 237, ../scss/gameStyle.scss */
+/* line 231, ../scss/gameStyle.scss */
 div.clearText {
   text-align: center !important;
   font-family: Mplus;
@@ -227,16 +229,16 @@ div.clearText {
   text-shadow: -1px -1px 0px #ecf0f1, 1px -1px 0px #ecf0f1, 1px 1px 0px #ecf0f1, -1px 1px 0px #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.6);
 }
 
-/* line 250, ../scss/gameStyle.scss */
+/* line 244, ../scss/gameStyle.scss */
 div.forResultBlock {
   background: rgba(0, 0, 0, 0) !important;
 }
-/* line 252, ../scss/gameStyle.scss */
+/* line 246, ../scss/gameStyle.scss */
 div.forResultBlock i {
   color: rgba(0, 0, 0, 0) !important;
 }
 
-/* line 256, ../scss/gameStyle.scss */
+/* line 250, ../scss/gameStyle.scss */
 div.gameOverText {
   text-align: center !important;
   font-family: Mplus;
@@ -246,12 +248,12 @@ div.gameOverText {
   text-shadow: -1px -1px 0px #ecf0f1, 1px -1px 0px #ecf0f1, 1px 1px 0px #ecf0f1, -1px 1px 0px #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.6);
 }
 
-/* line 269, ../scss/gameStyle.scss */
+/* line 263, ../scss/gameStyle.scss */
 #load {
   opacity: 0;
 }
 
-/* line 274, ../scss/gameStyle.scss */
+/* line 268, ../scss/gameStyle.scss */
 div.pointerArrow {
   position: relative;
   width: 0;
@@ -260,7 +262,7 @@ div.pointerArrow {
   border-right-color: yellow;
 }
 
-/* line 282, ../scss/gameStyle.scss */
+/* line 276, ../scss/gameStyle.scss */
 div.pointerArrow:after {
   position: absolute;
   content: '';
@@ -271,30 +273,30 @@ div.pointerArrow:after {
   background: yellow;
 }
 
-/* line 292, ../scss/gameStyle.scss */
+/* line 286, ../scss/gameStyle.scss */
 .TutoMessaFirst {
   font-size: 30px;
 }
 
-/* line 296, ../scss/gameStyle.scss */
+/* line 290, ../scss/gameStyle.scss */
 .tuto_white_msg {
   font-size: 20px;
   color: white;
 }
 
-/* line 301, ../scss/gameStyle.scss */
+/* line 295, ../scss/gameStyle.scss */
 .tuto_black_msg {
   font-size: 20px;
   color: black;
 }
 
-/* line 306, ../scss/gameStyle.scss */
+/* line 300, ../scss/gameStyle.scss */
 .tuto_clear_msg {
   font-size: 40px;
   color: black;
 }
 
-/* line 312, ../scss/gameStyle.scss */
+/* line 306, ../scss/gameStyle.scss */
 .msg {
   font-size: 20px;
 }

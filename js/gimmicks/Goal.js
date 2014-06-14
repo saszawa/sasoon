@@ -27,6 +27,7 @@ var Goal = Class.create(Sprite,{
 			currentStage.forEach(function(gimmick){
 				that.parentNode.removeChild(gimmick);
 			});
+			that.parentNode.removeChild(BACKGROUND_ARC);
 		}).delay(30).fadeTo(0,15).then(function(){
 			that.parentNode.showResult();
 			that.parentNode.removeChild(that);

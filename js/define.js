@@ -19,11 +19,12 @@ var LEVEL         = 0;
 
 
 var DIRECTIONS = {
-	black:  [true ,false ,true ,false],
+	black:  [true ,true ,true ,true],
 	white:  [true ,true ,true ,true],
 	red:    [true ,true ,true ,true],
 	green:  [true ,true ,true ,true],
 	blue:   [true ,true ,true ,true],
+	orange: [true ,false ,true ,false],
 	purple: [false ,true ,false ,true]
 };
 var COLORS = {
@@ -153,7 +154,7 @@ var STAGES = [
 		{ x:3 ,y:4 ,name: 'slanter'},
 		{ x:6 ,y:4 ,name: 'slanter'},
 		{ x:5 ,y:4 ,name: 'diffusioner'},
-		{ x:3 ,y:7 ,name: 'block' ,color: 'blue'},
+		{ x:1 ,y:6 ,name: 'block' ,color: 'orange'},
 		{ x:3 ,y:2 ,name: 'star'},
 		{ x:6 ,y:2 ,name: 'star'},
 		{ x:7 ,y:3 ,name: 'star'},
@@ -188,7 +189,7 @@ var STAGES = [
 	],
 	[
 		{ x:1 ,y:4 ,name: 'start'},
-		{ x:3 ,y:4 ,name: 'block',color:'black'},
+		{ x:3 ,y:4 ,name: 'block',color:'orange'},
 		{ x:3 ,y:2 ,name: 'block',color:'purple'},
 		{ x:3 ,y:6 ,name: 'block',color:'purple'},
 		{ x:6 ,y:6 ,name: 'block',color:'purple'},
