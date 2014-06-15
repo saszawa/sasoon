@@ -185,7 +185,6 @@ var STAGES = [
 		{ x:6 ,y:7 ,name: 'star'},
 		{ x:8 ,y:5 ,name: 'star'},
 		{ x:6 ,y:3 ,name: 'block',color:'orange'},
-		{ x:8 ,y:2 ,name: 'block',color:'blue'},
 		{ x:9 ,y:0 ,name: 'goal'}
 	],
 	[
