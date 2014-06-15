@@ -146,29 +146,14 @@ var STAGES = [
 		{ x:0 ,y:0 ,name: 'goal'}
 	],
 	[
-		{ x:1 ,y:1 ,name: 'start'},
-		{ x:6 ,y:3 ,name: 'block',color:'purple'},
-		{ x:4 ,y:0 ,name: 'block',color:'red'},
-		{ x:7 ,y:0 ,name: 'block',color:'blue'},
-    { x:4 ,y:3 ,name: 'block',color:'green'},
-		{ x:9 ,y:3 ,name: 'block',color:'red'},
-		{ x:6 ,y:5 ,name: 'block',color:'red'},
-		{ x:5 ,y:5 ,name: 'block',color:'blue'},
-		{ x:3 ,y:1 ,name: 'block',color:'purple'},
-		{ x:6 ,y:1 ,name: 'block',color:'purple'},
-		{ x:9 ,y:4 ,name: 'block',color:'blue'},
-		{ x:3 ,y:5 ,name: 'block',color:'purple'},
-    { x:7 ,y:4 ,name: 'star'},
-		{ x:9 ,y:7 ,name: 'block',color:'red'},
-    { x:7 ,y:7 ,name: 'star'},
-		{ x:5 ,y:7 ,name: 'block',color:'blue'},
-    { x:3 ,y:4 ,name: 'block',color:'green'},
-    { x:9 ,y:9 ,name: 'block',color:'green'},
-		{ x:6 ,y:9 ,name: 'block',color:'blue'},
-		{ x:2 ,y:9 ,name: 'block',color:'red'},
-    { x:2 ,y:7 ,name: 'block',color:'green'},
-    { x:9 ,y:2 ,name: 'star'},
-		{ x:0 ,y:9 ,name: 'goal'}
+		{ x:0 ,y:9 ,name: 'start'},
+		{ x:3 ,y:9 ,name: 'block',color:'orange'},
+		{ x:3 ,y:6 ,name: 'block',color:'orange'},
+    { x:6 ,y:3 ,name: 'block',color:'orange'},
+    { x:3 ,y:0 ,name: 'star'},
+    { x:0 ,y:3 ,name: 'star'},
+    { x:6 ,y:0 ,name: 'star'},
+		{ x:6 ,y:6 ,name: 'goal'}
 	],
 	[
 		{ x:0 ,y:4 ,name: 'start'},
@@ -177,7 +162,7 @@ var STAGES = [
 		{ x:3 ,y:2 ,name: 'star'},
 		{ x:6 ,y:2 ,name: 'star'},
 		{ x:8 ,y:2 ,name: 'star'},
-		{ x:8 ,y:7 ,name: 'goal'}
+		{ x:6 ,y:6 ,name: 'goal'}
 	],
 	[
 		{ x:0 ,y:4 ,name: 'start'},
