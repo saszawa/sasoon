@@ -34,8 +34,10 @@ function createStageScene(){
     this.addChild(ResultGroup);
     clearTimeout(this.endTimer);
 
-    //データの保存
-    userData[LEVEL] = this.star;
+
+    if(typeof userData[LEVEL] === 'undefined' || userData[LEVEL] < this.star){
+      userData[LEVEL] = this.star;
+    }
     localStorage.setItem("hal", JSON.stringify(userData));
 
   }
