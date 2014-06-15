@@ -25,7 +25,7 @@ var Beam = Class.create(Sprite,{
 		// 衝突検知
 		// やっぱこうなるの・・・
 		var gimmicks = this.currentStage.length;
-		var distance = BOX_HALF+16;
+		var distance = BOX_HALF+12;
 		for(var i = 0; i < gimmicks; i++){
 			if(this.within(this.currentStage[i],this.currentStage[i].distance || distance) && this.currentStage[i] !== this.parentBlock && !this.parentNode.cleared){
 				// 発射！
