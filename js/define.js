@@ -173,6 +173,19 @@ var STAGES = [
 	],
 	[
 		{ x:0 ,y:9 ,name: 'start'},
+		{ x:0 ,y:6 ,name: 'block',color:'purple'},
+		{ x:3 ,y:6 ,name: 'block',color:'orange'},
+		{ x:3 ,y:3 ,name: 'block',color:'purple'},
+		{ x:2 ,y:8 ,name: 'block',color:'blue'},
+		{ x:6 ,y:0 ,name: 'block',color:'purple'},
+		{ x:5 ,y:5 ,name: 'block',color:'blue'},
+		{ x:5 ,y:7 ,name: 'block',color:'orange'},
+		{ x:5 ,y:9 ,name: 'block',color:'blue'},
+		{ x:4 ,y:9 ,name: 'star'},
+		{ x:6 ,y:7 ,name: 'star'},
+		{ x:8 ,y:5 ,name: 'star'},
+		{ x:6 ,y:3 ,name: 'block',color:'orange'},
+		{ x:8 ,y:2 ,name: 'block',color:'blue'},
 		{ x:9 ,y:0 ,name: 'goal'}
 	],
 	[
