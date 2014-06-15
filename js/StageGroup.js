@@ -23,5 +23,8 @@ var StageGroup = Class.create(Group,{
 		});
 
 		this.parentNode.addChild(backToTop);
+
+		var playerStar = createPlayerStatus(userData);
+		this.parentNode.addChild(playerStar);
 	}
 });
