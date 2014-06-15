@@ -16,7 +16,7 @@ function createPointerArrow1(){
 //トップに戻るボタン
 function createBacktoTopLabel(){
 
-  var backToTop = new ExLabel(LANGUAGE[COUNTRYCODE].backToTop,160,50);
+  var backToTop = new ExLabel(LANGUAGE[COUNTRYCODE].backToTop,BOX_SIZE*3,BOX_SIZE);
   backToTop.setClassName('backToTopText');
   backToTop.x = 0.5 * 64;
   backToTop.y = 8.5 * 64;
@@ -95,6 +95,33 @@ function createTutorialLabel(){
   tutorialLabel.y = 440;
 
   return tutorialLabel;
+}
+
+// 現在の星の数を表すグループ
+function createPlayerStatus(data){
+  var starCount = 0;
+  for(var i = 0;i < data.length;i++){
+    starCount += data[i];
+  }
+
+  var playerStatusGroup = new Group();
+  playerStatusGroup._element = document.createElement('div');
+  playerStatusGroup.x = 7.5 * 64;
+  playerStatusGroup.y = 8.5 * 64;
+
+  var starsLabel = new ExLabel(' × '+starCount,BOX_SIZE*2,BOX_SIZE);
+  starsLabel.setClassName('playerStars');
+  playerStatusGroup.addChild(starsLabel);
+
+  var starSprite = new Sprite(BOX_SIZE,BOX_SIZE);
+  starSprite.image = YELLOW_STAR;
+  starSprite.scale(0.8,0.8);
+  playerStatusGroup.addChild(starSprite);
+
+
+
+
+  return playerStatusGroup;
 }
 
 //チュートリアルの勝ちパターンのときの最初の矢印

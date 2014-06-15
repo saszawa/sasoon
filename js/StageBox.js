@@ -3,7 +3,6 @@ var StageBox = Class.create(Sprite,{
 		Sprite.call(this,BOX_SIZE*2,BOX_SIZE*2);
 		this._element = document.createElement('div');
 		this._element.innerHTML = level+1;
-		this.backgroundColor = COLORS.white;
 		this.image = SCORE_STARS[star];
 		this.level = level;
 		this.moved = false;

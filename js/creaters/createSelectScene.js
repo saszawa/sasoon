@@ -16,20 +16,20 @@ function createSelectScene(){
     var bottomMax = Math.floor(stageGroup.childNodes.length/4) * -160 + 320;
     if(stageGroup.y > 0){
       stageGroup.tl.moveTo(0,0,10,SIN_EASEOUT);
-    }else if(bottomMax){
+    }else if(bottomMax > stageGroup.y){
       stageGroup.tl.moveTo(0,bottomMax,10,SIN_EASEOUT);
     }
   });
 
   selectScene.on('enter',function(e){
-    stageGroup = new StageGroup();
-    selectScene.addChild(stageGroup);
-
     // ローカルストレージからデータを取得
     userData = JSON.parse(localStorage.getItem("hal"));
     if(userData === null){
       userData = [];
     }
+
+    stageGroup = new StageGroup();
+    selectScene.addChild(stageGroup);
 
     var row = 1.5;
     var column = 0

@@ -7,7 +7,6 @@ var Beam = Class.create(Sprite,{
 		this._element.className = 'beam';
 
 		// 初期状態
-		this.backgroundColor = 'white';
 		this.direction = direction;
 		this.initX = init.x;
 		this.initY = init.y;
