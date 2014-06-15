@@ -13,8 +13,11 @@ function createSelectScene(){
     selectScene.startY = e.y;
   });
   selectScene.on('touchend',function(e){
+    var bottomMax = Math.floor(stageGroup.childNodes.length/4) * -160 + 320;
     if(stageGroup.y > 0){
       stageGroup.tl.moveTo(0,0,10,SIN_EASEOUT);
+    }else if(bottomMax){
+      stageGroup.tl.moveTo(0,bottomMax,10,SIN_EASEOUT);
     }
   });
 
