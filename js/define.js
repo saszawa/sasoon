@@ -27,6 +27,17 @@ var DIRECTIONS = {
 	orange: [true ,false ,true ,false],
 	purple: [false ,true ,false ,true]
 };
+
+var TUTODIRECTIONS = {
+  start:  [true ,true ,true ,true],
+	black:  [true ,true ,true ,true],
+	white:  [true ,true ,true ,true],
+	red:    [true ,true ,true ,true],
+	green:  [true ,true ,true ,true],
+	blue:   [true ,true ,true ,true],
+	orange: [true ,false ,true ,false],
+	purple: [false ,true ,false ,true]
+};
 var COLORS = {
 	black:     '#555555',
 	white:     '#ecf0f1',
@@ -332,17 +343,17 @@ var STAGES = [
 //チュートリアル用のステージ配列
 var TUTOSTAGES = [
 	[
-		{ x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
+		{ x:1 ,y:4 ,name: 'tutoBlock',color:'start'},
 		{ x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
 		{ x:7 ,y:4 ,name: 'tutoGoal',color:'green'}
 	],
 	[
-		{ x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
+		{ x:1 ,y:4 ,name: 'tutoBlock',color:'start'},
 		{ x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
 		{ x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
 	],
 	[
-		{ x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
+		{ x:1 ,y:4 ,name: 'tutoBlock',color:'start'},
 		{ x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
 		{ x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
 	]
