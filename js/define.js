@@ -49,6 +49,7 @@ var YELLOW_STAR = null;
 var SCORE_STARS = [];
 var DIFFUSIONER = null;
 var SLANTER = null;
+var PIPE = null;
 var LINKER = null;
 
 function drawStar(nX, nY, numVertex, longRadius, shortRadius, context2D) {
@@ -231,6 +232,7 @@ var STAGES = [
 		{ x:0 ,y:4 ,name: 'start'},
 		{ x:3 ,y:4 ,name: 'block',color:'red'},
 		{ x:6 ,y:4 ,name: 'block',color:'blue'},
+		{ x:4 ,y:2 ,name: 'pipe' ,pipeStatus:{x:5 ,y:7 ,direction:'right'} },
 		{ x:3 ,y:2 ,name: 'star'},
 		{ x:6 ,y:2 ,name: 'star'},
 		{ x:8 ,y:2 ,name: 'star'},

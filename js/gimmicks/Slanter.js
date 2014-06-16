@@ -3,7 +3,7 @@ var Slanter = Class.create(Sprite,{
 		Sprite.call(this,BOX_SIZE,BOX_SIZE);
 		this._element = document.createElement('div');
 		this._element.className = 'slanter';
-		this.image = SLANTER
+		this.image = SLANTER;
 		this.rotation = 45;
 
 		this.beamStatus = {

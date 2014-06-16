@@ -115,6 +115,29 @@ window.onload = function () {
     ctxSl.stroke();
     ctxSl.closePath();
 
+    // パイプ
+    PIPE = new Surface(BOX_SIZE,BOX_SIZE);
+    var ctxP = PIPE.context;
+    ctxP.fillStyle = COLORS.blue;
+    ctxP.strokeStyle = COLORS.yellow;
+    ctxP.lineWidth = 3;
+    ctxP.beginPath();
+    drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/2,BOX_SIZE/2,ctxP);
+    ctxP.fill();
+    ctxP.stroke();
+    ctxP.closePath();
+    // 発射パイプ
+    PIPE_OUT = new Surface(BOX_SIZE,BOX_SIZE);
+    var ctxPO = PIPE_OUT.context;
+    ctxPO.fillStyle = COLORS.blue;
+    ctxPO.strokeStyle = COLORS.yellow;
+    ctxPO.lineWidth = 3;
+    ctxPO.beginPath();
+    drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/3,BOX_SIZE/3,ctxPO);
+    ctxPO.fill();
+    ctxPO.stroke();
+    ctxPO.closePath();
+
     //==========================================================
     // title
     //==========================================================
@@ -144,6 +167,8 @@ function　StageBuilder(gimmick){
       return new Diffusioner();
     case 'slanter':
       return new Slanter();
+    case 'pipe':
+      return new Pipe(gimmick.pipeStatus);
     case 'linker':
       return new Linker(gimmick.color);
     case 'tutoGoal':
