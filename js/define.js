@@ -380,6 +380,25 @@ var STAGES = [
 ],
 [
   //23
+  { x:1 ,y:9 ,name: 'start'},
+  { x:4 ,y:9 ,name: 'block',color:'orange'},
+  { x:4 ,y:6 ,name: 'slanter'},
+  { x:3 ,y:5 ,name: 'slanter'},
+  { x:1 ,y:3 ,name: 'slanter'},
+  { x:2 ,y:2 ,name: 'slanter'},
+  { x:4 ,y:0 ,name: 'slanter'},
+  { x:5 ,y:1 ,name: 'slanter'},
+  { x:7 ,y:3 ,name: 'slanter'},
+  { x:8 ,y:4 ,name: 'slanter'},
+  { x:7 ,y:5 ,name: 'slanter'},
+  { x:6 ,y:3 ,name: 'slanter'},
+  { x:0 ,y:0 ,name: 'star'},
+  { x:9 ,y:1 ,name: 'star'},
+  { x:9 ,y:7 ,name: 'star'},
+  { x:5 ,y:4 ,name: 'goal'}
+],
+[
+  //24
   { x:0 ,y:4 ,name: 'start'},
   { x:2 ,y:4 ,name: 'block',color:'purple'},
   { x:5 ,y:4 ,name: 'slanter'},
@@ -399,7 +418,7 @@ var STAGES = [
   { x:5 ,y:3 ,name: 'goal'}
 ],
 [
-  //24
+  //25
   { x:0 ,y:5 ,name: 'start'},
   { x:3 ,y:3 ,name: 'slanter'},
   { x:0 ,y:3 ,name: 'block',color:'blue'},
@@ -417,7 +436,7 @@ var STAGES = [
   { x:8 ,y:4 ,name: 'goal'}
 ],
 [
-  //25
+  //26
   { x:0 ,y:9 ,name: 'start'},
   { x:3 ,y:9 ,name: 'block',color:'orange'},
   { x:9 ,y:6 ,name: 'block',color:'purple'},
@@ -433,7 +452,7 @@ var STAGES = [
   { x:7 ,y:1 ,name: 'goal'}
 ],
 [
-  //26
+  //27
   { x:0 ,y:9 ,name: 'start'},
   { x:3 ,y:9 ,name: 'block',color:'orange'},
   { x:3 ,y:6 ,name: 'slanter'},
@@ -456,7 +475,7 @@ var STAGES = [
   { x:4 ,y:4 ,name: 'goal'}
 ],
 [
-  //27
+  //28
   { x:0 ,y:5 ,name: 'start'},
   { x:3 ,y:5 ,name: 'block',color:'red'},
   { x:3 ,y:2 ,name: 'block',color:'purple'},
