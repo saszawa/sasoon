@@ -6,7 +6,7 @@ var LANGUAGE = {
     gameOver:"Game Over",
 		howToPlay:"遊び方",
     startTutorial:"今からこのゲームのチュートリアルを始めます",
-		sirotama:"ゲーム開始時白いオブジェクトが四散します",
+		sirotama:"ゲーム開始時このオブジェクトが四散します",
 		aotama:"破片が他のオブジェクトに当たると誘爆します",
 		prevGoal:"黄色いゴールオブジェクトに当てればクリアです",
 		tutoClear:"このようにゴールオブジェクトを<br/>壊せばクリアです",

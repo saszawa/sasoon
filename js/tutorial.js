@@ -23,6 +23,11 @@ var TutoBlock = Class.create(Sprite,{
     this._element.className = color;
 
     this.color = color;
+    if(this.color == "start"){
+      this.arccolor = "white";
+    }else{
+      this.arccolor = this.color;
+    }
     //矢印出すかどうかフラグ
     this.arrowFlg = true;
 
@@ -56,7 +61,7 @@ var TutoBlock = Class.create(Sprite,{
    */
   run: function(){
     var tutoThirdScene = null;
-    var arc = new HitArc(this.color);
+    var arc = new HitArc(this.arccolor);
     arc.x = this.x-128;
     arc.y = this.y-128;
     this.parentNode.addChild(arc);
@@ -66,7 +71,7 @@ var TutoBlock = Class.create(Sprite,{
     this.parentNode.removeChild(thirdStartMsg);
 
     for(var beam in this.beamStatus){
-      if(DIRECTIONS[this.color][i]){
+      if(TUTODIRECTIONS[this.color][i]){
         // 初期設定的な
         var beamInit = {
           x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
@@ -278,7 +283,7 @@ var TutoBeam = Class.create(Sprite,{
     this._element.className = 'beam';
 
     // 初期状態
-    this.backgroundColor = 'white';
+    this.backgroundColor = '#F4D03F';
     this.direction = direction;
     this.initX = init.x;
     this.initY = init.y;
