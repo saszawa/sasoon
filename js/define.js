@@ -434,6 +434,29 @@ var STAGES = [
 ],
 [
   //26
+  { x:0 ,y:9 ,name: 'start'},
+  { x:3 ,y:9 ,name: 'block',color:'orange'},
+  { x:3 ,y:6 ,name: 'slanter'},
+  { x:2 ,y:5 ,name: 'slanter'},
+  { x:0 ,y:3 ,name: 'slanter'},
+  { x:1 ,y:2 ,name: 'slanter'},
+  { x:3 ,y:0 ,name: 'slanter'},
+  { x:4 ,y:1 ,name: 'slanter'},
+  { x:6 ,y:3 ,name: 'slanter'},
+  { x:7 ,y:4 ,name: 'slanter'},
+  { x:5 ,y:6 ,name: 'slanter'},
+  { x:3 ,y:5 ,name: 'slanter'},
+  { x:7 ,y:5 ,name: 'block',color:'purple'},
+  { x:5 ,y:3 ,name: 'block',color:'purple'},
+  { x:5 ,y:5 ,name: 'block',color:'orange'},
+  { x:3 ,y:3 ,name: 'block',color:'blue'},
+  { x:1 ,y:3 ,name: 'star'},
+  { x:3 ,y:1 ,name: 'star'},
+  { x:7 ,y:3 ,name: 'star'},
+  { x:4 ,y:4 ,name: 'goal'}
+],
+[
+  //27
   { x:0 ,y:5 ,name: 'start'},
   { x:3 ,y:5 ,name: 'block',color:'red'},
   { x:3 ,y:2 ,name: 'block',color:'purple'},
