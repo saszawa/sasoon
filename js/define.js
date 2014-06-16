@@ -283,6 +283,42 @@ var STAGES = [
 ],
 [
   //17
+  { x:0 ,y:0 ,name: 'start'},
+  { x:0 ,y:3 ,name: 'block',color:'orange'},
+  { x:0 ,y:6 ,name: 'block',color:'orange'},
+  { x:0 ,y:9 ,name: 'block',color:'purple'},
+  { x:3 ,y:9 ,name: 'block',color:'red'},
+  { x:9 ,y:6 ,name: 'block',color:'blue'},
+  { x:9 ,y:9 ,name: 'block',color:'orange'},
+  { x:3 ,y:6 ,name: 'block',color:'orange'},
+  { x:3 ,y:3 ,name: 'block',color:'orange'},
+  { x:3 ,y:1 ,name: 'block',color:'purple'},
+  { x:6 ,y:1 ,name: 'block',color:'orange'},
+  { x:6 ,y:3 ,name: 'block',color:'orange'},
+  { x:9 ,y:1 ,name: 'block',color:'purple'},
+  { x:6 ,y:8 ,name: 'star'},
+  { x:6 ,y:0 ,name: 'star'},
+  { x:8 ,y:6 ,name: 'star'},
+  { x:9 ,y:3 ,name: 'goal'}
+],
+[
+  //18
+  { x:0 ,y:4 ,name: 'start'},
+  { x:3 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:4 ,name: 'block',color:'orange'},
+  { x:6 ,y:1 ,name: 'block',color:'purple'},
+  { x:6 ,y:7 ,name: 'block',color:'purple'},
+  { x:9 ,y:1 ,name: 'block',color:'purple'},
+  { x:3 ,y:7 ,name: 'block',color:'red'},
+  { x:9 ,y:7 ,name: 'block',color:'orange'},
+  { x:7 ,y:3 ,name: 'block',color:'blue'},
+  { x:3 ,y:9 ,name: 'star'},
+  { x:3 ,y:1 ,name: 'star'},
+  { x:5 ,y:3 ,name: 'star'},
+  { x:9 ,y:3 ,name: 'goal'}
+],
+[
+  //19
   { x:0 ,y:9 ,name: 'start'},
   { x:3 ,y:9 ,name: 'block',color:'blue'},
   { x:6 ,y:9 ,name: 'block',color:'orange'},
@@ -300,21 +336,6 @@ var STAGES = [
   { x:9 ,y:9 ,name: 'star'},
   { x:6 ,y:2 ,name: 'star'},
   { x:0 ,y:0 ,name: 'goal'}
-],
-[
-  { x:0 ,y:4 ,name: 'start'},
-  { x:3 ,y:4 ,name: 'block',color:'purple'},
-  { x:6 ,y:4 ,name: 'block',color:'orange'},
-  { x:6 ,y:1 ,name: 'block',color:'purple'},
-  { x:6 ,y:7 ,name: 'block',color:'purple'},
-  { x:9 ,y:1 ,name: 'block',color:'purple'},
-  { x:3 ,y:7 ,name: 'block',color:'red'},
-  { x:9 ,y:7 ,name: 'block',color:'orange'},
-  { x:7 ,y:3 ,name: 'block',color:'blue'},
-  { x:3 ,y:9 ,name: 'star'},
-  { x:3 ,y:1 ,name: 'star'},
-  { x:5 ,y:3 ,name: 'star'},
-  { x:9 ,y:3 ,name: 'goal'}
 ],
 [
   { x:0 ,y:9 ,name: 'start'},
