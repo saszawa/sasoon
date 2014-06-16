@@ -232,14 +232,14 @@ var STAGES = [
 		{ x:0 ,y:4 ,name: 'start'},
 		{ x:3 ,y:4 ,name: 'block',color:'red'},
 		{ x:6 ,y:4 ,name: 'block',color:'blue'},
-		{ x:4 ,y:2 ,name: 'pipe' ,pipeStatus:{x:5 ,y:7 ,direction:'right'} },
 		{ x:3 ,y:2 ,name: 'star'},
 		{ x:6 ,y:2 ,name: 'star'},
 		{ x:8 ,y:2 ,name: 'star'},
 		{ x:8 ,y:7 ,name: 'goal'}
 	]
 ];
-
+// pipeの使い方
+// { x:4 ,y:2 ,name: 'pipe' ,pipeStatus:{x:5 ,y:7 ,direction:'right'} },
 //チュートリアル用のステージ配列
 var TUTOSTAGES = [
 	[
