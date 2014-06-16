@@ -547,6 +547,20 @@ var STAGES = [
     { x:2 ,y:4 ,name: 'diffusioner'},
     { x:8 ,y:4 ,name: 'diffusioner'},
     { x:0 ,y:3 ,name: 'block',color:'purple'},
+    { x:3 ,y:4 ,name: 'block',color:'blue'},
+    { x:2 ,y:3 ,name: 'block',color:'green'},
+    { x:8 ,y:5 ,name: 'block',color:'orange'},
+    { x:5 ,y:1 ,name: 'star'},
+    { x:5 ,y:7 ,name: 'star'},
+    { x:8 ,y:2 ,name: 'star'},
+    { x:8 ,y:8 ,name: 'goal'}
+  ],
+  [
+    //32
+    { x:0 ,y:0 ,name: 'start'},
+    { x:2 ,y:4 ,name: 'diffusioner'},
+    { x:8 ,y:4 ,name: 'diffusioner'},
+    { x:0 ,y:3 ,name: 'block',color:'purple'},
     { x:3 ,y:3 ,name: 'block',color:'purple'},
     { x:2 ,y:5 ,name: 'block',color:'purple'},
     { x:3 ,y:4 ,name: 'block',color:'blue'},
