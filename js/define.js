@@ -1,6 +1,6 @@
 /*
-*global定義
-*/
+ *global定義
+ */
 var GAME;
 
 // 定数
@@ -19,25 +19,25 @@ var LEVEL         = 0;
 
 
 var DIRECTIONS = {
-	black:  [true ,true ,true ,true],
-	white:  [true ,true ,true ,true],
-	red:    [true ,true ,true ,true],
-	green:  [true ,true ,true ,true],
-	blue:   [true ,true ,true ,true],
-	orange: [true ,false ,true ,false],
-	purple: [false ,true ,false ,true]
+  black:  [true ,true ,true ,true],
+  white:  [true ,true ,true ,true],
+  red:    [true ,true ,true ,true],
+  green:  [true ,true ,true ,true],
+  blue:   [true ,true ,true ,true],
+  orange: [true ,false ,true ,false],
+  purple: [false ,true ,false ,true]
 };
 var COLORS = {
-	black:     '#555555',
-	white:     '#ecf0f1',
-	blue:      '#38B5FE',
-	green:     '#36D7B7',
-	red:       '#ff6666',
-	purple:    '#BF77EC',
-	yellow:    '#F4D03F',
-	orange:    '#FFA533',
-	pink:      '#FFCCFF',
-	pureWhite: '#fff'
+  black:     '#555555',
+  white:     '#ecf0f1',
+  blue:      '#38B5FE',
+  green:     '#36D7B7',
+  red:       '#ff6666',
+  purple:    '#BF77EC',
+  yellow:    '#F4D03F',
+  orange:    '#FFA533',
+  pink:      '#FFCCFF',
+  pureWhite: '#fff'
 };
 
 var BACKGROUND_ARC = null;
@@ -52,18 +52,18 @@ var SLANTER = null;
 var LINKER = null;
 
 function drawStar(nX, nY, numVertex, longRadius, shortRadius, context2D) {
-	var nStart = Math.PI;
-	var nTheta = nStart / numVertex;
-	var nRadians = 0;
-	numVertex *= 2;
-	nStart /= 2;
-	context2D.moveTo(nX, -longRadius + nY);
-	for (var i = 1; i < numVertex; i++) {
-		nRadians = i * nTheta - nStart;
-		context2D.lineTo(shortRadius * Math.cos(nRadians) + nX, shortRadius * Math.sin(nRadians) + nY);
-		nRadians = (++i) * nTheta - nStart;
-		context2D.lineTo(longRadius * Math.cos(nRadians) + nX, longRadius * Math.sin(nRadians) + nY);
-	}
+  var nStart = Math.PI;
+  var nTheta = nStart / numVertex;
+  var nRadians = 0;
+  numVertex *= 2;
+  nStart /= 2;
+  context2D.moveTo(nX, -longRadius + nY);
+  for (var i = 1; i < numVertex; i++) {
+    nRadians = i * nTheta - nStart;
+    context2D.lineTo(shortRadius * Math.cos(nRadians) + nX, shortRadius * Math.sin(nRadians) + nY);
+    nRadians = (++i) * nTheta - nStart;
+    context2D.lineTo(longRadius * Math.cos(nRadians) + nX, longRadius * Math.sin(nRadians) + nY);
+  }
 }
 
 // ブロックが1×1
@@ -71,298 +71,347 @@ function drawStar(nX, nY, numVertex, longRadius, shortRadius, context2D) {
 var currentStage = [];
 // ステージの配列
 var STAGES = [
-	[
-		{ x:0 ,y:4 ,name: 'start'},
-		{ x:3 ,y:4 ,name: 'block',color:'red'},
-		{ x:3 ,y:2 ,name: 'star'},
-		{ x:3 ,y:6 ,name: 'star'},
-		{ x:6 ,y:2 ,name: 'star'},
-		{ x:9 ,y:4 ,name: 'goal'}
-	],
-	[
-		{ x:3 ,y:1 ,name: 'start'},
-		{ x:3 ,y:4 ,name: 'block',color:'green'},
-		{ x:0 ,y:4 ,name: 'star'},
-		{ x:3 ,y:7 ,name: 'star'},
-		{ x:6 ,y:2 ,name: 'star'},
-		{ x:9 ,y:4 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:4 ,name: 'start'},
-		{ x:3 ,y:4 ,name: 'block',color:'red'},
-		{ x:6 ,y:4 ,name: 'block',color:'blue'},
-		{ x:3 ,y:2 ,name: 'star'},
-		{ x:6 ,y:2 ,name: 'star'},
-		{ x:8 ,y:2 ,name: 'star'},
-		{ x:8 ,y:7 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:1 ,name: 'start'},
-		{ x:0 ,y:4 ,name: 'block',color:'red'},
-		{ x:3 ,y:4 ,name: 'block',color:'blue'},
-		{ x:6 ,y:1 ,name: 'star'},
-		{ x:6 ,y:7 ,name: 'star'},
-		{ x:9 ,y:2 ,name: 'star'},
-		{ x:9 ,y:4 ,name: 'block',color:'red'},
-		{ x:9 ,y:7 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:1 ,name: 'start'},
-		{ x:3 ,y:1 ,name: 'block',color:'red'},
-		{ x:3 ,y:4 ,name: 'block',color:'blue'},
-		{ x:6 ,y:4 ,name: 'block',color:'green'},
-		{ x:9 ,y:7 ,name: 'block',color:'green'},
-		{ x:4 ,y:1 ,name: 'star'},
-		{ x:6 ,y:9 ,name: 'star'},
-		{ x:3 ,y:5 ,name: 'star'},
-		{ x:9 ,y:9 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:4 ,name: 'start'},
-		{ x:2 ,y:4 ,name: 'block',color:'purple'},
-		{ x:5 ,y:4 ,name: 'block',color:'purple'},
-		{ x:6 ,y:7 ,name: 'block',color:'purple'},
-		{ x:9 ,y:4 ,name: 'star'},
-		{ x:6 ,y:1 ,name: 'star'},
-		{ x:3 ,y:7 ,name: 'star'},
-		{ x:9 ,y:7 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:4 ,name: 'start'},
-		{ x:9 ,y:3 ,name: 'block',color:'purple'},
-		{ x:6 ,y:3 ,name: 'block',color:'red'},
-		{ x:6 ,y:2 ,name: 'star'},
-		{ x:3 ,y:3 ,name: 'star'},
-		{ x:3 ,y:4 ,name: 'block',color:'purple'},
-		{ x:6 ,y:4 ,name: 'block',color:'purple'},
-		{ x:9 ,y:5 ,name: 'block',color:'purple'},
-		{ x:6 ,y:5 ,name: 'block',color:'blue'},
-		{ x:6 ,y:6 ,name: 'star'},
-		{ x:3 ,y:5 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:4 ,name: 'start'},
-		{ x:9 ,y:1 ,name: 'block',color:'blue'},
-		{ x:6 ,y:1 ,name: 'star'},
-		{ x:9 ,y:0 ,name: 'star'},
-		{ x:3 ,y:4 ,name: 'block',color:'purple'},
-		{ x:6 ,y:4 ,name: 'block',color:'purple'},
-		{ x:6 ,y:7 ,name: 'block',color:'purple'},
-		{ x:9 ,y:7 ,name: 'block',color:'red'},
-		{ x:9 ,y:9 ,name: 'star'},
-		{ x:3 ,y:7 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:1 ,name: 'start'},
-		{ x:3 ,y:1 ,name: 'block',color:'purple'},
-		{ x:9 ,y:1 ,name: 'star'},
-		{ x:9 ,y:7 ,name: 'star'},
-		{ x:3 ,y:4 ,name: 'block',color:'blue'},
-		{ x:9 ,y:4 ,name: 'block',color:'red'},
-		{ x:3 ,y:7 ,name: 'block',color:'green'},
-		{ x:6 ,y:4 ,name: 'block',color:'purple'},
-		{ x:6 ,y:7 ,name: 'star'},
-		{ x:0 ,y:7 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:9 ,name: 'start'},
-		{ x:3 ,y:9 ,name: 'block',color:'purple'},
-		{ x:0 ,y:3 ,name: 'star'},
-		{ x:9 ,y:6 ,name: 'star'},
-		{ x:6 ,y:9 ,name: 'block',color:'blue'},
-		{ x:3 ,y:6 ,name: 'block',color:'red'},
-		{ x:6 ,y:6 ,name: 'block',color:'purple'},
-		{ x:6 ,y:3 ,name: 'block',color:'green'},
-		{ x:3 ,y:3 ,name: 'block',color:'purple'},
-		{ x:3 ,y:0 ,name: 'star'},
-		{ x:9 ,y:0 ,name: 'goal'}
-	],
   [
-    //11
-    { x:0 ,y:3 ,name: 'start'},
-    { x:5 ,y:0 ,name: 'star'},
-    { x:9 ,y:2 ,name: 'star'},
-    { x:3 ,y:3 ,name: 'block',color:'purple'},
-    { x:6 ,y:3 ,name: 'block',color:'purple'},
-    { x:9 ,y:3 ,name: 'block',color:'red'},
-    { x:5 ,y:6 ,name: 'block',color:'blue'},
-    { x:3 ,y:6 ,name: 'block',color:'purple'},
-    { x:9 ,y:4 ,name: 'star'},
-    { x:1 ,y:6 ,name: 'goal'}
-  ],
-  [
-    //12
-    { x:1 ,y:3 ,name: 'start'},
-    { x:0 ,y:4 ,name: 'star'},
-    { x:5 ,y:1 ,name: 'block',color:'red'},
-    { x:7 ,y:1 ,name: 'star'},
-    { x:3 ,y:3 ,name: 'block',color:'purple'},
-    { x:6 ,y:3 ,name: 'block',color:'purple'},
-    { x:8 ,y:3 ,name: 'block',color:'red'},
-    { x:5 ,y:6 ,name: 'block',color:'blue'},
-    { x:3 ,y:6 ,name: 'block',color:'purple'},
-    { x:0 ,y:6 ,name: 'block',color:'green'},
-    { x:8 ,y:9 ,name: 'star'},
-    { x:5 ,y:9 ,name: 'block',color:'purple'},
-    { x:0 ,y:9 ,name: 'goal'}
-  ],
-  [
-    //13
-    { x:0 ,y:0 ,name: 'start'},
-    { x:3 ,y:0 ,name: 'block',color:'purple'},
-    { x:6 ,y:0 ,name: 'block',color:'purple'},
-    { x:9 ,y:0 ,name: 'block',color:'red'},
-    { x:4 ,y:3 ,name: 'star'},
-    { x:0 ,y:3 ,name: 'block',color:'blue'},
-    { x:5 ,y:3 ,name: 'star'},
-    { x:3 ,y:3 ,name: 'block',color:'purple'},
-    { x:6 ,y:3 ,name: 'block',color:'purple'},
-    { x:9 ,y:6 ,name: 'block',color:'green'},
-    { x:0 ,y:6 ,name: 'block',color:'green'},
-    { x:3 ,y:6 ,name: 'star'},
-    { x:6 ,y:6 ,name: 'goal'}
-  ],
-	[
-		{ x:0 ,y:9 ,name: 'start'},
-		{ x:3 ,y:0 ,name: 'block',color:'purple'},
-		{ x:6 ,y:0 ,name: 'block',color:'purple'},
-		{ x:9 ,y:0 ,name: 'block',color:'purple'},
-		{ x:9 ,y:3 ,name: 'block',color:'blue'},
-		{ x:4 ,y:0 ,name: 'block',color:'blue'},
-    { x:5 ,y:0 ,name: 'star'},
-    { x:6 ,y:3 ,name: 'block',color:'purple'},
-    { x:3 ,y:3 ,name: 'block',color:'purple'},
-    { x:0 ,y:3 ,name: 'block',color:'purple'},
-		{ x:0 ,y:6 ,name: 'block',color:'red'},
-    { x:3 ,y:6 ,name: 'block',color:'purple'},
-    { x:4 ,y:6 ,name: 'star'},
-    { x:5 ,y:6 ,name: 'star'},
-    { x:6 ,y:6 ,name: 'block',color:'purple'},
-    { x:9 ,y:6 ,name: 'block',color:'purple'},
-    { x:9 ,y:9 ,name: 'block',color:'green'},
-    { x:6 ,y:9 ,name: 'block',color:'purple'},
-    { x:3 ,y:9 ,name: 'block',color:'purple'},
-		{ x:0 ,y:0 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:9 ,name: 'start'},
-		{ x:3 ,y:9 ,name: 'block',color:'orange'},
-		{ x:3 ,y:6 ,name: 'block',color:'orange'},
-    { x:6 ,y:3 ,name: 'block',color:'orange'},
-    { x:3 ,y:0 ,name: 'star'},
-    { x:0 ,y:3 ,name: 'star'},
-    { x:6 ,y:0 ,name: 'star'},
-		{ x:6 ,y:6 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:4 ,name: 'start'},
-		{ x:3 ,y:4 ,name: 'block',color:'purple'},
-		{ x:6 ,y:4 ,name: 'block',color:'orange'},
-		{ x:6 ,y:1 ,name: 'block',color:'purple'},
-		{ x:6 ,y:7 ,name: 'block',color:'purple'},
-		{ x:9 ,y:1 ,name: 'block',color:'purple'},
-		{ x:3 ,y:7 ,name: 'block',color:'red'},
-		{ x:9 ,y:7 ,name: 'block',color:'orange'},
-		{ x:7 ,y:3 ,name: 'block',color:'blue'},
-		{ x:3 ,y:9 ,name: 'star'},
-		{ x:3 ,y:1 ,name: 'star'},
-		{ x:5 ,y:3 ,name: 'star'},
-		{ x:9 ,y:3 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:9 ,name: 'start'},
-		{ x:0 ,y:6 ,name: 'block',color:'purple'},
-		{ x:3 ,y:6 ,name: 'block',color:'orange'},
-		{ x:3 ,y:3 ,name: 'block',color:'purple'},
-		{ x:2 ,y:8 ,name: 'block',color:'blue'},
-		{ x:6 ,y:0 ,name: 'block',color:'purple'},
-		{ x:5 ,y:5 ,name: 'block',color:'blue'},
-		{ x:5 ,y:8 ,name: 'star'},
-		{ x:6 ,y:7 ,name: 'star'},
-		{ x:8 ,y:5 ,name: 'star'},
-		{ x:6 ,y:3 ,name: 'block',color:'orange'},
-		{ x:9 ,y:0 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:0 ,name: 'start'},
-		{ x:3 ,y:0 ,name: 'block',color:'purple'},
-		{ x:6 ,y:0 ,name: 'block',color:'red'},
-		{ x:6 ,y:3 ,name: 'block',color:'purple'},
-		{ x:3 ,y:6 ,name: 'slanter'},
-		{ x:1 ,y:4 ,name: 'star'},
-		{ x:5 ,y:4 ,name: 'star'},
-		{ x:1 ,y:8 ,name: 'star'},
-		{ x:5 ,y:8 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:6 ,name: 'start'},
-		{ x:3 ,y:1 ,name: 'block',color:'red'},
-		{ x:3 ,y:4 ,name: 'slanter'},
-		{ x:3 ,y:6 ,name: 'block',color:'orange'},
-		{ x:5 ,y:6 ,name: 'block',color:'orange'},
-		{ x:5 ,y:4 ,name: 'slanter'},
-		{ x:5 ,y:1 ,name: 'block',color:'blue'},
-		{ x:0 ,y:2 ,name: 'star'},
-		{ x:7 ,y:2 ,name: 'star'},
-		{ x:7 ,y:6 ,name: 'star'},
-		{ x:8 ,y:1 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:4 ,name: 'start'},
-		{ x:2 ,y:4 ,name: 'block',color:'purple'},
-		{ x:5 ,y:4 ,name: 'slanter'},
-		{ x:1 ,y:2 ,name: 'block',color:'purple'},
-		{ x:3 ,y:0 ,name: 'block',color:'orange'},
-		{ x:1 ,y:6 ,name: 'block',color:'purple'},
-		{ x:3 ,y:8 ,name: 'block',color:'orange'},
-		{ x:9 ,y:2 ,name: 'block',color:'blue'},
-		{ x:7 ,y:0 ,name: 'block',color:'red'},
-		{ x:9 ,y:6 ,name: 'block',color:'green'},
-		{ x:7 ,y:8 ,name: 'block',color:'blue'},
-		{ x:7 ,y:3 ,name: 'block',color:'red'},
-		{ x:5 ,y:8 ,name: 'star'},
-		{ x:9 ,y:4 ,name: 'star'},
-		{ x:4 ,y:6 ,name: 'star'},
-		{ x:3 ,y:3 ,name: 'block',color:'purple'},
-		{ x:5 ,y:3 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:4 ,name: 'start'},
-		{ x:2 ,y:4 ,name: 'block',color:'purple'},
-		{ x:6 ,y:4 ,name: 'block',color:'blue'},
-		{ x:3 ,y:2 ,name: 'star'},
-		{ x:6 ,y:2 ,name: 'star'},
-		{ x:8 ,y:2 ,name: 'star'},
-		{ x:8 ,y:7 ,name: 'goal'}
-	],
-	[
-		{ x:0 ,y:4 ,name: 'start'},
-		{ x:3 ,y:4 ,name: 'block',color:'red'},
-		{ x:6 ,y:4 ,name: 'block',color:'blue'},
-		{ x:3 ,y:2 ,name: 'star'},
-		{ x:6 ,y:2 ,name: 'star'},
-		{ x:8 ,y:2 ,name: 'star'},
-		{ x:8 ,y:7 ,name: 'goal'}
-	]
+  { x:0 ,y:4 ,name: 'start'},
+  { x:3 ,y:4 ,name: 'block',color:'red'},
+  { x:3 ,y:2 ,name: 'star'},
+  { x:3 ,y:6 ,name: 'star'},
+  { x:6 ,y:2 ,name: 'star'},
+  { x:9 ,y:4 ,name: 'goal'}
+],
+[
+  { x:3 ,y:1 ,name: 'start'},
+  { x:3 ,y:4 ,name: 'block',color:'green'},
+  { x:0 ,y:4 ,name: 'star'},
+  { x:3 ,y:7 ,name: 'star'},
+  { x:6 ,y:2 ,name: 'star'},
+  { x:9 ,y:4 ,name: 'goal'}
+],
+[
+  { x:0 ,y:4 ,name: 'start'},
+  { x:3 ,y:4 ,name: 'block',color:'red'},
+  { x:6 ,y:4 ,name: 'block',color:'blue'},
+  { x:3 ,y:2 ,name: 'star'},
+  { x:6 ,y:2 ,name: 'star'},
+  { x:8 ,y:2 ,name: 'star'},
+  { x:8 ,y:7 ,name: 'goal'}
+],
+[
+  { x:0 ,y:1 ,name: 'start'},
+  { x:0 ,y:4 ,name: 'block',color:'red'},
+  { x:3 ,y:4 ,name: 'block',color:'blue'},
+  { x:6 ,y:1 ,name: 'star'},
+  { x:6 ,y:7 ,name: 'star'},
+  { x:9 ,y:2 ,name: 'star'},
+  { x:9 ,y:4 ,name: 'block',color:'red'},
+  { x:9 ,y:7 ,name: 'goal'}
+],
+[
+  { x:0 ,y:1 ,name: 'start'},
+  { x:3 ,y:1 ,name: 'block',color:'red'},
+  { x:3 ,y:4 ,name: 'block',color:'blue'},
+  { x:6 ,y:4 ,name: 'block',color:'green'},
+  { x:9 ,y:7 ,name: 'block',color:'green'},
+  { x:4 ,y:1 ,name: 'star'},
+  { x:6 ,y:9 ,name: 'star'},
+  { x:3 ,y:5 ,name: 'star'},
+  { x:9 ,y:9 ,name: 'goal'}
+],
+[
+  { x:0 ,y:4 ,name: 'start'},
+  { x:2 ,y:4 ,name: 'block',color:'purple'},
+  { x:5 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:7 ,name: 'block',color:'purple'},
+  { x:9 ,y:4 ,name: 'star'},
+  { x:6 ,y:1 ,name: 'star'},
+  { x:3 ,y:7 ,name: 'star'},
+  { x:9 ,y:7 ,name: 'goal'}
+],
+[
+  { x:0 ,y:4 ,name: 'start'},
+  { x:9 ,y:3 ,name: 'block',color:'purple'},
+  { x:6 ,y:3 ,name: 'block',color:'red'},
+  { x:6 ,y:2 ,name: 'star'},
+  { x:3 ,y:3 ,name: 'star'},
+  { x:3 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:4 ,name: 'block',color:'purple'},
+  { x:9 ,y:5 ,name: 'block',color:'purple'},
+  { x:6 ,y:5 ,name: 'block',color:'blue'},
+  { x:6 ,y:6 ,name: 'star'},
+  { x:3 ,y:5 ,name: 'goal'}
+],
+[
+  { x:0 ,y:4 ,name: 'start'},
+  { x:9 ,y:1 ,name: 'block',color:'blue'},
+  { x:6 ,y:1 ,name: 'star'},
+  { x:9 ,y:0 ,name: 'star'},
+  { x:3 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:7 ,name: 'block',color:'purple'},
+  { x:9 ,y:7 ,name: 'block',color:'red'},
+  { x:9 ,y:9 ,name: 'star'},
+  { x:3 ,y:7 ,name: 'goal'}
+],
+[
+  { x:0 ,y:1 ,name: 'start'},
+  { x:3 ,y:1 ,name: 'block',color:'purple'},
+  { x:9 ,y:1 ,name: 'star'},
+  { x:9 ,y:7 ,name: 'star'},
+  { x:3 ,y:4 ,name: 'block',color:'blue'},
+  { x:9 ,y:4 ,name: 'block',color:'red'},
+  { x:3 ,y:7 ,name: 'block',color:'green'},
+  { x:6 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:7 ,name: 'star'},
+  { x:0 ,y:7 ,name: 'goal'}
+],
+[
+  { x:0 ,y:9 ,name: 'start'},
+  { x:3 ,y:9 ,name: 'block',color:'purple'},
+  { x:0 ,y:3 ,name: 'star'},
+  { x:9 ,y:6 ,name: 'star'},
+  { x:6 ,y:9 ,name: 'block',color:'blue'},
+  { x:3 ,y:6 ,name: 'block',color:'red'},
+  { x:6 ,y:6 ,name: 'block',color:'purple'},
+  { x:6 ,y:3 ,name: 'block',color:'green'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:3 ,y:0 ,name: 'star'},
+  { x:9 ,y:0 ,name: 'goal'}
+],
+[
+  //11
+  { x:0 ,y:3 ,name: 'start'},
+  { x:5 ,y:0 ,name: 'star'},
+  { x:9 ,y:2 ,name: 'star'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:6 ,y:3 ,name: 'block',color:'purple'},
+  { x:9 ,y:3 ,name: 'block',color:'red'},
+  { x:5 ,y:6 ,name: 'block',color:'blue'},
+  { x:3 ,y:6 ,name: 'block',color:'purple'},
+  { x:9 ,y:4 ,name: 'star'},
+  { x:1 ,y:6 ,name: 'goal'}
+],
+[
+  //12
+  { x:1 ,y:3 ,name: 'start'},
+  { x:0 ,y:4 ,name: 'star'},
+  { x:5 ,y:1 ,name: 'block',color:'red'},
+  { x:7 ,y:1 ,name: 'star'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:6 ,y:3 ,name: 'block',color:'purple'},
+  { x:8 ,y:3 ,name: 'block',color:'red'},
+  { x:5 ,y:6 ,name: 'block',color:'blue'},
+  { x:3 ,y:6 ,name: 'block',color:'purple'},
+  { x:0 ,y:6 ,name: 'block',color:'green'},
+  { x:8 ,y:9 ,name: 'star'},
+  { x:5 ,y:9 ,name: 'block',color:'purple'},
+  { x:0 ,y:9 ,name: 'goal'}
+],
+[
+  //13
+  { x:0 ,y:0 ,name: 'start'},
+  { x:3 ,y:0 ,name: 'block',color:'purple'},
+  { x:6 ,y:0 ,name: 'block',color:'purple'},
+  { x:9 ,y:0 ,name: 'block',color:'red'},
+  { x:4 ,y:3 ,name: 'star'},
+  { x:0 ,y:3 ,name: 'block',color:'blue'},
+  { x:5 ,y:3 ,name: 'star'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:6 ,y:3 ,name: 'block',color:'purple'},
+  { x:9 ,y:6 ,name: 'block',color:'green'},
+  { x:0 ,y:6 ,name: 'block',color:'green'},
+  { x:3 ,y:6 ,name: 'star'},
+  { x:6 ,y:6 ,name: 'goal'}
+],
+[
+  //14
+  { x:0 ,y:9 ,name: 'start'},
+  { x:3 ,y:0 ,name: 'block',color:'purple'},
+  { x:6 ,y:0 ,name: 'block',color:'purple'},
+  { x:9 ,y:0 ,name: 'block',color:'purple'},
+  { x:9 ,y:3 ,name: 'block',color:'blue'},
+  { x:4 ,y:0 ,name: 'block',color:'blue'},
+  { x:5 ,y:0 ,name: 'star'},
+  { x:6 ,y:3 ,name: 'block',color:'purple'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:0 ,y:3 ,name: 'block',color:'purple'},
+  { x:0 ,y:6 ,name: 'block',color:'red'},
+  { x:3 ,y:6 ,name: 'block',color:'purple'},
+  { x:4 ,y:6 ,name: 'star'},
+  { x:5 ,y:6 ,name: 'star'},
+  { x:6 ,y:6 ,name: 'block',color:'purple'},
+  { x:9 ,y:6 ,name: 'block',color:'purple'},
+  { x:9 ,y:9 ,name: 'block',color:'green'},
+  { x:6 ,y:9 ,name: 'block',color:'purple'},
+  { x:3 ,y:9 ,name: 'block',color:'purple'},
+  { x:0 ,y:0 ,name: 'goal'}
+],
+[
+  //15
+  { x:0 ,y:9 ,name: 'start'},
+  { x:3 ,y:9 ,name: 'block',color:'orange'},
+  { x:3 ,y:6 ,name: 'block',color:'orange'},
+  { x:6 ,y:3 ,name: 'block',color:'orange'},
+  { x:3 ,y:0 ,name: 'star'},
+  { x:0 ,y:3 ,name: 'star'},
+  { x:6 ,y:0 ,name: 'star'},
+  { x:6 ,y:6 ,name: 'goal'}
+],
+[
+  //16
+  { x:0 ,y:9 ,name: 'start'},
+  { x:3 ,y:9 ,name: 'block',color:'blue'},
+  { x:6 ,y:9 ,name: 'block',color:'orange'},
+  { x:6 ,y:6 ,name: 'block',color:'red'},
+  { x:9 ,y:6 ,name: 'block',color:'orange'},
+  { x:9 ,y:3 ,name: 'block',color:'orange'},
+  { x:0 ,y:2 ,name: 'block',color:'orange'},
+  { x:9 ,y:0 ,name: 'block',color:'purple'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:3 ,y:4 ,name: 'block',color:'red'},
+  { x:0 ,y:3 ,name: 'block',color:'green'},
+  { x:6 ,y:0 ,name: 'block',color:'blue'},
+  { x:4 ,y:0 ,name: 'block',color:'purple'},
+  { x:3 ,y:5 ,name: 'star'},
+  { x:9 ,y:9 ,name: 'star'},
+  { x:6 ,y:2 ,name: 'star'},
+  { x:0 ,y:0 ,name: 'goal'}
+],
+[
+  { x:0 ,y:4 ,name: 'start'},
+  { x:3 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:4 ,name: 'block',color:'orange'},
+  { x:6 ,y:1 ,name: 'block',color:'purple'},
+  { x:6 ,y:7 ,name: 'block',color:'purple'},
+  { x:9 ,y:1 ,name: 'block',color:'purple'},
+  { x:3 ,y:7 ,name: 'block',color:'red'},
+  { x:9 ,y:7 ,name: 'block',color:'orange'},
+  { x:7 ,y:3 ,name: 'block',color:'blue'},
+  { x:3 ,y:9 ,name: 'star'},
+  { x:3 ,y:1 ,name: 'star'},
+  { x:5 ,y:3 ,name: 'star'},
+  { x:9 ,y:3 ,name: 'goal'}
+],
+[
+  { x:0 ,y:9 ,name: 'start'},
+  { x:0 ,y:6 ,name: 'block',color:'purple'},
+  { x:3 ,y:6 ,name: 'block',color:'orange'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:2 ,y:8 ,name: 'block',color:'blue'},
+  { x:6 ,y:0 ,name: 'block',color:'purple'},
+  { x:5 ,y:5 ,name: 'block',color:'blue'},
+  { x:5 ,y:8 ,name: 'star'},
+  { x:6 ,y:7 ,name: 'star'},
+  { x:8 ,y:5 ,name: 'star'},
+  { x:6 ,y:3 ,name: 'block',color:'orange'},
+  { x:9 ,y:0 ,name: 'goal'}
+],
+[
+  { x:0 ,y:0 ,name: 'start'},
+  { x:3 ,y:0 ,name: 'block',color:'purple'},
+  { x:6 ,y:0 ,name: 'block',color:'red'},
+  { x:6 ,y:3 ,name: 'block',color:'purple'},
+  { x:3 ,y:6 ,name: 'slanter'},
+  { x:1 ,y:4 ,name: 'star'},
+  { x:5 ,y:4 ,name: 'star'},
+  { x:1 ,y:8 ,name: 'star'},
+  { x:5 ,y:8 ,name: 'goal'}
+],
+[
+  { x:0 ,y:6 ,name: 'start'},
+  { x:3 ,y:1 ,name: 'block',color:'red'},
+  { x:3 ,y:4 ,name: 'slanter'},
+  { x:3 ,y:6 ,name: 'block',color:'orange'},
+  { x:5 ,y:6 ,name: 'block',color:'orange'},
+  { x:5 ,y:4 ,name: 'slanter'},
+  { x:5 ,y:1 ,name: 'block',color:'blue'},
+  { x:0 ,y:2 ,name: 'star'},
+  { x:7 ,y:2 ,name: 'star'},
+  { x:7 ,y:6 ,name: 'star'},
+  { x:8 ,y:1 ,name: 'goal'}
+],
+[
+  { x:0 ,y:4 ,name: 'start'},
+  { x:2 ,y:4 ,name: 'block',color:'purple'},
+  { x:5 ,y:4 ,name: 'slanter'},
+  { x:1 ,y:2 ,name: 'block',color:'purple'},
+  { x:3 ,y:0 ,name: 'block',color:'orange'},
+  { x:1 ,y:6 ,name: 'block',color:'purple'},
+  { x:3 ,y:8 ,name: 'block',color:'orange'},
+  { x:9 ,y:2 ,name: 'block',color:'blue'},
+  { x:7 ,y:0 ,name: 'block',color:'red'},
+  { x:9 ,y:6 ,name: 'block',color:'green'},
+  { x:7 ,y:8 ,name: 'block',color:'blue'},
+  { x:7 ,y:3 ,name: 'block',color:'red'},
+  { x:5 ,y:8 ,name: 'star'},
+  { x:9 ,y:4 ,name: 'star'},
+  { x:4 ,y:6 ,name: 'star'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:5 ,y:3 ,name: 'goal'}
+],
+[
+  { x:0 ,y:5 ,name: 'start'},
+  { x:3 ,y:5 ,name: 'block',color:'red'},
+  { x:3 ,y:2 ,name: 'block',color:'purple'},
+  { x:3 ,y:8 ,name: 'block',color:'purple'},
+  { x:6 ,y:2 ,name: 'block',color:'red'},
+  { x:9 ,y:1 ,name: 'block',color:'red'},
+  { x:8 ,y:0 ,name: 'block',color:'blue'},
+  { x:9 ,y:4 ,name: 'block',color:'green'},
+  { x:9 ,y:6 ,name: 'star'},
+  { x:5 ,y:8 ,name: 'block',color:'purple'},
+  { x:5 ,y:0 ,name: 'block',color:'purple'},
+  { x:8 ,y:3 ,name: 'block',color:'purple'},
+  { x:9 ,y:0 ,name: 'star'},
+  { x:7 ,y:8 ,name: 'block',color:'blue'},
+  { x:7 ,y:1 ,name: 'block',color:'red'},
+  { x:7 ,y:6 ,name: 'block',color:'green'},
+  { x:6 ,y:5 ,name: 'star'},
+  { x:9 ,y:5 ,name: 'goal'}
+],
+[
+  { x:1 ,y:1 ,name: 'start'},
+  { x:6 ,y:3 ,name: 'block',color:'purple'},
+  { x:4 ,y:0 ,name: 'block',color:'red'},
+  { x:7 ,y:0 ,name: 'block',color:'blue'},
+  { x:4 ,y:3 ,name: 'block',color:'green'},
+  { x:9 ,y:3 ,name: 'block',color:'red'},
+  { x:6 ,y:5 ,name: 'block',color:'red'},
+  { x:5 ,y:5 ,name: 'block',color:'blue'},
+  { x:3 ,y:1 ,name: 'block',color:'purple'},
+  { x:6 ,y:1 ,name: 'block',color:'purple'},
+  { x:9 ,y:4 ,name: 'block',color:'blue'},
+  { x:3 ,y:5 ,name: 'block',color:'purple'},
+  { x:7 ,y:4 ,name: 'star'},
+  { x:9 ,y:7 ,name: 'block',color:'red'},
+  { x:7 ,y:7 ,name: 'star'},
+  { x:5 ,y:7 ,name: 'block',color:'blue'},
+  { x:3 ,y:4 ,name: 'block',color:'green'},
+  { x:9 ,y:9 ,name: 'block',color:'green'},
+  { x:6 ,y:9 ,name: 'block',color:'blue'},
+  { x:2 ,y:9 ,name: 'block',color:'red'},
+  { x:2 ,y:7 ,name: 'block',color:'green'},
+  { x:9 ,y:2 ,name: 'star'},
+  { x:0 ,y:9 ,name: 'goal'}
+]
 ];
 
 //チュートリアル用のステージ配列
 var TUTOSTAGES = [
-	[
-		{ x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
-		{ x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
-		{ x:7 ,y:4 ,name: 'tutoGoal',color:'green'}
-	],
-	[
-		{ x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
-		{ x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
-		{ x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
-	],
-	[
-		{ x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
-		{ x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
-		{ x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
-	]
+  [
+  { x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
+  { x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
+  { x:7 ,y:4 ,name: 'tutoGoal',color:'green'}
+],
+[
+  { x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
+  { x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
+  { x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
+],
+[
+  { x:1 ,y:4 ,name: 'tutoBlock',color:'white'},
+  { x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
+  { x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
+]
 ];
 
 var tutoCurrentStage = [];
