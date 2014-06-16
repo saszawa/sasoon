@@ -60,6 +60,7 @@ var YELLOW_STAR = null;
 var SCORE_STARS = [];
 var DIFFUSIONER = null;
 var SLANTER = null;
+var PIPE = null;
 var LINKER = null;
 
 function drawStar(nX, nY, numVertex, longRadius, shortRadius, context2D) {
@@ -356,7 +357,8 @@ var STAGES = [
 		{ x:8 ,y:7 ,name: 'goal'}
 	]
 ];
-
+// pipeの使い方
+// { x:4 ,y:2 ,name: 'pipe' ,pipeStatus:{x:5 ,y:7 ,direction:'right'} },
 //チュートリアル用のステージ配列
 var TUTOSTAGES = [
 	[
