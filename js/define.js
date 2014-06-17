@@ -557,6 +557,32 @@ var STAGES = [
   ],
   [
     //32
+    { x:0 ,y:8 ,name: 'start'},
+    { x:3 ,y:1 ,name: 'diffusioner'},
+    { x:7 ,y:1 ,name: 'diffusioner'},
+    { x:7 ,y:5 ,name: 'diffusioner'},
+    { x:3 ,y:5 ,name: 'diffusioner'},
+    { x:5 ,y:3 ,name: 'slanter'},
+    { x:2 ,y:5 ,name: 'slanter'},
+    { x:5 ,y:6 ,name: 'block',color:'orange'},
+    { x:7 ,y:6 ,name: 'block',color:'orange'},
+    { x:5 ,y:8 ,name: 'block',color:'orange'},
+    { x:4 ,y:1 ,name: 'block',color:'orange'},
+    { x:2 ,y:8 ,name: 'block',color:'purple'},
+    { x:8 ,y:1 ,name: 'block',color:'purple'},
+    { x:3 ,y:2 ,name: 'block',color:'purple'},
+    { x:3 ,y:4 ,name: 'block',color:'purple'},
+    { x:7 ,y:4 ,name: 'block',color:'purple'},
+    { x:2 ,y:2 ,name: 'block',color:'blue'},
+    { x:6 ,y:1 ,name: 'block',color:'orange'},
+    { x:2 ,y:4 ,name: 'block',color:'red'},
+    { x:5 ,y:1 ,name: 'star'},
+    { x:3 ,y:3 ,name: 'star'},
+    { x:7 ,y:3 ,name: 'star'},
+    { x:0 ,y:0 ,name: 'goal'}
+  ],
+  [
+    //33
     { x:0 ,y:0 ,name: 'start'},
     { x:2 ,y:4 ,name: 'diffusioner'},
     { x:8 ,y:4 ,name: 'diffusioner'},
