@@ -37,7 +37,6 @@
 <script src="js/tutorial.js"></script>
 </head>
 <body style="width: 100%; height: 100%; padding: 0; margin: 0;">
-<div id="enchant-stage"></div>
 <i class="icon-th" id='load'></i>
 </body>
 </html>
