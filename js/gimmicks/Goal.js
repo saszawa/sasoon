@@ -13,6 +13,9 @@ var Goal = Class.create(Sprite,{
 	run: function(){
 		clearTimeout(this.parentNode.endTimer);
 		this.parentNode.cleared = true;
+
+		this.parentNode.removeChild(this.parentNode.retryLabel);
+
 		var that = this;
 
 		// 星の削除

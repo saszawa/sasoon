@@ -257,11 +257,32 @@ div.gameOverText {
 }
 
 /* line 266, ../scss/gameStyle.scss */
+div.retryLabelOnGame {
+  text-align: center;
+  font-size: 30px;
+  line-height: 64px;
+  color: #ecf0f1;
+  background: #555555;
+  box-sizing: border-box;
+  border-radius: 5px;
+  z-index: 9999;
+  opacity: 0.5 !important;
+}
+/* line 276, ../scss/gameStyle.scss */
+div.retryLabelOnGame:hover {
+  opacity: 1 !important;
+}
+/* line 279, ../scss/gameStyle.scss */
+div.retryLabelOnGame:active {
+  opacity: 1 !important;
+}
+
+/* line 283, ../scss/gameStyle.scss */
 #load {
   opacity: 0;
 }
 
-/* line 271, ../scss/gameStyle.scss */
+/* line 288, ../scss/gameStyle.scss */
 div.pointerArrow {
   position: relative;
   width: 0;
@@ -270,7 +291,7 @@ div.pointerArrow {
   border-right-color: yellow;
 }
 
-/* line 279, ../scss/gameStyle.scss */
+/* line 296, ../scss/gameStyle.scss */
 div.pointerArrow:after {
   position: absolute;
   content: '';
@@ -281,30 +302,30 @@ div.pointerArrow:after {
   background: yellow;
 }
 
-/* line 289, ../scss/gameStyle.scss */
+/* line 306, ../scss/gameStyle.scss */
 .TutoMessaFirst {
   font-size: 30px;
 }
 
-/* line 293, ../scss/gameStyle.scss */
+/* line 310, ../scss/gameStyle.scss */
 .tuto_white_msg {
   font-size: 20px;
   color: white;
 }
 
-/* line 298, ../scss/gameStyle.scss */
+/* line 315, ../scss/gameStyle.scss */
 .tuto_black_msg {
   font-size: 20px;
   color: black;
 }
 
-/* line 303, ../scss/gameStyle.scss */
+/* line 320, ../scss/gameStyle.scss */
 .tuto_clear_msg {
   font-size: 40px;
   color: black;
 }
 
-/* line 309, ../scss/gameStyle.scss */
+/* line 326, ../scss/gameStyle.scss */
 .msg {
   font-size: 20px;
 }

@@ -118,10 +118,15 @@ function createPlayerStatus(data){
   starSprite.scale(0.8,0.8);
   playerStatusGroup.addChild(starSprite);
 
-
-
-
   return playerStatusGroup;
+}
+
+function createRetryLabelOnGame(){
+  var retryLabelOnGame = new ExLabel(LANGUAGE[COUNTRYCODE].gameRetry,BOX_SIZE*3,BOX_SIZE);
+  retryLabelOnGame.setClassName('retryLabelOnGame');
+  retryLabelOnGame.x = 6.5 * 64;
+  retryLabelOnGame.y = 8.5 * 64;
+  return retryLabelOnGame;
 }
 
 //チュートリアルの勝ちパターンのときの最初の矢印

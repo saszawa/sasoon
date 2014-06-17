@@ -1,7 +1,7 @@
 var Timer = Class.create(Label,{
 	initialize: function(){
 		Label.call(this);
-		this.timer = 10;
+		this.timer = 20;
 		this.text = this.timer;
 		this.font = '400px Mplus';
 		this.color = COLORS.blue;
@@ -13,7 +13,7 @@ var Timer = Class.create(Label,{
 		this.textAlign = 'center';
 	},
 	onaddedtoscene: function(){
-		this.tl.scaleTo(0.1,0.1,300);
+		this.tl.scaleTo(0.1,0.1,600);
 		console.log('timer add');
 	},
 	onenterframe: function(){
@@ -25,10 +25,14 @@ var Timer = Class.create(Label,{
 				this.color = COLORS.red;
 			}
 			if(this.timer > 0 && !this.parentNode.canTap){
+				this.parentNode.addChild(this.parentNode.retryLabel);
+
 				currentStage[0].run();
 				this.parentNode.removeChild(this);
 				currentStage.splice(0,1);
 			} else if(this.timer <= 0){
+				this.parentNode.addChild(this.parentNode.retryLabel);
+
 				console.log('Not yet tap.');
 				this.parentNode.canTap = false;
 				currentStage[0].run();
