@@ -6,8 +6,17 @@ function createStageScene(){
     this.star = 0;
     this.stars = [];
     this.canTap = true;
+    clearTimeout(this.endTimer);
     this.endTimer = null;
     this.cleared = false;
+
+    this.removeChild(this.retryLabel);
+    this.retryLabel = createRetryLabelOnGame();
+    this.retryLabel.on('touchend',function(){
+      stageScene.initStage();
+      var selectScene = createSelectScene();
+      selectScene.selectedStage(LEVEL);
+    });
 
     // ステージの初期化
     currentStage.forEach(function(gimmick){
