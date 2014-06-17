@@ -329,3 +329,9 @@ div.pointerArrow:after {
 .msg {
   font-size: 20px;
 }
+
+/* line 330, ../scss/gameStyle.scss */
+#enchant-stage {
+  max-width: 640px !important;
+  max-height: 640px !important;
+}
