@@ -557,6 +557,45 @@ var STAGES = [
 ],
 [
   //32
+  { x:0 ,y:9 ,name: 'start'},
+  { x:3 ,y:2 ,name: 'diffusioner'},
+  { x:7 ,y:2 ,name: 'diffusioner'},
+  { x:7 ,y:6 ,name: 'diffusioner'},
+  { x:3 ,y:6 ,name: 'diffusioner'},
+  { x:5 ,y:4 ,name: 'slanter'},
+  { x:2 ,y:7 ,name: 'slanter'},
+  { x:8 ,y:7 ,name: 'slanter'},
+  { x:3 ,y:3 ,name: 'slanter'},
+  { x:5 ,y:7 ,name: 'block',color:'orange'},
+  { x:5 ,y:9 ,name: 'block',color:'orange'},
+  { x:2 ,y:9 ,name: 'block',color:'purple'},
+  { x:5 ,y:0 ,name: 'block',color:'purple'},
+  { x:5 ,y:2 ,name: 'block',color:'red'},
+  { x:1 ,y:2 ,name: 'block',color:'orange'},
+  { x:1 ,y:8 ,name: 'star'},
+  { x:9 ,y:8 ,name: 'star'},
+  { x:1 ,y:0 ,name: 'star'},
+  { x:7 ,y:0 ,name: 'goal'}
+],
+[
+  //33
+  { x:0 ,y:0 ,name: 'start'},
+  { x:2 ,y:4 ,name: 'diffusioner'},
+  { x:8 ,y:4 ,name: 'diffusioner'},
+  { x:0 ,y:3 ,name: 'block',color:'purple'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:2 ,y:5 ,name: 'block',color:'purple'},
+  { x:3 ,y:4 ,name: 'block',color:'blue'},
+  { x:2 ,y:3 ,name: 'block',color:'green'},
+  { x:7 ,y:3 ,name: 'slanter'},
+  { x:8 ,y:5 ,name: 'block',color:'orange'},
+  { x:5 ,y:1 ,name: 'star'},
+  { x:6 ,y:7 ,name: 'star'},
+  { x:9 ,y:1 ,name: 'star'},
+  { x:8 ,y:8 ,name: 'goal'}
+],
+[
+  //34
   { x:0 ,y:8 ,name: 'start'},
   { x:3 ,y:1 ,name: 'diffusioner'},
   { x:7 ,y:1 ,name: 'diffusioner'},
@@ -580,23 +619,6 @@ var STAGES = [
   { x:3 ,y:3 ,name: 'star'},
   { x:7 ,y:3 ,name: 'star'},
   { x:0 ,y:0 ,name: 'goal'}
-],
-[
-  //33
-  { x:0 ,y:0 ,name: 'start'},
-  { x:2 ,y:4 ,name: 'diffusioner'},
-  { x:8 ,y:4 ,name: 'diffusioner'},
-  { x:0 ,y:3 ,name: 'block',color:'purple'},
-  { x:3 ,y:3 ,name: 'block',color:'purple'},
-  { x:2 ,y:5 ,name: 'block',color:'purple'},
-  { x:3 ,y:4 ,name: 'block',color:'blue'},
-  { x:2 ,y:3 ,name: 'block',color:'green'},
-  { x:7 ,y:3 ,name: 'slanter'},
-  { x:8 ,y:5 ,name: 'block',color:'orange'},
-  { x:5 ,y:1 ,name: 'star'},
-  { x:6 ,y:7 ,name: 'star'},
-  { x:9 ,y:1 ,name: 'star'},
-  { x:8 ,y:8 ,name: 'goal'}
 ],
 [
   //35
