@@ -263,6 +263,23 @@ div.gameOverText{
 	-1px 1px 0px $col-white,
 	1px 2px 3px rgba(0, 0, 0, 0.6)
 }
+div.retryLabelOnGame{
+	text-align: center;
+	font-size: 30px;
+	line-height: 64px;
+	color: $col-white;
+	background: $col-black;
+	box-sizing: border-box;
+	border-radius: 5px;
+	z-index: 9999;
+	opacity:0.5 !important;
+	&:hover{
+		opacity:1 !important;
+	}
+	&:active{
+		opacity:1 !important;
+	}
+}
 #load{
 	opacity: 0;
 }

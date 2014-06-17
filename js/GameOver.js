@@ -61,6 +61,7 @@ var GameOver = Class.create(Group,{
 		});
 	},
 	onaddedtoscene: function(){
+		this.parentNode.removeChild(this.parentNode.retryLabel);
 		this.gameOverLabel.tl.moveTo(0,230,30,BOUNCE_EASEOUT);
 	}
 });
