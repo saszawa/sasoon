@@ -36,7 +36,7 @@ window.onload = function () {
 
     // 獲得数の星
     SCORE_STARS[0] = new Surface(BOX_SIZE*2,BOX_SIZE*2);
-
+    // 星1
     SCORE_STARS[1] = new Surface(BOX_SIZE*2,BOX_SIZE*2);
     var ctxS = SCORE_STARS[1].context;
     ctxS.beginPath();
@@ -48,7 +48,7 @@ window.onload = function () {
     ctxS.fill();
     ctxS.stroke();
 
-
+    // 星2
     SCORE_STARS[2] = new Surface(BOX_SIZE*2,BOX_SIZE*2);
     var ctxD = SCORE_STARS[2].context;
     ctxD.fillStyle = COLORS.yellow;
@@ -67,6 +67,7 @@ window.onload = function () {
     ctxD.stroke();
     ctxD.closePath();
 
+    // 星3
     SCORE_STARS[3] = new Surface(BOX_SIZE*2,BOX_SIZE*2);
     var ctxT = SCORE_STARS[3].context;
     ctxT.fillStyle = COLORS.yellow;
@@ -90,6 +91,75 @@ window.onload = function () {
     ctxT.fill();
     ctxT.stroke();
     ctxT.closePath();
+
+    // オレンジブロック
+    ORANGE = new Surface(BOX_SIZE,BOX_SIZE);
+    var ctxOr = ORANGE.context;
+    ctxOr.fillStyle = COLORS.orange;
+    ctxOr.strokeStyle = COLORS.yellow;
+    ctxOr.lineWidth = 3;
+    ctxOr.beginPath();
+    ctxOr.moveTo(BOX_HALF,0);
+    ctxOr.lineTo(BOX_SIZE,BOX_HALF);
+    ctxOr.lineTo(BOX_HALF,BOX_SIZE);
+    ctxOr.lineTo(0,BOX_HALF);
+    ctxOr.lineTo(BOX_HALF,0);
+    ctxOr.fill();
+    ctxOr.stroke();
+    ctxOr.closePath()
+
+    ctxOr.beginPath();
+    ctxOr.fillStyle = COLORS.yellow;
+    ctxOr.strokeStyle = COLORS.orange;
+    ctxOr.moveTo(BOX_HALF,0);
+    ctxOr.lineTo(BOX_HALF*1.5,BOX_HALF*0.5);
+    ctxOr.lineTo(BOX_HALF+6,BOX_HALF*0.5);
+    ctxOr.lineTo(BOX_HALF+6,BOX_HALF*1.5);
+    ctxOr.lineTo(BOX_HALF*1.5,BOX_HALF*1.5);
+    ctxOr.lineTo(BOX_HALF,BOX_SIZE);
+    ctxOr.lineTo(BOX_HALF*0.5,BOX_HALF*1.5);
+    ctxOr.lineTo(BOX_HALF-6,BOX_HALF*1.5);
+    ctxOr.lineTo(BOX_HALF-6,BOX_HALF*0.5);
+    ctxOr.lineTo(BOX_HALF*0.5,BOX_HALF*0.5);
+    ctxOr.lineTo(BOX_HALF,0);
+    ctxOr.fill();
+    ctxOr.stroke();
+    ctxOr.closePath();
+
+
+    // 紫ブロック
+    PURPLE = new Surface(BOX_SIZE,BOX_SIZE);
+    var ctxPu = PURPLE.context;
+    ctxPu.fillStyle = COLORS.purple;
+    ctxPu.strokeStyle = COLORS.yellow;
+    ctxPu.lineWidth = 3;
+    ctxPu.beginPath();
+    ctxPu.moveTo(BOX_HALF,0);
+    ctxPu.lineTo(BOX_SIZE,BOX_HALF);
+    ctxPu.lineTo(BOX_HALF,BOX_SIZE);
+    ctxPu.lineTo(0,BOX_HALF);
+    ctxPu.lineTo(BOX_HALF,0);
+    ctxPu.fill();
+    ctxPu.stroke();
+    ctxPu.closePath()
+
+    ctxPu.beginPath();
+    ctxPu.fillStyle = COLORS.yellow;
+    ctxPu.strokeStyle = COLORS.purple;
+    ctxPu.moveTo(0,BOX_HALF);
+    ctxPu.lineTo(BOX_HALF*0.5,BOX_HALF*1.5);
+    ctxPu.lineTo(BOX_HALF*0.5,BOX_HALF+6);
+    ctxPu.lineTo(BOX_HALF*1.5,BOX_HALF+6);
+    ctxPu.lineTo(BOX_HALF*1.5,BOX_HALF*1.5);
+    ctxPu.lineTo(BOX_SIZE,BOX_HALF);
+    ctxPu.lineTo(BOX_HALF*1.5,BOX_HALF*0.5);
+    ctxPu.lineTo(BOX_HALF*1.5,BOX_HALF-6);
+    ctxPu.lineTo(BOX_HALF*0.5,BOX_HALF-6);
+    ctxPu.lineTo(BOX_HALF*0.5,BOX_HALF*0.5);
+    ctxPu.lineTo(0,BOX_HALF);
+    ctxPu.fill();
+    ctxPu.stroke();
+    ctxPu.closePath();
 
     // ディフュージョナー
     DIFFUSIONER = new Surface(BOX_SIZE,BOX_SIZE);

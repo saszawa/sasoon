@@ -62,6 +62,8 @@ var DIFFUSIONER = null;
 var SLANTER = null;
 var PIPE = null;
 var LINKER = null;
+var ORANGE = null;
+var PURPLE = null;
 
 function drawStar(nX, nY, numVertex, longRadius, shortRadius, context2D) {
   var nStart = Math.PI;
