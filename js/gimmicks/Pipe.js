@@ -10,7 +10,7 @@ var Pipe = Class.create(Sprite,{
 
     // Beam用ステータス
     this.beamStatus = {
-      top:{
+      up:{
         moveX: 0,
         moveY: -MOVE_PX,
       },
