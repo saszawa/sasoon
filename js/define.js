@@ -692,10 +692,42 @@ var STAGES = [
   { x:3 ,y:7 ,name: 'goal'}
 ],
 [
-  //36
-  { x:0 ,y:8 ,name: 'start'},
-  { x:5 ,y:7 ,name: 'slanter'},
-  { x:0 ,y:0 ,name: 'goal'}
+  //37
+  { x:1 ,y:2 ,name: 'start'},
+  { x:7 ,y:2 ,name: 'pipe' ,pipeStatus:{x:4 ,y:7 ,direction:'right'} },
+  { x:6 ,y:7 ,name: 'block',color:'red'},
+  { x:4 ,y:4 ,name: 'star'},
+  { x:6 ,y:9 ,name: 'star'},
+  { x:9 ,y:7 ,name: 'star'},
+  { x:6 ,y:4 ,name: 'goal'}
+],
+[
+  //38
+  { x:1 ,y:1 ,name: 'start'},
+  { x:7 ,y:1 ,name: 'pipe' ,pipeStatus:{x:1 ,y:8 ,direction:'right'} },
+  { x:4 ,y:4 ,name: 'pipe' ,pipeStatus:{x:8 ,y:6 ,direction:'left'} },
+  { x:4 ,y:1 ,name: 'block',color:'red'},
+  { x:5 ,y:6 ,name: 'block',color:'red'},
+  { x:4 ,y:8 ,name: 'block',color:'red'},
+  { x:5 ,y:0 ,name: 'star'},
+  { x:8 ,y:3 ,name: 'star'},
+  { x:2 ,y:6 ,name: 'star'},
+  { x:2 ,y:3 ,name: 'goal'}
+],
+[
+  //39
+  { x:0 ,y:4 ,name: 'start'},
+  { x:4 ,y:1 ,name: 'pipe' ,pipeStatus:{x:0 ,y:5 ,direction:'right'} },
+  { x:3 ,y:4 ,name: 'block',color:'red'},
+  { x:6 ,y:4 ,name: 'block',color:'blue'},
+  { x:9 ,y:1 ,name: 'block',color:'green'},
+  { x:9 ,y:5 ,name: 'block',color:'green'},
+  { x:7 ,y:5 ,name: 'block',color:'purple'},
+  { x:7 ,y:1 ,name: 'block',color:'red'},
+  { x:6 ,y:5 ,name: 'star'},
+  { x:4 ,y:5 ,name: 'star'},
+  { x:7 ,y:3 ,name: 'star'},
+  { x:1 ,y:5 ,name: 'goal'}
 ]
 
 
