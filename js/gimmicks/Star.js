@@ -15,7 +15,7 @@ var Star = Class.create(Sprite,{
 		this.hited = true;
 		this.tl.scaleTo(0.5,0.5,7).scaleTo(1,1,2).then(function(){
 			that.tl.clear();
-			that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT).loop();
+			that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
 		});
 		this.image = YELLOW_STAR;
 		this.parentNode.star++;
