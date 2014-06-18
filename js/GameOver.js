@@ -58,6 +58,8 @@ var GameOver = Class.create(Group,{
 			that.parentNode.removeChild(that);
 
 			GAME.currentScene.stageSelect();
+
+			delete that;
 		});
 	},
 	onaddedtoscene: function(){

@@ -52,11 +52,11 @@ var TitleBackAnim = Class.create(Group,{
                     this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
                 }
                 //	出したら移動
-                setTimeout(function(){
-                    thatBlock.x = that.positions[that.count].x * BOX_SIZE;
-                    thatBlock.y = that.positions[that.count].y * BOX_SIZE;
-                    that.count++;
-                },500);
+                thatBlock.tl.moveTo(
+                  that.positions[that.count].x * BOX_SIZE,
+                  that.positions[that.count].y * BOX_SIZE,
+                  30);
+                that.count++;
 
                 if(that.count === 4){
                     that.count = 0;
