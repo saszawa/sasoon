@@ -11,6 +11,9 @@ $col-purple: #BF77EC;
 $col-yellow: #F4D03F;
 $col-orange: #FFA533;
 $col-pink:   #FFCCFF;
+
+$box-size: 64px;
+
 *{
 	font-family: 'Bitter', serif
 }
@@ -37,8 +40,10 @@ $prefixes: ("-webkit-", "-moz-","-ms-","-o-",null);
 }
 @mixin blockAndBeam($color,$hex){
 	div.#{$color}{
+		box-sizing: border-box;
 		background: rgba($hex,1);
 		border-radius: 50%;
+		border: solid 2px $col-yellow;
 	}
 }
 //=======================//
@@ -191,6 +196,7 @@ div.box{
 @include blockAndBeam(black,$col-black);
 div.black{
 	text-align: center !important;
+	border: none !important;
 	i{
 		color: white;
 		width: 64px;
@@ -244,6 +250,45 @@ div.clearText{
 	1px 1px 0px $col-white,
 	-1px 1px 0px $col-white,
 	1px 2px 3px rgba(0, 0, 0, 0.6);
+}
+div.pipeOut{
+	line-height: $box-size;
+	font-family:'WebHostingHub-Glyphs';
+	font-size: 24px;
+	&:after{
+		color: $col-yellow;
+		width:$box-size;
+		height:$box-size;
+		text-align:center;
+	}
+	&.up:after{
+		content:'\f301';
+		position:absolute;
+		top:0;
+		left:0;
+		text-align: center;
+	}
+	&.right:after{
+		content:'\f304';
+		position:absolute;
+		top:0;
+		left:0;
+		text-align: center;
+	}
+	&.down:after{
+		content:'\f2fe';
+		position:absolute;
+		top:0;
+		left:0;
+		text-align: center;
+	}
+	&.left:after{
+		content:'\f305';
+		position:absolute;
+		top:0;
+		left:0;
+		text-align: center;
+	}
 }
 div.forResultBlock{
 	background: rgba(0,0,0,0) !important;

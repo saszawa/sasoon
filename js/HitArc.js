@@ -14,10 +14,11 @@ var HitArc = Class.create(Sprite,{
 	},
 	onaddedtoscene: function(){
 		var that = this;
+		var removeTarget = BACKGROUND_ARC;
+		BACKGROUND_ARC = that;
 		this.tl.scaleTo(5,5,20)
 			.then(function(){
-				that.parentNode.removeChild(BACKGROUND_ARC);
-					BACKGROUND_ARC = that;
+				GAME.currentScene.removeChild(removeTarget);
 			});
 	}
 });

@@ -33,7 +33,6 @@ var Slanter = Class.create(Sprite,{
 			var beamInit = {
 				x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
 				y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-				color: COLORS[this.color],
 				parentBlock:this,
 				beamLength: 2
 			}

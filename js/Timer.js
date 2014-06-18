@@ -3,7 +3,7 @@ var Timer = Class.create(Label,{
 		Label.call(this);
 		this.timer = 20;
 		this.text = this.timer;
-		this.font = '400px Mplus';
+		this.font = '400px Bitter';
 		this.color = COLORS.blue;
 		this.width = 640;
 		this.height = 640;

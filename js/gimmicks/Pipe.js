@@ -29,14 +29,16 @@ var Pipe = Class.create(Sprite,{
     };
   },
   onaddedtoscene: function(){
-    console.log(this.pipeStatus);
     this.pipeOut = new Sprite(BOX_SIZE,BOX_SIZE);
     this.pipeOut._element = document.createElement('div');
-    this.pipeOut._element.className = 'pipeOut';
+    this.pipeOut._element.className = 'pipeOut '+this.pipeStatus.direction;
     this.pipeOut.image = PIPE_OUT;
     this.pipeOut.x = this.pipeStatus.x * BOX_SIZE;
     this.pipeOut.y = this.pipeStatus.y * BOX_SIZE;
     this.parentNode.addChild(this.pipeOut);
+  },
+  onremovedfromscene: function(){
+    GAME.currentScene.removeChild(this.pipeOut);
   },
   /**
   * Block.run()
