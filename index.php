@@ -6,6 +6,7 @@
 <title>Touch Bloomy</title>
 <link rel="stylesheet" href="css/whhg.css">
 <link rel="stylesheet" href="css/gameStyle.css">
+<link rel="shortcut icon" href="./favicon.ico" />
 <script src="js/define.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/enchant.min.js"></script>
