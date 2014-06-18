@@ -717,6 +717,18 @@ var STAGES = [
 [
   //39
   { x:0 ,y:4 ,name: 'start'},
+  { x:2 ,y:3 ,name: 'block',color:'red'},
+  { x:2 ,y:5 ,name: 'block',color:'blue'},
+  { x:5 ,y:3 ,name: 'block',color:'green'},
+  { x:3 ,y:4 ,name: 'diffusioner'},
+  { x:4 ,y:3 ,name: 'star'},
+  { x:4 ,y:4 ,name: 'star'},
+  { x:4 ,y:5 ,name: 'star'},
+  { x:8 ,y:0 ,name: 'goal'}
+],
+[
+  //40
+  { x:0 ,y:4 ,name: 'start'},
   { x:4 ,y:1 ,name: 'pipe' ,pipeStatus:{x:0 ,y:5 ,direction:'right'} },
   { x:3 ,y:4 ,name: 'block',color:'red'},
   { x:6 ,y:4 ,name: 'block',color:'blue'},
@@ -728,7 +740,7 @@ var STAGES = [
   { x:4 ,y:5 ,name: 'star'},
   { x:7 ,y:3 ,name: 'star'},
   { x:1 ,y:5 ,name: 'goal'}
-]
+],
 
 
 ];
