@@ -209,8 +209,8 @@ div.black{
 @include blockAndBeam(red,$col-red);
 @include blockAndBeam(blue,$col-blue);
 @include blockAndBeam(green,$col-green);
-@include blockAndBeam(purple,$col-purple);
-@include blockAndBeam(orange,$col-orange);
+// @include blockAndBeam(purple,$col-purple);
+// @include blockAndBeam(orange,$col-orange);
 
 /*======== beam ========*/
 div.beam{

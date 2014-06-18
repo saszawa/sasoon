@@ -195,22 +195,6 @@ div.green {
   border: solid 2px #f4d03f;
 }
 
-/* line 42, ../scss/gameStyle.scss */
-div.purple {
-  box-sizing: border-box;
-  background: #bf77ec;
-  border-radius: 50%;
-  border: solid 2px #f4d03f;
-}
-
-/* line 42, ../scss/gameStyle.scss */
-div.orange {
-  box-sizing: border-box;
-  background: #ffa533;
-  border-radius: 50%;
-  border: solid 2px #f4d03f;
-}
-
 /*======== beam ========*/
 /* line 216, ../scss/gameStyle.scss */
 div.beam {

@@ -8,6 +8,12 @@ var Block = Class.create(Sprite,{
 
 		this.color = color;
 
+		if(this.color === 'orange'){
+			this.image = ORANGE;
+		} else if(this.color === 'purple'){
+			this.image = PURPLE;
+		}
+
 		// Beam用ステータス
 		this.beamStatus = {
 			top:{
