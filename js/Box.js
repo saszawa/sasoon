@@ -1,10 +1,9 @@
 var Box = Class.create(Sprite,{
-	initialize: function(scene){
+	initialize: function(){
 		Sprite.call(this,BOX_SIZE,BOX_SIZE);
 		// DOMモード
 		this._element = document.createElement('div');
 		this._element.className = 'box';
-		this.scene = scene;
 		this.moved = false;
 	},
 	ontouchstart: function(e){
@@ -33,6 +32,6 @@ var Box = Class.create(Sprite,{
 		block.x = this.x;
 		block.y = this.y;
 		currentStage.push(block);
-		this.scene.addChild(block);
+		this.parentNode.addChild(block);
 	}
 });

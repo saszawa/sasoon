@@ -1,6 +1,6 @@
 var Block = Class.create(Sprite,{
 	initialize: function(color){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE); 
+		Sprite.call(this,BOX_SIZE,BOX_SIZE);
 
 		// DOMモード
 		this._element = document.createElement('div');
@@ -50,7 +50,6 @@ var Block = Class.create(Sprite,{
 				var beamInit = {
 					x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
 					y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-					color: this.color,
 					parentBlock:this,
 					beamLength:BEAM_LENGTH
 				}
