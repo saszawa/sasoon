@@ -12,7 +12,6 @@ var Beam = Class.create(Sprite,{
 		this.initY = init.y;
 		this.x = init.x;
 		this.y = init.y;
-		this.color = init.color;
 
 		this.currentStage = currentStage;
 		this.parentBlock = init.parentBlock;
@@ -32,6 +31,7 @@ var Beam = Class.create(Sprite,{
 				this.currentStage[i].run();
 
 				// 当たったら消える
+				delete this.currentStage[i];
 				this.currentStage.splice(i,1);
 				this.parentNode.removeChild(this);
 				return;
