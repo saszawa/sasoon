@@ -19,9 +19,10 @@ function createStageScene(){
     });
 
     // ステージの初期化
-    currentStage.forEach(function(gimmick){
-      that.removeChild(gimmick);
-    });
+    for(var i = 0; i < currentStage.length;i++){
+      this.removeChild(currentStage[i]);
+      delete currentStage[i];
+    }
     currentStage = [];
 
     // タイマーのセット

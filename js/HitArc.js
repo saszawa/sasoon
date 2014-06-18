@@ -14,11 +14,9 @@ var HitArc = Class.create(Sprite,{
 	},
 	onaddedtoscene: function(){
 		var that = this;
-		var removeTarget = BACKGROUND_ARC;
-		BACKGROUND_ARC = that;
-		this.tl.scaleTo(5,5,20)
+		this.tl.scaleTo(2,2,20).and().fadeTo(0,20)
 			.then(function(){
-				GAME.currentScene.removeChild(removeTarget);
+				GAME.currentScene.removeChild(that);
 			});
 	}
 });
