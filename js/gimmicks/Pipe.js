@@ -1,12 +1,14 @@
 var Pipe = Class.create(Sprite,{
-  initialize: function(pipeStatus){
+  initialize: function(color,pipeStatus){
     Sprite.call(this,BOX_SIZE,BOX_SIZE);
 
     // DOMモード
     this._element = document.createElement('div');
     this._element.className = 'pipe';
-    this.image = PIPE;
+    console.log( PIPE_COLORS[color]);
+    this.image = PIPE_COLORS[color].pipe;
     this.pipeStatus = pipeStatus;
+    this.color = color;
 
     // Beam用ステータス
     this.beamStatus = {
@@ -32,7 +34,7 @@ var Pipe = Class.create(Sprite,{
     this.pipeOut = new Sprite(BOX_SIZE,BOX_SIZE);
     this.pipeOut._element = document.createElement('div');
     this.pipeOut._element.className = 'pipeOut '+this.pipeStatus.direction;
-    this.pipeOut.image = PIPE_OUT;
+    this.pipeOut.image = PIPE_COLORS[this.color].pipeOut;
     this.pipeOut.x = this.pipeStatus.x * BOX_SIZE;
     this.pipeOut.y = this.pipeStatus.y * BOX_SIZE;
     this.parentNode.addChild(this.pipeOut);
@@ -50,7 +52,7 @@ var Pipe = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-    var arc = new HitArc('blue');
+    var arc = new HitArc(this.color);
     arc.x = this.pipeOut.x-128;
     arc.y = this.pipeOut.y-128;
     this.parentNode.addChild(arc);

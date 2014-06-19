@@ -60,10 +60,16 @@ var YELLOW_STAR = null;
 var SCORE_STARS = [];
 var DIFFUSIONER = null;
 var SLANTER = null;
-var PIPE = null;
 var LINKER = null;
 var ORANGE = null;
 var PURPLE = null;
+var PIPE_RED = null;
+var PIPE_GREEN = null;
+var PIPE_BLUE = null;
+var PIPE_RED_OUT = null;
+var PIPE_GREEN_OUT = null;
+var PIPE_BLUE_OUT = null;
+var PIPE_COLORS = null;
 
 function drawStar(nX, nY, numVertex, longRadius, shortRadius, context2D) {
   var nStart = Math.PI;
@@ -696,7 +702,7 @@ var STAGES = [
 [
   //37
   { x:1 ,y:2 ,name: 'start'},
-  { x:7 ,y:2 ,name: 'pipe' ,pipeStatus:{x:4 ,y:7 ,direction:'right'} },
+  { x:7 ,y:2 ,name: 'pipe' ,color:'blue',pipeStatus:{x:4 ,y:7 ,direction:'right'} },
   { x:6 ,y:7 ,name: 'block',color:'red'},
   { x:4 ,y:4 ,name: 'star'},
   { x:6 ,y:9 ,name: 'star'},
@@ -706,8 +712,8 @@ var STAGES = [
 [
   //38
   { x:1 ,y:1 ,name: 'start'},
-  { x:7 ,y:1 ,name: 'pipe' ,pipeStatus:{x:1 ,y:8 ,direction:'right'} },
-  { x:4 ,y:4 ,name: 'pipe' ,pipeStatus:{x:8 ,y:6 ,direction:'left'} },
+  { x:7 ,y:1 ,name: 'pipe' ,color:'red'   ,pipeStatus:{x:1 ,y:8 ,direction:'right'} },
+  { x:4 ,y:4 ,name: 'pipe' ,color:'green' ,pipeStatus:{x:8 ,y:6 ,direction:'left'} },
   { x:4 ,y:1 ,name: 'block',color:'red'},
   { x:5 ,y:6 ,name: 'block',color:'red'},
   { x:4 ,y:8 ,name: 'block',color:'red'},
@@ -731,7 +737,7 @@ var STAGES = [
 [
   //40
   { x:0 ,y:4 ,name: 'start'},
-  { x:4 ,y:1 ,name: 'pipe' ,pipeStatus:{x:0 ,y:5 ,direction:'right'} },
+  { x:4 ,y:1 ,name: 'pipe' ,color:'blue',pipeStatus:{x:0 ,y:5 ,direction:'right'} },
   { x:3 ,y:4 ,name: 'block',color:'red'},
   { x:6 ,y:4 ,name: 'block',color:'blue'},
   { x:9 ,y:1 ,name: 'block',color:'green'},
@@ -783,6 +789,3 @@ var COUNTRYCODE = browserLanguage();
 var userData;
 var stageBoxes = [];
 var stageGroup;
-// var userData = [
-// 	3,2,3,1,1,3,2,0,2,1,0,1,3
-// ];
