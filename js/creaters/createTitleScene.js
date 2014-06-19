@@ -14,7 +14,7 @@ function createTitleScene(){
     titleScene.removeChild(touchStartLabel);
     titleScene.addChild(gameStartLabel);
     titleScene.addChild(tutorialLabel);
-    titleScene.addChild(optionMenuButton);
+    //titleScene.addChild(optionMenuButton);
   });
 
   var titleBackAnim = new TitleBackAnim();
