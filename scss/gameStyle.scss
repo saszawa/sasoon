@@ -108,13 +108,24 @@ div.tutorial{
   background: rgba($col-white,0.9);
   z-index:9999 !important;
 }
-div.delete{
-  font-size: 40px;
-  line-height: 60px;
-  text-align: center;
-  border-radius: 10px;
-  color: $col-green;
-  background: $col-white;
+div.optionMenu{
+	font-family:'WebHostingHub-Glyphs';
+	font-size:32px;
+	border-radius: 50%;
+	border: solid 3px $col-black;
+	box-sizing: border-box;
+	color: $col-black;
+	background: $col-white;
+	opacity: 0.9 !important;
+	z-index: 9999;
+	&:after{
+		content: '\f306';
+		position: absolute;
+		width: $box-size - 6;
+		height: $box-size - 6;
+		line-height: $box-size - 6;
+		text-align: center;
+	}
 }
 //===========================================
 // SELECT SCENE
