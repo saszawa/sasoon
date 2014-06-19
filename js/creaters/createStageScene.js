@@ -11,12 +11,6 @@ function createStageScene(){
     this.cleared = false;
 
     this.removeChild(this.retryLabel);
-    this.retryLabel = createRetryLabelOnGame();
-    this.retryLabel.on('touchend',function(){
-      stageScene.initStage();
-      var selectScene = createSelectScene();
-      selectScene.selectedStage(LEVEL);
-    });
 
     // ステージの初期化
     for(var i = 0; i < currentStage.length;i++){

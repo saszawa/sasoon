@@ -62,7 +62,7 @@ function createTitleLabel(){
 
   var titleLabel = new ExLabel(LANGUAGE[COUNTRYCODE].title);
   titleLabel.setClassName('titleText');
-  titleLabel.y = 150;
+  titleLabel.y = 140;
 
   return titleLabel;
 }
@@ -96,7 +96,29 @@ function createTutorialLabel(){
 
   return tutorialLabel;
 }
+// オプションメニューボタン
+function createOptionMenuButton(){
+  var optionMenuButton = new Sprite(BOX_SIZE,BOX_SIZE);
+  optionMenuButton._element = document.createElement('div');
+  optionMenuButton._element.className = 'optionMenu';
+  optionMenuButton.x = 4.5*BOX_SIZE;
+  optionMenuButton.y = 8*BOX_SIZE;
+  return optionMenuButton;
+}
+function createOptionMenu(){
+  var menuGroup = new Group();
 
+  var effectSwitch = new ExLabel('<input type="radio" name="effect" class="effect" />');
+  menuGroup.addChild(effectSwitch);
+
+  var deleteDataLabel = new ExLabel('<button>セーブデータを削除</button>');
+  menuGroup.addChild(deleteDataLabel);
+
+  var openAllStage = new ExLabel('<button>全ステージ出現</button>');
+  menuGroup.addChild(openAllStage);
+
+  return menuGroup;
+}
 // 現在の星の数を表すグループ
 function createPlayerStatus(data){
   var starCount = 0;

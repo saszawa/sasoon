@@ -68,6 +68,12 @@ function createSelectScene(){
     selectScene.addChild(selectLabel);
   });
 
+  selectScene.selectedStage = function(level){
+    LEVEL = level;
+    GAME.replaceScene(stageScene);
+    stageScene.initStage();
+  }
+
   //stageScene作成
   var stageScene = createStageScene();
   stageScene.stageSelect = function(){
@@ -79,11 +85,9 @@ function createSelectScene(){
     GAME.replaceScene(selectScene);
   }
 
-  selectScene.selectedStage = function(level){
-    LEVEL = level;
-    GAME.replaceScene(stageScene);
-    stageScene.initStage();
-  }
-
+  stageScene.retryLabel = createRetryLabelOnGame();
+  stageScene.retryLabel.on('touchend',function(){
+    selectScene.selectedStage(LEVEL);
+  });
   return selectScene;
 }
