@@ -725,7 +725,18 @@ var STAGES = [
 ],
 [
   //41
-  { x:1 ,y:4 ,name: 'start'},
+  { x:0 ,y:5 ,name: 'start'},
+  { x:0 ,y:0 ,name: 'pipe' ,color:'red'   ,pipeStatus:{x:2 ,y:4 ,direction:'right'} },
+  { x:3 ,y:2 ,name: 'pipe' ,color:'green' ,pipeStatus:{x:8 ,y:4 ,direction:'left'} },
+  { x:0 ,y:6 ,name: 'block',color:'blue'},
+  { x:3 ,y:6 ,name: 'block',color:'red'},
+  { x:6 ,y:6 ,name: 'block',color:'purple'},
+  { x:5 ,y:7 ,name: 'block',color:'orange'},
+  { x:9 ,y:3 ,name: 'block',color:'orange'},
+  { x:9 ,y:6 ,name: 'block',color:'red'},
+  { x:5 ,y:9 ,name: 'block',color:'blue'},
+  { x:9 ,y:0 ,name: 'block',color:'green'},
+  { x:6 ,y:0 ,name: 'block',color:'purple'},
   { x:5 ,y:4 ,name: 'slanter'},
   { x:4 ,y:4 ,name: 'slanter'},
   { x:6 ,y:4 ,name: 'slanter'},
@@ -753,7 +764,7 @@ var TUTOSTAGES = [
   { x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
 ],
 [
-  { x:1 ,y:4 ,name: 'tutoBlock',color:'start'},
+  { x:0 ,y:4 ,name: 'tutoBlock',color:'start'},
   { x:4 ,y:4 ,name: 'tutoBlock',color:'blue'},
   { x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
 ]
