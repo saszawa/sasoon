@@ -14,6 +14,7 @@ function createTitleScene(){
     titleScene.removeChild(touchStartLabel);
     titleScene.addChild(gameStartLabel);
     titleScene.addChild(tutorialLabel);
+    titleScene.addChild(optionMenuButton);
   });
 
   var titleBackAnim = new TitleBackAnim();
@@ -62,6 +63,12 @@ function createTitleScene(){
   tutorialLabel.on('touchend',function(){
     GAME.replaceScene(tutorialScene);
   });
+
+  // var optionMenuButton = createOptionMenuButton();
+  // var optionMenu = createOptionMenu();
+  // optionMenuButton.on('touchend',function(){
+  //   titleScene.addChild(optionMenu);
+  // });
 
   //selectscene
   var selectScene = createSelectScene();

@@ -26,7 +26,9 @@ var Beam = Class.create(Sprite,{
 		var gimmicks = this.currentStage.length;
 		var distance = BOX_HALF+12;
 		for(var i = 0; i < gimmicks; i++){
-			if(this.within(this.currentStage[i],this.currentStage[i].distance || distance) && this.currentStage[i] !== this.parentBlock && !this.parentNode.cleared){
+			if(!this.currentStage[i]){
+				GAME.currentScene.removeChild(this);
+			} else if(this.within(this.currentStage[i],this.currentStage[i].distance || distance) && this.currentStage[i] !== this.parentBlock && !this.parentNode.cleared){
 				// 発射！
 				this.currentStage[i].run();
 
