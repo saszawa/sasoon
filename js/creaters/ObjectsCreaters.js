@@ -382,26 +382,126 @@ function createSurfaces(){
   ctxSl.stroke();
   ctxSl.closePath();
 
-  // パイプ
-  PIPE = new Surface(BOX_SIZE,BOX_SIZE);
-  var ctxP = PIPE.context;
-  ctxP.fillStyle = COLORS.blue;
-  ctxP.strokeStyle = COLORS.yellow;
-  ctxP.lineWidth = 3;
-  ctxP.beginPath();
-  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/2,BOX_SIZE/2,ctxP);
-  ctxP.fill();
-  ctxP.stroke();
-  ctxP.closePath();
+  // 赤パイプ
+  PIPE_RED = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPR = PIPE_RED.context;
+  ctxPR.fillStyle = COLORS.red;
+  ctxPR.strokeStyle = COLORS.yellow;
+  ctxPR.lineWidth = 3;
+  ctxPR.beginPath();
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/2,BOX_SIZE/2,ctxPR);
+  ctxPR.fill();
+  ctxPR.stroke();
+  ctxPR.closePath();
   // 発射パイプ
-  PIPE_OUT = new Surface(BOX_SIZE,BOX_SIZE);
-  var ctxPO = PIPE_OUT.context;
-  ctxPO.fillStyle = COLORS.blue;
+  PIPE_RED_OUT = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPRO = PIPE_RED_OUT.context;
+  ctxPRO.fillStyle = COLORS.red;
+  ctxPRO.strokeStyle = COLORS.yellow;
+  ctxPRO.lineWidth = 3;
+  ctxPRO.beginPath();
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/3,BOX_SIZE/3,ctxPRO);
+  ctxPRO.fill();
+  ctxPRO.stroke();
+  ctxPRO.closePath();
+
+  // 緑パイプ
+  PIPE_GREEN = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPG = PIPE_GREEN.context;
+  ctxPG.fillStyle = COLORS.green;
+  ctxPG.strokeStyle = COLORS.yellow;
+  ctxPG.lineWidth = 3;
+  ctxPG.beginPath();
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/2,BOX_SIZE/2,ctxPG);
+  ctxPG.fill();
+  ctxPG.stroke();
+  ctxPG.closePath();
+  // 発射パイプ
+  PIPE_GREEN_OUT = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPGO = PIPE_GREEN_OUT.context;
+  ctxPGO.fillStyle = COLORS.green;
+  ctxPGO.strokeStyle = COLORS.yellow;
+  ctxPGO.lineWidth = 3;
+  ctxPGO.beginPath();
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/3,BOX_SIZE/3,ctxPGO);
+  ctxPGO.fill();
+  ctxPGO.stroke();
+  ctxPGO.closePath();
+
+  // 青パイプ
+  PIPE_BLUE = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPB = PIPE_BLUE.context;
+  ctxPB.fillStyle = COLORS.blue;
+  ctxPB.strokeStyle = COLORS.yellow;
+  ctxPB.lineWidth = 3;
+  ctxPB.beginPath();
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/2,BOX_SIZE/2,ctxPB);
+  ctxPB.fill();
+  ctxPB.stroke();
+  ctxPB.closePath();
+  // 発射パイプ
+  PIPE_BLUE_OUT = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPBO = PIPE_BLUE_OUT.context;
+  ctxPBO.fillStyle = COLORS.blue;
+  ctxPBO.strokeStyle = COLORS.yellow;
+  ctxPBO.lineWidth = 3;
+  ctxPBO.beginPath();
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/3,BOX_SIZE/3,ctxPBO);
+  ctxPBO.fill();
+  ctxPBO.stroke();
+  ctxPBO.closePath();
+
+  // 紫パイプ
+  PIPE_PURPLE = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPP = PIPE_PURPLE.context;
+  ctxPP.fillStyle = COLORS.purple;
+  ctxPP.strokeStyle = COLORS.yellow;
+  ctxPP.lineWidth = 3;
+  ctxPP.beginPath();
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/2,BOX_SIZE/2,ctxPP);
+  ctxPP.fill();
+  ctxPP.stroke();
+  ctxPP.closePath();
+  // 紫発射パイプ
+  PIPE_PURPLE_OUT = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPPO = PIPE_PURPLE_OUT.context;
+  ctxPPO.fillStyle = COLORS.purple;
+  ctxPPO.strokeStyle = COLORS.yellow;
+  ctxPPO.lineWidth = 3;
+  ctxPPO.beginPath();
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/3,BOX_SIZE/3,ctxPPO);
+  ctxPPO.fill();
+  ctxPPO.stroke();
+  ctxPPO.closePath();
+
+  // 紫パイプ
+  PIPE_ORANGE = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPO = PIPE_ORANGE.context;
+  ctxPO.fillStyle = COLORS.purple;
   ctxPO.strokeStyle = COLORS.yellow;
   ctxPO.lineWidth = 3;
   ctxPO.beginPath();
-  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/3,BOX_SIZE/3,ctxPO);
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/2,BOX_SIZE/2,ctxPO);
   ctxPO.fill();
   ctxPO.stroke();
   ctxPO.closePath();
+  // 紫発射パイプ
+  PIPE_ORANGE_OUT = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxPOO = PIPE_ORANGE_OUT.context;
+  ctxPOO.fillStyle = COLORS.purple;
+  ctxPOO.strokeStyle = COLORS.yellow;
+  ctxPOO.lineWidth = 3;
+  ctxPOO.beginPath();
+  drawStar(BOX_SIZE/2,BOX_SIZE/2,3,BOX_SIZE/3,BOX_SIZE/3,ctxPOO);
+  ctxPOO.fill();
+  ctxPOO.stroke();
+  ctxPOO.closePath();
+
+  PIPE_COLORS = {
+    red:   {pipe:PIPE_RED    ,pipeOut:PIPE_RED_OUT},
+    green: {pipe:PIPE_GREEN  ,pipeOut:PIPE_GREEN_OUT},
+    blue:  {pipe:PIPE_BLUE   ,pipeOut:PIPE_BLUE_OUT},
+    purple:{pipe:PIPE_PURPLE ,pipeOut:PIPE_PURPLE_OUT},
+    orange:{pipe:PIPE_ORANGE ,pipeOut:PIPE_ORANGE_OUT}
+  };
 }

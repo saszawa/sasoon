@@ -44,7 +44,7 @@ function　StageBuilder(gimmick){
     case 'slanter':
       return new Slanter();
     case 'pipe':
-      return new Pipe(gimmick.pipeStatus);
+      return new Pipe(gimmick.color,gimmick.pipeStatus);
     case 'linker':
       return new Linker(gimmick.color);
     case 'tutoGoal':
