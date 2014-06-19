@@ -63,12 +63,17 @@ var SLANTER = null;
 var LINKER = null;
 var ORANGE = null;
 var PURPLE = null;
+
 var PIPE_RED = null;
 var PIPE_GREEN = null;
 var PIPE_BLUE = null;
+var PIPE_PURPLE = null;
+var PIPE_ORANGE = null;
 var PIPE_RED_OUT = null;
 var PIPE_GREEN_OUT = null;
 var PIPE_BLUE_OUT = null;
+var PIPE_PURPLE_OUT = null;
+var PIPE_ORANGE_OUT = null;
 var PIPE_COLORS = null;
 
 function drawStar(nX, nY, numVertex, longRadius, shortRadius, context2D) {
@@ -752,10 +757,10 @@ var STAGES = [
 [
   //41
   { x:1 ,y:4 ,name: 'start'},
-  { x:3 ,y:7 ,name: 'pipe' ,pipeStatus:{x:0 ,y:0 ,direction:'down'} },
-  { x:3 ,y:3 ,name: 'pipe' ,pipeStatus:{x:0 ,y:9 ,direction:'right'} },
-  { x:6 ,y:3 ,name: 'pipe' ,pipeStatus:{x:9 ,y:0 ,direction:'left'} },
-  { x:6 ,y:7 ,name: 'pipe' ,pipeStatus:{x:9 ,y:9 ,direction:'up'} },
+  { x:3 ,y:7 ,name: 'pipe' ,color:'red'   ,pipeStatus:{x:0 ,y:0 ,direction:'down'} },
+  { x:3 ,y:3 ,name: 'pipe' ,color:'green' ,pipeStatus:{x:0 ,y:9 ,direction:'right'} },
+  { x:6 ,y:3 ,name: 'pipe' ,color:'blue'  ,pipeStatus:{x:9 ,y:0 ,direction:'left'} },
+  { x:6 ,y:7 ,name: 'pipe' ,color:'orange',pipeStatus:{x:9 ,y:9 ,direction:'up'} },
   { x:0 ,y:3 ,name: 'block',color:'purple'},
   { x:1 ,y:7 ,name: 'block',color:'purple'},
   { x:3 ,y:9 ,name: 'block',color:'purple'},
