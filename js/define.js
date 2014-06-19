@@ -743,6 +743,26 @@ var STAGES = [
   { x:7 ,y:3 ,name: 'star'},
   { x:1 ,y:5 ,name: 'goal'}
 ],
+[
+  //41
+  { x:1 ,y:4 ,name: 'start'},
+  { x:3 ,y:7 ,name: 'pipe' ,pipeStatus:{x:0 ,y:0 ,direction:'down'} },
+  { x:3 ,y:3 ,name: 'pipe' ,pipeStatus:{x:0 ,y:9 ,direction:'right'} },
+  { x:6 ,y:3 ,name: 'pipe' ,pipeStatus:{x:9 ,y:0 ,direction:'left'} },
+  { x:6 ,y:7 ,name: 'pipe' ,pipeStatus:{x:9 ,y:9 ,direction:'up'} },
+  { x:0 ,y:3 ,name: 'block',color:'purple'},
+  { x:1 ,y:7 ,name: 'block',color:'purple'},
+  { x:3 ,y:9 ,name: 'block',color:'purple'},
+  { x:9 ,y:6 ,name: 'block',color:'green'},
+  { x:6 ,y:9 ,name: 'block',color:'orange'},
+  { x:2 ,y:5 ,name: 'block',color:'blue'},
+  { x:3 ,y:9 ,name: 'block',color:'red'},
+  { x:9 ,y:3 ,name: 'block',color:'purple'},
+  { x:5 ,y:5 ,name: 'star'},
+  { x:2 ,y:0 ,name: 'star'},
+  { x:6 ,y:6 ,name: 'star'},
+  { x:6 ,y:0 ,name: 'goal'}
+]
 
 
 ];
