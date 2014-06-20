@@ -74,6 +74,7 @@ function createTitleScene(){
   var selectScene = createSelectScene();
   // backbutton branch 追加分 (0609)
   selectScene.backToTop = function(){
+    selectScene.initSelect();
     GAME.replaceScene(titleScene);
   }
   return titleScene;
