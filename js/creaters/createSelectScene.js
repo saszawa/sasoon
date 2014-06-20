@@ -74,6 +74,14 @@ function createSelectScene(){
     stageScene.initStage();
   }
 
+  selectScene.initSelect = function(){
+    var stageBoxesLen = stageBoxes.length;
+    for(var i = 0; i < stageBoxesLen;i++){
+      stageGroup.removeChild(stageBoxes[i]);
+    }
+    stageBoxes = [];
+  }
+
   //stageScene作成
   var stageScene = createStageScene();
   stageScene.stageSelect = function(){
