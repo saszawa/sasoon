@@ -14,7 +14,7 @@ function createTitleScene(){
     titleScene.removeChild(touchStartLabel);
     titleScene.addChild(gameStartLabel);
     titleScene.addChild(tutorialLabel);
-    //titleScene.addChild(optionMenuButton);
+    titleScene.addChild(optionMenuButton);
   });
 
   var titleBackAnim = new TitleBackAnim();
@@ -64,11 +64,11 @@ function createTitleScene(){
     GAME.replaceScene(tutorialScene);
   });
 
-  // var optionMenuButton = createOptionMenuButton();
-  // var optionMenu = createOptionMenu();
-  // optionMenuButton.on('touchend',function(){
-  //   titleScene.addChild(optionMenu);
-  // });
+  var optionMenuButton = createOptionMenuButton();
+  var optionMenu = createOptionMenu();
+  optionMenuButton.on('touchend',function(){
+    titleScene.addChild(optionMenu);
+  });
 
   //selectscene
   var selectScene = createSelectScene();

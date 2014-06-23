@@ -42,7 +42,7 @@ $prefixes: ("-webkit-", "-moz-","-ms-","-o-",null);
 	div.#{$color}{
 		box-sizing: border-box;
 		background: rgba($hex,1);
-		border-radius: 50%;
+		border-radius: $box-size/2;
 		border: solid 2px $col-yellow;
 	}
 }
@@ -70,7 +70,7 @@ div.titleText{
     2px 2px 0 $col-white,
     -2px 2px 0 $col-white,
 	1px 2px 3px rgba(0, 0, 0, 0.6);
-    z-index:9999 !important;
+    z-index:9997 !important;
     span{
         font-family: 'Bitter', serif;
         color: $col-red !important;
@@ -97,7 +97,7 @@ div.gameStart{
   border-radius: 10px;
   color: $col-green;
   background: rgba($col-white,0.9);
-  z-index:9999 !important;
+  z-index:9997 !important;
 }
 div.tutorial{
   font-size: 40px;
@@ -106,13 +106,50 @@ div.tutorial{
   border-radius: 10px;
   color: $col-green;
   background: rgba($col-white,0.9);
-  z-index:9999 !important;
+  z-index:9997 !important;
 }
-div.optionMenu{
+div.optionLayer{
+	z-index: 9999;
+	font-size: 64px;
+	color: $col-white;
+	text-align: center;
+	box-sizing: border-box;
+	button.btn-long{
+		border: solid 3px $col-white;
+		background: $col-blue;
+		color: $col-white;
+		font-size: 32px;
+		width: 400px;
+	}
+}
+div.effectLabel{
+	font-size: 48px;
+}
+div.effectSwitch{
+	button{
+		box-sizing: border-box;
+		border: solid 2px $col-white;
+		margin: 0;
+		padding: 5px 10px;
+		font-size: 32px;
+		background: $col-white;
+		width: 160px;
+	}
+	&.active button{
+		background: $col-blue;
+		border: solid 2px $col-green;
+	}
+}
+div.optionBackground{
+	z-index: 9998 !important;
+	border: solid 10px $col-white;
+	background: rgba($col-black,0.9);
+}
+div.optionMenuButton{
 	font-family:'WebHostingHub-Glyphs';
 	font-size:32px;
-	border-radius: 50%;
-	border: solid 3px $col-black;
+	border-radius: $box-size/2;
+	border: solid 1px $col-black;
 	box-sizing: border-box;
 	color: $col-black;
 	background: $col-white;
@@ -121,11 +158,15 @@ div.optionMenu{
 	&:after{
 		content: '\f306';
 		position: absolute;
-		width: $box-size - 6;
-		height: $box-size - 6;
-		line-height: $box-size - 6;
+		width: $box-size - 2;
+		height: $box-size - 2;
+		line-height: $box-size - 2;
 		text-align: center;
 	}
+}
+div.optionMenu{
+	width: 640px;
+	height: 640px;
 }
 //===========================================
 // SELECT SCENE
@@ -148,7 +189,6 @@ div.stageBox{
 	font-size: 64px;
 	line-height: 64px ;
 	color: $col-yellow !important;
-	border-radius: 10px;
   background: $col-white;
   &.nextStage{
     border:solid 5px $col-green;
@@ -166,7 +206,6 @@ div.stageBox{
       width: 128px;
       height: 128px;
       line-height: 128px;
-      border-radius: 10px;
       background: rgba(0,0,0,0.5);;
     }
   }
@@ -225,12 +264,12 @@ div.black{
 
 /*======== beam ========*/
 div.beam{
-	border-radius: 50%;
+	border-radius: $box-size/2;
   z-index:1;
   background: $col-yellow;
 }
 div.start{
-	border-radius: 50%;
+	border-radius: $box-size/2;
   box-sizing: border-box;
   border: double 24px $col-yellow;
 }
@@ -239,7 +278,7 @@ div.goal{
 	position: relative;
 	width: 100%;
 	height: 100%;
-	border-radius: 50%;
+	border-radius: $box-size/2;
   background: $col-yellow;
 }
 

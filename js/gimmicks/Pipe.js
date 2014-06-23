@@ -5,7 +5,6 @@ var Pipe = Class.create(Sprite,{
     // DOMモード
     this._element = document.createElement('div');
     this._element.className = 'pipe';
-    console.log( PIPE_COLORS[color]);
     this.image = PIPE_COLORS[color].pipe;
     this.pipeStatus = pipeStatus;
     this.color = color;
