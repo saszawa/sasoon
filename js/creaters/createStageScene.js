@@ -4,7 +4,7 @@ function createStageScene(){
   stageScene.initStage = function(){
     var that = this;
     this.star = 0;
-    this.stars = [];
+
     this.canTap = true;
     clearTimeout(this.endTimer);
     this.endTimer = null;
@@ -18,6 +18,14 @@ function createStageScene(){
       delete currentStage[i];
     }
     currentStage = [];
+    // 取得済みの星の削除
+    if(this.stars){
+      for(var i = 0; i < this.stars.length;i++){
+        this.removeChild(this.stars[i]);
+        delete this.stars[i];
+      }
+    }
+    this.stars = [];
 
     // タイマーのセット
     var timer = new Timer();
