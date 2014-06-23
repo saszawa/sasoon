@@ -138,6 +138,7 @@ div.effectSwitch{
 	&.active button{
 		background: $col-blue;
 		border: solid 2px $col-green;
+		color: $col-white !important;
 	}
 }
 div.optionBackground{

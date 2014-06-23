@@ -67,7 +67,17 @@ function createTitleScene(){
   var optionMenuButton = createOptionMenuButton();
   var optionMenu = createOptionMenu();
   optionMenuButton.on('touchend',function(){
-    titleScene.addChild(optionMenu);
+    if(this.menuOpen){
+      try{
+        titleScene.removeChild(optionMenu);
+      } catch(e){
+        // しゃあないもみ消す
+      }
+      this.menuOpen = false;
+    } else {
+      titleScene.addChild(optionMenu);
+      this.menuOpen = true;
+    }
   });
 
   //selectscene

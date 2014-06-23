@@ -27,7 +27,6 @@ window.onload = function () {
 
 // ステージ構築の補助
 function　StageBuilder(gimmick){
-
   switch(gimmick.name){
     case 'block':
       return new Block(gimmick.color);

@@ -44,10 +44,12 @@ var Block = Class.create(Sprite,{
 			GAME.currentScene.gameOver();
 		},3500);
 
-		var arc = new HitArc(this.color);
-		arc.x = this.x-128;
-		arc.y = this.y-128;
-		this.parentNode.addChild(arc);
+		if( 0 < effectLevel){
+			var arc = new HitArc(this.color);
+			arc.x = this.x-128;
+			arc.y = this.y-128;
+			this.parentNode.addChild(arc);
+		}
 
 		var i = 0;
 		for(var beam in this.beamStatus){
