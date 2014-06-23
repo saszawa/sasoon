@@ -10,7 +10,7 @@ var HitArc = Class.create(Sprite,{
 		arc.context.arc(160, 160, 160, 0, Math.PI*2, true);
 		arc.context.fill();
 		this.image = arc;
-
+		
 	},
 	onaddedtoscene: function(){
 		var that = this;
