@@ -103,6 +103,7 @@ function createOptionMenuButton(){
   optionMenuButton._element.className = 'optionMenuButton';
   optionMenuButton.x = 8.5*BOX_SIZE;
   optionMenuButton.y = 8.5*BOX_SIZE;
+  optionMenuButton.menuOpen = false;
   return optionMenuButton;
 }
 function createOptionMenu(){
@@ -118,44 +119,47 @@ function createOptionMenu(){
   menuGroup.addChild(background);
 
   // メニュータイトル
-  var optionLabel = new ExLabel(' --- MENU ---');
+  var optionLabel = new ExLabel('Option');
   optionLabel.setClassName('optionLayer');
   optionLabel.y = 20;
   menuGroup.addChild(optionLabel);
 
   // エフェクト
-  var switchLabel = new ExLabel('Effect');
+  var switchLabel = new ExLabel(LANGUAGE[COUNTRYCODE].optionTitle);
   switchLabel.setClassName('optionLayer effectLabel');
-  switchLabel.y = 160;
+  switchLabel.y = 140;
   menuGroup.addChild(switchLabel);
 
-  var lowSwitch = new ExLabel('<button id="low">LOW</button>',160);
+  var lowSwitch = new ExLabel('<button id="low">'+LANGUAGE[COUNTRYCODE].optionEffect[0]+'</button>',160);
   lowSwitch.setClassName('effectSwitch optionLayer');
   lowSwitch.quality = 'low';
   lowSwitch.x = 80;
   lowSwitch.y = 192;
   lowSwitch.on('touchend',function(){
     qualityCheck(this.quality);
+    effectLevel = 0;
   });
   menuGroup.addChild(lowSwitch);
 
-  var medSwitch = new ExLabel('<button id="med">MEDIUM</button>',160);
+  var medSwitch = new ExLabel('<button id="med">'+LANGUAGE[COUNTRYCODE].optionEffect[1]+'</button>',160);
   medSwitch.setClassName('effectSwitch optionLayer active');
   medSwitch.quality = 'med';
   medSwitch.x = 240;
   medSwitch.y = 192;
   medSwitch.on('touchend',function(){
     qualityCheck(this.quality);
+    effectLevel = 1;
   });
   menuGroup.addChild(medSwitch);
 
-  var highSwitch = new ExLabel('<button id="high">HIGH</button>',160);
+  var highSwitch = new ExLabel('<button id="high">'+LANGUAGE[COUNTRYCODE].optionEffect[2]+'</button>',160);
   highSwitch.setClassName('effectSwitch optionLayer');
   highSwitch.quality = 'high';
   highSwitch.x = 400;
   highSwitch.y = 192;
   highSwitch.on('touchend',function(){
     qualityCheck(this.quality);
+    effectLevel = 2;
   });
   menuGroup.addChild(highSwitch);
 
@@ -173,19 +177,19 @@ function createOptionMenu(){
   }
 
   // すべてを削除ボタン
-  var deleteDataLabel = new ExLabel('<button id="deleteButton" class="btn-long">セーブデータを削除</button>');
+  var deleteDataLabel = new ExLabel('<button id="deleteButton" class="btn-long">'+LANGUAGE[COUNTRYCODE].optionDeleteData+'</button>');
   deleteDataLabel.setClassName('deleteData optionLayer');
   deleteDataLabel.y = 320;
   deleteDataLabel.on('touchend',function(){
-  	if(window.confirm('本当に削除しますか？')){
+  	if(window.confirm(LANGUAGE[COUNTRYCODE].optionDeleteConf)){
       localStorage.clear();
-      alert('セーブデータを初期化しました');
+      alert(LANGUAGE[COUNTRYCODE].optionDeleteComp);
   	}
   });
   menuGroup.addChild(deleteDataLabel);
 
   // 全ステージを出現ボタン
-  var openAllStage = new ExLabel('<button id="allStage" class="btn-long">全ステージ出現</button>');
+  var openAllStage = new ExLabel('<button id="allStage" class="btn-long">'+LANGUAGE[COUNTRYCODE].optionAllStage+'</button>');
   openAllStage.setClassName('openAllStage optionLayer');
   openAllStage.on('touchend',function(){
     var allData = [];
@@ -193,6 +197,7 @@ function createOptionMenu(){
       allData.push(0);
     }
     localStorage.setItem("hal", JSON.stringify(allData));
+    alert(LANGUAGE[COUNTRYCODE].optionAllStageUnlock);
   });
   openAllStage.y = 448;
   menuGroup.addChild(openAllStage);
