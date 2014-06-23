@@ -712,7 +712,6 @@ var STAGES = [
   { x:6 ,y:7 ,name: 'pipe' ,color:'orange',pipeStatus:{x:9 ,y:9 ,direction:'up'} },
   { x:0 ,y:3 ,name: 'block',color:'purple'},
   { x:1 ,y:7 ,name: 'block',color:'purple'},
-  { x:3 ,y:9 ,name: 'block',color:'purple'},
   { x:9 ,y:6 ,name: 'block',color:'green'},
   { x:6 ,y:9 ,name: 'block',color:'orange'},
   { x:2 ,y:5 ,name: 'block',color:'blue'},
@@ -786,3 +785,4 @@ var COUNTRYCODE = browserLanguage();
 var userData;
 var stageBoxes = [];
 var stageGroup;
+var effectLevel = 1;

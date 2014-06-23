@@ -14,9 +14,9 @@ var HitArc = Class.create(Sprite,{
 	},
 	onaddedtoscene: function(){
 		var that = this;
-		this.tl.scaleTo(1.5,1.5,20).and().fadeTo(0,20,QUAD_EASEIN)
-			.then(function(){
-				GAME.currentScene.removeChild(that);
-			});
+		this.tl.scaleTo(1.5*effectLevel*effectLevel,1.5*effectLevel*effectLevel,20)
+		.delay((effectLevel-1)*20).fadeTo(0,10*effectLevel).then(function(){
+			GAME.currentScene.removeChild(that);
+		});
 	}
 });

@@ -2,9 +2,6 @@ var TitleBackAnim = Class.create(Group,{
     initialize: function(){
         Group.call(this);
 
-        // this._element = document.createElement('div');
-        // this._element.className = 'backgroundAnim';
-
         this.count = 3;
         this.next = 0;
 
@@ -24,7 +21,6 @@ var TitleBackAnim = Class.create(Group,{
             this.parentNode.addChild(block);
 
             block.run = function(){
-                console.log('call');
                 if(!this.parentNode){
                     return;
                 }
