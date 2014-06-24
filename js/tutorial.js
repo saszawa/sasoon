@@ -184,7 +184,8 @@ var TutoGoal = Class.create(Sprite,{
     if(tutoCurrentStage.length > 1){
       return;
     }
-    this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).unloop();
+    //this.parentNode.backgroundColor.tl.scaleTo(30,30,30);
+    this.tl.scaleTo(30,30,0,30);
 
     //どのシーンのゴールかで挙動変わる
     if(this.nextEndFlg){
