@@ -61,9 +61,10 @@ function createStageScene(){
   // BOX構築
   for(var x = 0; x < 10; x++){
     for(var y = 0; y < 10; y++){
-      var box = new Box(stageScene);
+      var box = new Box();
       box.x = x*BOX_SIZE;
       box.y = y*BOX_SIZE;
+      box._element.innerHTML = 'x:'+x+'<br />y:'+y;
       stageScene.addChild(box);
     }
   }
