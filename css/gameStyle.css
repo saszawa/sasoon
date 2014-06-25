@@ -327,7 +327,7 @@ div.retryLabelOnGame:active {
   opacity: 0;
 }
 
-/* line 333, ../scss/gameStyle.scss */
+/* line 332, ../scss/gameStyle.scss */
 div.pointerArrow {
   position: relative;
   width: 0;
@@ -336,7 +336,7 @@ div.pointerArrow {
   border-right-color: yellow;
 }
 
-/* line 341, ../scss/gameStyle.scss */
+/* line 340, ../scss/gameStyle.scss */
 div.pointerArrow:after {
   position: absolute;
   content: '';
@@ -347,15 +347,16 @@ div.pointerArrow:after {
   background: yellow;
 }
 
-/* line 351, ../scss/gameStyle.scss */
+/* line 350, ../scss/gameStyle.scss */
 .TutoMessaFirst {
-  font-size: 30px;
+  font-size: 20px;
+  z-index: 9999;
 }
 
 /* line 355, ../scss/gameStyle.scss */
 .tuto_white_msg {
   font-size: 20px;
-  color: white;
+  color: black;
 }
 
 /* line 360, ../scss/gameStyle.scss */
@@ -368,9 +369,10 @@ div.pointerArrow:after {
 .tuto_clear_msg {
   font-size: 40px;
   color: black;
+  z-index: 9999;
 }
 
-/* line 371, ../scss/gameStyle.scss */
+/* line 372, ../scss/gameStyle.scss */
 .msg {
   font-size: 20px;
 }

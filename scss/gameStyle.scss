@@ -15,7 +15,7 @@ $col-pink:   #FFCCFF;
 $box-size: 64px;
 
 *{
-	font-family: 'Bitter', serif
+  font-family: 'Bitter', serif
 }
 
 //=======================//
@@ -35,16 +35,16 @@ $prefixes: ("-webkit-", "-moz-","-ms-","-o-",null);
 }
 @mixin animation($name, $duration, $timing, $delay, $count, $direction: null) {
   @each $prefix in $prefixes {
-      #{$prefix}#{animation}: $name $duration $timing $delay $count $direction;
+    #{$prefix}#{animation}: $name $duration $timing $delay $count $direction;
   }
 }
 @mixin blockAndBeam($color,$hex){
-	div.#{$color}{
-		box-sizing: border-box;
-		background: rgba($hex,1);
-		border-radius: 50%;
-		border: solid 2px $col-yellow;
-	}
+  div.#{$color}{
+    box-sizing: border-box;
+    background: rgba($hex,1);
+    border-radius: 50%;
+    border: solid 2px $col-yellow;
+  }
 }
 //=======================//
 //         style         //
@@ -55,26 +55,26 @@ $prefixes: ("-webkit-", "-moz-","-ms-","-o-",null);
 // TITLE SCENE
 //===========================================
 div.titleText{
-	text-align: center !important;
-	font-family: 'Bitter', serif;
-	font-size: 100px !important;
+  text-align: center !important;
+  font-family: 'Bitter', serif;
+  font-size: 100px !important;
   line-height: 100px;
-	color: $col-blue !important;
-	text-shadow:
-	-1px -1px 0 $col-white,
-	1px -1px 0 $col-white,
-	1px 1px 0 $col-white,
-	-1px 1px 0 $col-white,
-    -2px -2px 0 $col-white,
-    2px -2px 0 $col-white,
-    2px 2px 0 $col-white,
-    -2px 2px 0 $col-white,
-	1px 2px 3px rgba(0, 0, 0, 0.6);
-    z-index:9999 !important;
-    span{
-        font-family: 'Bitter', serif;
-        color: $col-red !important;
-    }
+  color: $col-blue !important;
+  text-shadow:
+  -1px -1px 0 $col-white,
+  1px -1px 0 $col-white,
+  1px 1px 0 $col-white,
+  -1px 1px 0 $col-white,
+  -2px -2px 0 $col-white,
+  2px -2px 0 $col-white,
+  2px 2px 0 $col-white,
+  -2px 2px 0 $col-white,
+  1px 2px 3px rgba(0, 0, 0, 0.6);
+  z-index:9999 !important;
+  span{
+    font-family: 'Bitter', serif;
+    color: $col-red !important;
+  }
 
 }
 div.touchStart{
@@ -120,24 +120,24 @@ div.delete{
 // SELECT SCENE
 //===========================================
 div.stageSelectText{
-	text-align: center !important;
-	font-family: 'Bitter', serif;
-	font-size: 80px;
-	color: $col-green !important;
-	text-shadow:
-	-1px -1px 0px $col-white,
-	1px -1px 0px $col-white,
-	1px 1px 0px $col-white,
-	-1px 1px 0px $col-white,
-	1px 2px 3px rgba(0, 0, 0, 0.5);
-	background: rgba(white,0.8) !important; // backbutton branch 変更分 (0609)
+  text-align: center !important;
+  font-family: 'Bitter', serif;
+  font-size: 80px;
+  color: $col-green !important;
+  text-shadow:
+  -1px -1px 0px $col-white,
+  1px -1px 0px $col-white,
+  1px 1px 0px $col-white,
+  -1px 1px 0px $col-white,
+  1px 2px 3px rgba(0, 0, 0, 0.5);
+  background: rgba(white,0.8) !important; // backbutton branch 変更分 (0609)
 }
 div.stageBox{
-	text-align: center !important;
-	font-size: 64px;
-	line-height: 64px ;
-	color: $col-yellow !important;
-	border-radius: 10px;
+  text-align: center !important;
+  font-size: 64px;
+  line-height: 64px ;
+  color: $col-yellow !important;
+  border-radius: 10px;
   background: $col-white;
   &.nextStage{
     border:solid 5px $col-green;
@@ -186,24 +186,24 @@ div.playerStars{
 //===========================================
 /*========  box  ========*/
 div.box{
-	@include transition(background 0.2s ease-out);
-	background: transparent;
-	&.touched{
-		background: rgba($col-blue,0.5);
-	}
+  @include transition(background 0.2s ease-out);
+  background: transparent;
+  &.touched{
+    background: rgba($col-blue,0.5);
+  }
 }
 
 @include blockAndBeam(black,$col-black);
 div.black{
-	text-align: center !important;
-	border: none !important;
-	i{
-		color: white;
-		width: 64px;
-		height: 64px;
-		font-size: 32px;
-		line-height: 64px;
-	}
+  text-align: center !important;
+  border: none !important;
+  i{
+    color: white;
+    width: 64px;
+    height: 64px;
+    font-size: 32px;
+    line-height: 64px;
+  }
 }
 @include blockAndBeam(white,$col-white);
 @include blockAndBeam(red,$col-red);
@@ -214,121 +214,120 @@ div.black{
 
 /*======== beam ========*/
 div.beam{
-	border-radius: 50%;
+  border-radius: 50%;
   z-index:1;
   background: $col-yellow;
 }
 div.start{
-	border-radius: 50%;
+  border-radius: 50%;
   box-sizing: border-box;
   border: double 24px $col-yellow;
 }
 
 div.goal{
-	position: relative;
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
   background: $col-yellow;
 }
 
 div.count{
-	font-size: 48px !important;
-	text-align: center !important;
-	line-height: 64px !important;
-	width: 64px !important;
-	height: 64px !important;
+  font-size: 48px !important;
+  text-align: center !important;
+  line-height: 64px !important;
+  width: 64px !important;
+  height: 64px !important;
 }
 div.clearText{
-	text-align: center !important;
-	font-size: 60px !important;
-	font-weight: bold;
-	color: $col-black !important;
-	text-shadow:
-	-1px -1px 0px $col-white,
-	1px -1px 0px $col-white,
-	1px 1px 0px $col-white,
-	-1px 1px 0px $col-white,
-	1px 2px 3px rgba(0, 0, 0, 0.6);
+  text-align: center !important;
+  font-size: 60px !important;
+  font-weight: bold;
+  color: $col-black !important;
+  text-shadow:
+  -1px -1px 0px $col-white,
+  1px -1px 0px $col-white,
+  1px 1px 0px $col-white,
+  -1px 1px 0px $col-white,
+  1px 2px 3px rgba(0, 0, 0, 0.6);
 }
 div.pipeOut{
-	line-height: $box-size;
-	font-family:'WebHostingHub-Glyphs';
-	font-size: 24px;
-	&:after{
-		color: $col-yellow;
-		width:$box-size;
-		height:$box-size;
-		text-align:center;
-	}
-	&.up:after{
-		content:'\f301';
-		position:absolute;
-		top:0;
-		left:0;
-		text-align: center;
-	}
-	&.right:after{
-		content:'\f304';
-		position:absolute;
-		top:0;
-		left:0;
-		text-align: center;
-	}
-	&.down:after{
-		content:'\f2fe';
-		position:absolute;
-		top:0;
-		left:0;
-		text-align: center;
-	}
-	&.left:after{
-		content:'\f305';
-		position:absolute;
-		top:0;
-		left:0;
-		text-align: center;
-	}
+  line-height: $box-size;
+  font-family:'WebHostingHub-Glyphs';
+  font-size: 24px;
+  &:after{
+    color: $col-yellow;
+    width:$box-size;
+    height:$box-size;
+    text-align:center;
+  }
+  &.up:after{
+    content:'\f301';
+    position:absolute;
+    top:0;
+    left:0;
+    text-align: center;
+  }
+  &.right:after{
+    content:'\f304';
+    position:absolute;
+    top:0;
+    left:0;
+    text-align: center;
+  }
+  &.down:after{
+    content:'\f2fe';
+    position:absolute;
+    top:0;
+    left:0;
+    text-align: center;
+  }
+  &.left:after{
+    content:'\f305';
+    position:absolute;
+    top:0;
+    left:0;
+    text-align: center;
+  }
 }
 div.forResultBlock{
-	background: rgba(0,0,0,0) !important;
-	i{
-		color: rgba(0,0,0,0) !important;
-	}
+  background: rgba(0,0,0,0) !important;
+  i{
+    color: rgba(0,0,0,0) !important;
+  }
 }
 div.gameOverText{
-	text-align: center !important;
-	font-size: 100px !important;
-	font-weight: bold;
-	color: $col-black !important;
-	text-shadow:
-	-1px -1px 0px $col-white,
-	1px -1px 0px $col-white,
-	1px 1px 0px $col-white,
-	-1px 1px 0px $col-white,
-	1px 2px 3px rgba(0, 0, 0, 0.6)
+  text-align: center !important;
+  font-size: 100px !important;
+  font-weight: bold;
+  color: $col-black !important;
+  text-shadow:
+  -1px -1px 0px $col-white,
+  1px -1px 0px $col-white,
+  1px 1px 0px $col-white,
+  -1px 1px 0px $col-white,
+  1px 2px 3px rgba(0, 0, 0, 0.6)
 }
 div.retryLabelOnGame{
-	text-align: center;
-	font-size: 30px;
-	line-height: 64px;
-	color: $col-white;
-	background: $col-black;
-	box-sizing: border-box;
-	border-radius: 5px;
-	z-index: 9999;
-	opacity:0.5 !important;
-	&:hover{
-		opacity:1 !important;
-	}
-	&:active{
-		opacity:1 !important;
-	}
+  text-align: center;
+  font-size: 30px;
+  line-height: 64px;
+  color: $col-white;
+  background: $col-black;
+  box-sizing: border-box;
+  border-radius: 5px;
+  z-index: 9999;
+  opacity:0.5 !important;
+  &:hover{
+    opacity:1 !important;
+  }
+  &:active{
+    opacity:1 !important;
+  }
 }
 #load{
-	opacity: 0;
+  opacity: 0;
 }
-
 
 div.pointerArrow{
   position: relative;
@@ -349,17 +348,18 @@ div.pointerArrow:after{
 }
 
 .TutoMessaFirst{
-  font-size: 30px;
+  font-size: 20px;
+  z-index: 9999;
 }
 
 .tuto_white_msg{
-	font-size:  20px;
-	color: white;
+  font-size:  20px;
+  color: black;
 }
 
 .tuto_black_msg{
-	font-size:  20px;
-	color: black;
+  font-size:  20px;
+  color: black;
 }
 
 .tuto_clear_msg{
@@ -370,5 +370,5 @@ div.pointerArrow:after{
 
 .msg
 {
-	font-size: 20px;
+  font-size: 20px;
 }
