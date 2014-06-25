@@ -6,7 +6,7 @@
   font-family: "Bitter", serif;
 }
 
-/* line 57, ../scss/gameStyle.scss */
+/* line 58, ../scss/gameStyle.scss */
 div.titleText {
   text-align: center !important;
   font-family: 'Bitter', serif;
@@ -16,7 +16,7 @@ div.titleText {
   text-shadow: -1px -1px 0 #ecf0f1, 1px -1px 0 #ecf0f1, 1px 1px 0 #ecf0f1, -1px 1px 0 #ecf0f1, -2px -2px 0 #ecf0f1, 2px -2px 0 #ecf0f1, 2px 2px 0 #ecf0f1, -2px 2px 0 #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.6);
   z-index: 9997 !important;
 }
-/* line 74, ../scss/gameStyle.scss */
+/* line 75, ../scss/gameStyle.scss */
 div.titleText span {
   font-family: 'Bitter', serif;
   color: #ff6666 !important;
@@ -389,7 +389,7 @@ div.retryLabelOnGame:active {
   opacity: 0;
 }
 
-/* line 384, ../scss/gameStyle.scss */
+/* line 383, ../scss/gameStyle.scss */
 div.pointerArrow {
   position: relative;
   width: 0;
@@ -398,7 +398,7 @@ div.pointerArrow {
   border-right-color: yellow;
 }
 
-/* line 392, ../scss/gameStyle.scss */
+/* line 391, ../scss/gameStyle.scss */
 div.pointerArrow:after {
   position: absolute;
   content: '';
@@ -409,15 +409,16 @@ div.pointerArrow:after {
   background: yellow;
 }
 
-/* line 402, ../scss/gameStyle.scss */
+/* line 401, ../scss/gameStyle.scss */
 .TutoMessaFirst {
-  font-size: 30px;
+  font-size: 20px;
+  z-index: 9999;
 }
 
 /* line 406, ../scss/gameStyle.scss */
 .tuto_white_msg {
   font-size: 20px;
-  color: white;
+  color: black;
 }
 
 /* line 411, ../scss/gameStyle.scss */
@@ -430,9 +431,10 @@ div.pointerArrow:after {
 .tuto_clear_msg {
   font-size: 40px;
   color: black;
+  z-index: 9999;
 }
 
-/* line 422, ../scss/gameStyle.scss */
+/* line 423, ../scss/gameStyle.scss */
 .msg {
   font-size: 20px;
 }

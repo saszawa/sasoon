@@ -17,8 +17,6 @@ function createTutorialScene(){
 
   //文言変えるようのフラグ(汚いやり方、本来は状態を持たせて上手い事やるべきかな)
   tutorialScene.aotamaEndFlg = false;
-  //背景を黒にする
-  tutorialScene.backgroundColor = "#555555";
 
   // /*=== ステージの読み込み ===*/
   // var i = 0;
@@ -43,7 +41,7 @@ function createTutorialScene(){
 
   var backToTop = createBacktoTopLabel();
   tutorialScene.addChild(backToTop);
-  
+
   backToTop.on('touchend',function(){
 
     //==========================================================
