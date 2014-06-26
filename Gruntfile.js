@@ -1,0 +1,69 @@
+module.exports = function(grunt) {
+  'use strict';
+
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+
+    // ファイル結合の設定
+    concat: {
+      dist: {
+        src: [
+          'js/define.js',
+          'js/i18n.js',
+          'js/main.js',
+          'js/TitleBackAnim.js',
+          'js/creaters/ObjectsCreaters.js',
+          'js/creaters/createTutorialScene.js',
+          'js/creaters/createStageScene.js',
+          'js/creaters/createTitleScene.js',
+          'js/creaters/createSelectScene.js',
+          'js/StageGroup.js',
+          'js/StageBox.js',
+          'js/Box.js',
+          'js/HitArc.js',
+          'js/Timer.js',
+          'js/Result.js',
+          'js/GameOver.js',
+          'js/ExLabel.js',
+          'js/gimmicks/Beam.js',
+          'js/gimmicks/Block.js',
+          'js/gimmicks/CountBlock.js',
+          'js/gimmicks/Start.js',
+          'js/gimmicks/Goal.js',
+          'js/gimmicks/Star.js',
+          'js/gimmicks/Diffusioner.js',
+          'js/gimmicks/Slanter.js',
+          'js/gimmicks/Linker.js',
+          'js/gimmicks/Pipe.js',
+          'js/tutorial.js'
+        ],
+        dest: 'js/game.js'
+      }
+    },
+
+    // ファイル圧縮の設定
+    uglify: {
+      build: {
+        src: 'js/game.js',
+        dest: 'js/game.min.js'
+      }
+    },
+
+    cssmin: {
+      combine: {
+        files: {
+          'css/gameStyle.min.css': ['css/gameStyle.css']
+        }
+      }
+    }
+
+  });
+
+  // プラグインのロード
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+
+  // デフォルトタスクの設定
+  grunt.registerTask('build', [ 'concat', 'uglify', 'cssmin']);
+};

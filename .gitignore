@@ -2,4 +2,4 @@
 /config.rb
 *.swp
 *~
-
+/node_modules
