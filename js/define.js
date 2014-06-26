@@ -844,4 +844,4 @@ var effectLevel = 1;
   { x:5 ,y:9 ,name: 'star'},
   { x:4 ,y:6 ,name: 'star'},
   { x:6 ,y:5 ,name: 'goal'}
-]
+];
