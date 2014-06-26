@@ -803,8 +803,39 @@ var STAGES = [
   { x:5 ,y:9 ,name: 'star'},
   { x:4 ,y:6 ,name: 'star'},
   { x:6 ,y:5 ,name: 'goal'}
+],
+//45
+[
+  //45
+  { x:4 ,y:5 ,name: 'start'},
+  { x:6 ,y:5 ,name: 'block',color:'blue'},
+  { x:6 ,y:3 ,name: 'pipe' ,color:'green' ,pipeStatus:{x:3 ,y:6 ,direction:'right'} },
+  { x:5 ,y:6 ,name: 'block',color:'purple'},
+  { x:7 ,y:6 ,name: 'block',color:'red'},
+  { x:7 ,y:4 ,name: 'block',color:'orange'},
+  { x:7 ,y:2 ,name: 'block',color:'green'},
+  { x:5 ,y:1 ,name: 'slanter'},
+  { x:5 ,y:2 ,name: 'block',color:'purple'},
+  { x:3 ,y:2 ,name: 'pipe' ,color:'red' ,pipeStatus:{x:0 ,y:9 ,direction:'right'} },
+  { x:5 ,y:4 ,name: 'pipe' ,color:'blue' ,pipeStatus:{x:0 ,y:2 ,direction:'down'} },
+  { x:3 ,y:9 ,name: 'block',color:'blue'},
+  { x:6 ,y:9 ,name: 'block',color:'red'},
+  { x:9 ,y:9 ,name: 'block',color:'green'},
+  { x:9 ,y:7 ,name: 'block',color:'blue'},
+  { x:9 ,y:4 ,name: 'block',color:'orange'},
+  { x:8 ,y:4 ,name: 'block',color:'red'},
+  { x:9 ,y:1 ,name: 'block',color:'green'},
+  { x:9 ,y:0 ,name: 'block',color:'blue'},
+  { x:6 ,y:0 ,name: 'block',color:'red'},
+  { x:3 ,y:0 ,name: 'block',color:'green'},
+  { x:0 ,y:0 ,name: 'block',color:'blue'},
+  { x:0 ,y:4 ,name: 'block',color:'green'},
+  { x:0 ,y:6 ,name: 'block',color:'red'},
+  { x:3 ,y:4 ,name: 'star'},
+  { x:3 ,y:3 ,name: 'star'},
+  { x:3 ,y:5 ,name: 'star'},
+  { x:0 ,y:8 ,name: 'goal'}
 ]
-
 ];
 // pipeの使い方
 // { x:4 ,y:2 ,name: 'pipe' ,pipeStatus:{x:5 ,y:7 ,direction:'right'} },
