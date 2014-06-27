@@ -35,7 +35,7 @@ var Beam = Class.create(Sprite,{
 				// 当たったら消える
 				delete this.currentStage[i];
 				this.currentStage.splice(i,1);
-				this.parentNode.removeChild(this);
+				GAME.currentScene.removeChild(this);
 				return;
 			}
 		}
@@ -49,7 +49,7 @@ var Beam = Class.create(Sprite,{
 			// 生存期間を過ぎると消えていく
 			this.opacity -= 0.1;
 			if(this.opacity < 0){
-				this.parentNode.removeChild(this);
+				GAME.currentScene.removeChild(this);
 			}
 		}
 	}

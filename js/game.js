@@ -857,7 +857,32 @@ var STAGES = [
   { x:1 ,y:7 ,name: 'star'},
   { x:5 ,y:8 ,name: 'star'},
   { x:5 ,y:0 ,name: 'goal'}
-]
+],
+[
+  //46
+  { x:0 ,y:0 ,name: 'start'},
+  { x:0 ,y:3 ,name: 'block',color:'orange'},
+  { x:0 ,y:6 ,name: 'block',color:'blue'},
+  { x:2 ,y:6 ,name: 'pipe' ,color:'red' ,pipeStatus:{x:3 ,y:1 ,direction:'right'} },
+  { x:0 ,y:8 ,name: 'pipe' ,color:'blue' ,pipeStatus:{x:3 ,y:5 ,direction:'up'} },
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:5 ,y:1 ,name: 'block',color:'orange'},
+  { x:5 ,y:3 ,name: 'diffusioner'},
+  { x:6 ,y:3 ,name: 'block',color:'purple'},
+  { x:5 ,y:4 ,name: 'block',color:'orange'},
+  { x:5 ,y:5 ,name: 'block',color:'purple'},
+  { x:7 ,y:5 ,name: 'star'},
+  { x:7 ,y:3 ,name: 'diffusioner'},
+  { x:7 ,y:2 ,name: 'diffusioner'},
+  { x:7 ,y:1 ,name: 'star'},
+  { x:2 ,y:8 ,name: 'star'},
+  { x:2 ,y:2 ,name: 'pipe' ,color:'green' ,pipeStatus:{x:3 ,y:7 ,direction:'right'} },
+  { x:8 ,y:2 ,name: 'block',color:'orange'},
+  { x:8 ,y:5 ,name: 'block',color:'orange'},
+  { x:5 ,y:7 ,name: 'block',color:'purple'},
+  { x:7 ,y:7 ,name: 'goal'}
+],
+
 
 ];
 // pipeの使い方
@@ -2474,7 +2499,7 @@ var Beam = Class.create(Sprite,{
 				// 当たったら消える
 				delete this.currentStage[i];
 				this.currentStage.splice(i,1);
-				this.parentNode.removeChild(this);
+				GAME.currentScene.removeChild(this);
 				return;
 			}
 		}
@@ -2488,7 +2513,7 @@ var Beam = Class.create(Sprite,{
 			// 生存期間を過ぎると消えていく
 			this.opacity -= 0.1;
 			if(this.opacity < 0){
-				this.parentNode.removeChild(this);
+				GAME.currentScene.removeChild(this);
 			}
 		}
 	}
@@ -2953,8 +2978,8 @@ var Pipe = Class.create(Sprite,{
     }
     this.parentNode.addChild(new Beam(this.beamStatus[this.pipeStatus.direction],beamInit));
     //	出したら消滅
-    this.parentNode.removeChild(this.pipeOut);
-    this.parentNode.removeChild(this);
+    GAME.currentScene.removeChild(this.pipeOut);
+    GAME.currentScene.removeChild(this);
   }
 });
 
