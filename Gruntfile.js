@@ -55,7 +55,18 @@ module.exports = function(grunt) {
           'css/gameStyle.min.css': ['css/gameStyle.css']
         }
       }
-    }
+    },
+
+    watch: {
+      scripts: {
+        files: ['js/*.js','js/game.js'],
+        tasks: ['concat','uglify'],
+        options: {
+          spawn: true,
+        }
+      }
+    },
+
 
   });
 
@@ -63,6 +74,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // デフォルトタスクの設定
   grunt.registerTask('build', [ 'concat', 'uglify', 'cssmin']);
