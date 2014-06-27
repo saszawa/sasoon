@@ -835,7 +835,30 @@ var STAGES = [
   { x:3 ,y:3 ,name: 'star'},
   { x:3 ,y:5 ,name: 'star'},
   { x:0 ,y:8 ,name: 'goal'}
+],
+[
+  //46
+  { x:5 ,y:5 ,name: 'start'},
+  { x:5 ,y:7 ,name: 'slanter'},
+  { x:7 ,y:5 ,name: 'pipe' ,color:'red' ,pipeStatus:{x:3 ,y:7 ,direction:'right'} },
+  { x:3 ,y:5 ,name: 'diffusioner'},
+  { x:5 ,y:3 ,name: 'block',color:'blue'},
+  { x:3 ,y:3 ,name: 'slanter'},
+  { x:7 ,y:6 ,name: 'slanter'},
+  { x:5 ,y:1 ,name: 'pipe' ,color:'blue' ,pipeStatus:{x:7 ,y:7 ,direction:'right'} },
+  { x:7 ,y:3 ,name: 'diffusioner'},
+  { x:9 ,y:6 ,name: 'star'},
+  { x:9 ,y:4 ,name: 'block',color:'orange'},
+  { x:4 ,y:9 ,name: 'pipe' ,color:'green' ,pipeStatus:{x:7 ,y:9 ,direction:'up'} },
+  { x:9 ,y:1 ,name: 'block',color:'purple'},
+  { x:1 ,y:4 ,name: 'block',color:'orange'},
+  { x:7 ,y:1 ,name: 'block',color:'blue'},
+  { x:4 ,y:1 ,name: 'slanter'},
+  { x:1 ,y:7 ,name: 'star'},
+  { x:5 ,y:8 ,name: 'star'},
+  { x:5 ,y:0 ,name: 'goal'}
 ]
+
 ];
 // pipeの使い方
 // { x:4 ,y:2 ,name: 'pipe' ,pipeStatus:{x:5 ,y:7 ,direction:'right'} },
