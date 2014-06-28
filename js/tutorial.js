@@ -2,6 +2,7 @@ var TUTORIALBEAM = [];
 //矢印管理用配列
 var ARROWARRAY = [];
 
+var tutoSecondScene = null;
 var gameOverLabel = new ExLabel(LANGUAGE[COUNTRYCODE].gameOver,640,100);
 gameOverLabel.setClassName('gameOverText');
 gameOverLabel.x = 0;
@@ -176,15 +177,15 @@ var TutoGoal = Class.create(Sprite,{
     this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).loop();
   },
   run: function(){
+    this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).unloop();
     var that = this;
-    var arc = new HitArc(this.color);
-    arc.x = this.x-128;
-    arc.y = this.y-128;
-    this.parentNode.addChild(arc);
+   // this.parentNode.addChild(arc);
     if(tutoCurrentStage.length > 1){
       return;
     }
-    this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).unloop();
+    //this.tl.scaleTo(30,30,0,30);
+    clearTimeout(this.parentNode.endTimer);
+    this.parentNode.cleared = true;
 
     //どのシーンのゴールかで挙動変わる
     if(this.nextEndFlg){
@@ -193,41 +194,57 @@ var TutoGoal = Class.create(Sprite,{
       GAME.currentScene.addChild(endLabel);
 
       //文字表示切り替え
-      this.tl.delay(30).then(function(){
+      this.tl.clear().scaleTo(30,30,30).then(function(){
+
+      }).delay(30).then(function(){
         endLabel.setClassName('tuto_black_msg');
         endLabel._element.innerHTML = LANGUAGE[COUNTRYCODE].tutoClearMsg2;
-      });
-      this.tl.delay(100).then(function(){
+      }).delay(100).then(function(){
         endLabel._element.innerHTML = LANGUAGE[COUNTRYCODE].tutoClearMsg3;
-      });
-
-      this.tl.delay(100).then(function(){
+      }).delay(40).then(function(){
+      }).delay(100).then(function(){
         var titleScene = createTitleScene();
+        that.parentNode.removeChild(this);
         GAME.replaceScene(titleScene);
         initTutorialScene();
       })
 
     }else{
+      tutoSecondScene = null;
+      var tutoClearMessage = null;
+      var nextLosePatternLabel = null;
       //クリアメッセージを出す
-      this.tl.delay(1).then(function(){
-        this.x = 120;
-        this.y = 220;
-        this.width = 500;
-        this.height = 200;
-        this._element.className = "TutoMessaFirst";
-        that._element.innerHTML = LANGUAGE[COUNTRYCODE].tutoClear;
-      });
+      this.tl.clear().scaleTo(30,30,30).delay(30).then(function(){
 
-      var tutoSecondScene = null;
-      this.tl.delay(100).then(function(){
-        that._element.innerHTML = LANGUAGE[COUNTRYCODE].nextLosePattern;
-        tutoCurrentStage.splice(0,1);
+        tutoClearMessage = new ExLabel(LANGUAGE[COUNTRYCODE].tutoClear);
+        tutoClearMessage.x = 120;
+        tutoClearMessage.y = 220;
+        tutoClearMessage.width = 500;
+        tutoClearMessage.height = 200;
+        tutoClearMessage.setClassName('TutoMessaFirst');
+        tutorialScene.addChild(tutoClearMessage);
+
+        nextLosePatternLabel = new ExLabel(LANGUAGE[COUNTRYCODE].nextLosePattern);
+        nextLosePatternLabel .x = 120;
+        nextLosePatternLabel.y = 220;
+        nextLosePatternLabel.width = 500;
+        nextLosePatternLabel.height = 200;
+        nextLosePatternLabel.setClassName('TutoMessaFirst');
+
+        that.tl.delay(60).then(function(){
+          tutorialScene.removeChild(tutoClearMessage);
+          tutorialScene.addChild(nextLosePatternLabel);
+        })
+
+//        tutoSecondScene = createTutorialSecondScene();
+       // kokokaraセカンドシーン作成
         tutoSecondScene = new Scene();
 
         var titleScene = createTitleScene();
 
-        //戻るボタン
+       //戻るボタン
         var backToTop = createBacktoTopLabel();
+
         tutoSecondScene.backToTop = function(){
           GAME.replaceScene(titleScene);
         }
@@ -236,6 +253,7 @@ var TutoGoal = Class.create(Sprite,{
         // /*=== ステージの読み込み ===*/
         //終わりフラグ用の変数
         var i = 0;
+        tutoCurrentStage = [];
         TUTOSTAGES[1].forEach(function(blockInfo){
           var block = StageBuilder(blockInfo);
           block.x = blockInfo.x*BOX_SIZE;
@@ -243,9 +261,9 @@ var TutoGoal = Class.create(Sprite,{
           if(i == TUTOSTAGES[1].length - 2){
             block.lastFlg = true;
           }
+          tutoSecondScene.addChild(block);
           tutoCurrentStage.push(block);
 
-          tutoSecondScene.addChild(block);
           i++;
         });
 
@@ -254,7 +272,7 @@ var TutoGoal = Class.create(Sprite,{
         tutoSecondScene.loseAotamaFlg = true;
 
         backToTop.on('touchend',function(){
-          this.parentNode.backToTop();
+          tutoSecondScene.backToTop();
           initTutorialScene();
         });
 
@@ -263,7 +281,7 @@ var TutoGoal = Class.create(Sprite,{
           tutorialScene.removeChild(that);
           GAME.replaceScene(tutoSecondScene);
           losePatternText.tl.delay(100).then(function(){
-            tutoCurrentStage[0].run()
+            tutoCurrentStage[0].run();
             tutoCurrentStage.splice(0,1);
             tutoSecondScene.removeChild(losePatternText);
           });

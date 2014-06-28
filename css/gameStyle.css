@@ -6,7 +6,7 @@
   font-family: "Bitter", serif;
 }
 
-/* line 52, ../scss/gameStyle.scss */
+/* line 53, ../scss/gameStyle.scss */
 html, body {
   margin: 0;
   padding: 0;
@@ -15,7 +15,7 @@ html, body {
   height: 100%;
 }
 
-/* line 63, ../scss/gameStyle.scss */
+/* line 64, ../scss/gameStyle.scss */
 div.titleText {
   text-align: center !important;
   font-family: 'Bitter', serif;
@@ -25,7 +25,7 @@ div.titleText {
   text-shadow: -1px -1px 0 #ecf0f1, 1px -1px 0 #ecf0f1, 1px 1px 0 #ecf0f1, -1px 1px 0 #ecf0f1, -2px -2px 0 #ecf0f1, 2px -2px 0 #ecf0f1, 2px 2px 0 #ecf0f1, -2px 2px 0 #ecf0f1, 1px 2px 3px rgba(0, 0, 0, 0.6);
   z-index: 9997 !important;
 }
-/* line 80, ../scss/gameStyle.scss */
+/* line 81, ../scss/gameStyle.scss */
 div.titleText span {
   font-family: 'Bitter', serif;
   color: #ff6666 !important;
@@ -420,28 +420,30 @@ div.pointerArrow:after {
 
 /* line 410, ../scss/gameStyle.scss */
 .TutoMessaFirst {
-  font-size: 30px;
+  font-size: 20px;
+  z-index: 9999;
 }
 
-/* line 414, ../scss/gameStyle.scss */
+/* line 415, ../scss/gameStyle.scss */
 .tuto_white_msg {
   font-size: 20px;
-  color: white;
+  color: black;
 }
 
-/* line 419, ../scss/gameStyle.scss */
+/* line 420, ../scss/gameStyle.scss */
 .tuto_black_msg {
   font-size: 20px;
   color: black;
 }
 
-/* line 424, ../scss/gameStyle.scss */
+/* line 425, ../scss/gameStyle.scss */
 .tuto_clear_msg {
   font-size: 40px;
   color: black;
+  z-index: 9999;
 }
 
-/* line 430, ../scss/gameStyle.scss */
+/* line 432, ../scss/gameStyle.scss */
 .msg {
   font-size: 20px;
 }
