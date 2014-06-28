@@ -954,7 +954,6 @@ var STAGES = [
   { x:7 ,y:4 ,name: 'block' ,color: 'green'},
   { x:6 ,y:4 ,name: 'block' ,color: 'green'},
   { x:5 ,y:4 ,name: 'slanter'},
-  //{ x:7 ,y:3 ,name: 'block' ,color: 'green'},
   { x:7 ,y:2 ,name: 'slanter'},
   { x:6 ,y:1 ,name: 'slanter'},
   { x:5 ,y:1 ,name: 'slanter'},
