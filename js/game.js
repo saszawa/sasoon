@@ -214,6 +214,20 @@ var STAGES = [
   { x:9 ,y:0 ,name: 'goal'}
 ],
 [
+  { x:2 ,y:4 ,name: 'start'},
+  { x:3 ,y:5 ,name: 'block',color:'purple'},
+  { x:4 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:2 ,name: 'block',color:'purple'},
+  { x:6 ,y:6 ,name: 'block',color:'purple'},
+  { x:3 ,y:2 ,name: 'block',color:'orange'},
+  { x:5 ,y:5 ,name: 'block',color:'orange'},
+  { x:7 ,y:4 ,name: 'block',color:'orange'},
+  { x:7 ,y:2 ,name: 'star'},
+  { x:4 ,y:6 ,name: 'star'},
+  { x:0 ,y:5 ,name: 'star'},
+  { x:5 ,y:3 ,name: 'goal'}
+],
+[
   //11
   { x:0 ,y:3 ,name: 'start'},
   { x:5 ,y:0 ,name: 'star'},
@@ -913,7 +927,48 @@ var STAGES = [
   { x:9 ,y:8 ,name: 'star'},
   { x:5 ,y:0 ,name: 'star'},
   { x:9 ,y:9 ,name: 'goal'}
+],
+[
+  { x:3 ,y:9 ,name: 'start'},
+  { x:3 ,y:8 ,name: 'block' ,color: 'green'},
+  { x:3 ,y:7 ,name: 'block' ,color: 'green'},
+  { x:2 ,y:7 ,name: 'block' ,color: 'green'},
+  { x:2 ,y:6 ,name: 'block' ,color: 'green'},
+  { x:2 ,y:5 ,name: 'slanter'},
+  { x:2 ,y:4 ,name: 'block' ,color: 'green'},
+  { x:2 ,y:4 ,name: 'block' ,color: 'green'},
+  { x:3 ,y:4 ,name: 'slanter'},
+  { x:4 ,y:4 ,name: 'block' ,color: 'green'},
+  { x:2 ,y:3 ,name: 'slanter'},
+  { x:2 ,y:2 ,name: 'slanter'},
+  { x:3 ,y:1 ,name: 'slanter'},
+  { x:4 ,y:1 ,name: 'block' ,color: 'green'},
+  { x:2 ,y:0 ,name: 'slanter'},
+
+  { x:6 ,y:8 ,name: 'slanter'},
+  { x:6 ,y:7 ,name: 'slanter'},
+  { x:7 ,y:7 ,name: 'block' ,color: 'green'},
+  { x:7 ,y:6 ,name: 'block' ,color: 'green'},
+  { x:7 ,y:5 ,name: 'slanter'},
+  { x:7 ,y:4 ,name: 'block' ,color: 'green'},
+  { x:7 ,y:4 ,name: 'block' ,color: 'green'},
+  { x:6 ,y:4 ,name: 'block' ,color: 'green'},
+  { x:5 ,y:4 ,name: 'slanter'},
+  { x:7 ,y:2 ,name: 'slanter'},
+  { x:6 ,y:1 ,name: 'slanter'},
+  { x:5 ,y:1 ,name: 'slanter'},
+  { x:7 ,y:0 ,name: 'slanter'},
+
+  { x:4 ,y:7 ,name: 'pipe' ,color:'green' ,pipeStatus:{x:1 ,y:4 ,direction:'down'} },
+  { x:5 ,y:7 ,name: 'pipe' ,color:'green' ,pipeStatus:{x:8 ,y:4 ,direction:'down'} },
+  { x:1 ,y:5 ,name: 'pipe' ,color:'red' ,pipeStatus:{x:8 ,y:6 ,direction:'down'} },
+  { x:8 ,y:5 ,name: 'pipe' ,color:'blue' ,pipeStatus:{x:1 ,y:6 ,direction:'down'} },
+  { x:6 ,y:9 ,name: 'star'},
+  { x:3 ,y:2 ,name: 'star'},
+  { x:6 ,y:2 ,name: 'star'},
+  { x:5 ,y:5 ,name: 'goal'}
 ]
+
 
 
 ];
@@ -1887,7 +1942,7 @@ function createStageScene(){
   // BOX構築
   for(var x = 0; x < 10; x++){
     for(var y = 0; y < 10; y++){
-      var box = new Box(stageScene);
+      var box = new Box();
       box.x = x*BOX_SIZE;
       box.y = y*BOX_SIZE;
       stageScene.addChild(box);
