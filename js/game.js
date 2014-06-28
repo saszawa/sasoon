@@ -214,6 +214,20 @@ var STAGES = [
   { x:9 ,y:0 ,name: 'goal'}
 ],
 [
+  { x:2 ,y:4 ,name: 'start'},
+  { x:3 ,y:5 ,name: 'block',color:'purple'},
+  { x:4 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:2 ,name: 'block',color:'purple'},
+  { x:6 ,y:6 ,name: 'block',color:'purple'},
+  { x:3 ,y:2 ,name: 'block',color:'orange'},
+  { x:5 ,y:5 ,name: 'block',color:'orange'},
+  { x:7 ,y:4 ,name: 'block',color:'orange'},
+  { x:7 ,y:2 ,name: 'star'},
+  { x:4 ,y:6 ,name: 'star'},
+  { x:0 ,y:5 ,name: 'star'},
+  { x:5 ,y:3 ,name: 'goal'}
+],
+[
   //11
   { x:0 ,y:3 ,name: 'start'},
   { x:5 ,y:0 ,name: 'star'},
@@ -1949,7 +1963,6 @@ function createStageScene(){
       var box = new Box();
       box.x = x*BOX_SIZE;
       box.y = y*BOX_SIZE;
-      box._element.innerHTML = 'x:'+x+'<br />y:'+y;
       stageScene.addChild(box);
     }
   }
