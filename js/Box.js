@@ -18,15 +18,11 @@ var Box = Class.create(Sprite,{
 	},
 	ontouchend: function(){
 		this._element.className = 'box';
-		console.log('ontouchend');
 		if(!this.parentNode.canTap){
-			console.log('Can not tap');
 			return;
 		} else if(this.moved){
-			console.log('Tap cansel');
 			return;
 		}
-		console.log('Set block');
 		this.parentNode.canTap = false;
 		var block = new Block('white');
 		block.x = this.x;
