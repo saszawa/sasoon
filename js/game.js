@@ -214,6 +214,20 @@ var STAGES = [
   { x:9 ,y:0 ,name: 'goal'}
 ],
 [
+  { x:2 ,y:4 ,name: 'start'},
+  { x:3 ,y:5 ,name: 'block',color:'purple'},
+  { x:4 ,y:4 ,name: 'block',color:'purple'},
+  { x:6 ,y:2 ,name: 'block',color:'purple'},
+  { x:6 ,y:6 ,name: 'block',color:'purple'},
+  { x:3 ,y:2 ,name: 'block',color:'orange'},
+  { x:5 ,y:5 ,name: 'block',color:'orange'},
+  { x:7 ,y:4 ,name: 'block',color:'orange'},
+  { x:7 ,y:2 ,name: 'star'},
+  { x:4 ,y:6 ,name: 'star'},
+  { x:0 ,y:5 ,name: 'star'},
+  { x:5 ,y:3 ,name: 'goal'}
+],
+[
   //11
   { x:0 ,y:3 ,name: 'start'},
   { x:5 ,y:0 ,name: 'star'},
@@ -955,6 +969,65 @@ var userData;
 var stageBoxes = [];
 var stageGroup;
 var effectLevel = 1;
+
+// ステージ案
+[
+  { x:1 ,y:4 ,name: 'start'},
+  { x:3 ,y:4 ,name: 'block',color:'orange'},
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:3 ,y:6 ,name: 'block',color:'purple'},
+  { x:6 ,y:3 ,name: 'block',color:'orange'},
+  { x:5 ,y:6 ,name: 'block',color:'orange'},
+  { x:2 ,y:6 ,name: 'slanter'},
+  { x:6 ,y:6 ,name: 'slanter'},
+  { x:4 ,y:8 ,name: 'block',color:'orange'},
+  { x:5 ,y:2 ,name: 'star'},
+  { x:6 ,y:0 ,name: 'star'},
+  { x:4 ,y:5 ,name: 'star'},
+  { x:7 ,y:4 ,name: 'goal'}
+];
+
+[
+  { x:0 ,y:4 ,name: 'start'},
+  { x:2 ,y:4 ,name: 'block',color:'green'},
+  { x:5 ,y:4 ,name: 'block',color:'green'},
+  { x:5 ,y:2 ,name: 'block',color:'red'},
+  { x:5 ,y:6 ,name: 'block',color:'blue'},
+  { x:2 ,y:1 ,name: 'block',color:'purple'},
+  { x:2 ,y:7 ,name: 'block',color:'purple'},
+  { x:4 ,y:7 ,name: 'block',color:'red'},
+  { x:4 ,y:1 ,name: 'block',color:'blue'},
+  { x:8 ,y:3 ,name: 'block',color:'purple'},
+  { x:8 ,y:5 ,name: 'block',color:'purple'},
+  { x:6 ,y:3 ,name: 'block',color:'blue'},
+  { x:6 ,y:5 ,name: 'block',color:'red'},
+  { x:3 ,y:2 ,name: 'star'},
+  { x:3 ,y:6 ,name: 'star'},
+  { x:3 ,y:3 ,name: 'star'},
+  { x:3 ,y:5 ,name: 'goal'}
+];
+[
+  { x:0 ,y:4 ,name: 'start'},
+  { x:0 ,y:5 ,name: 'block',color:'red'},
+  { x:2 ,y:5 ,name: 'block',color:'blue'},
+  { x:2 ,y:3 ,name: 'block',color:'orange'},
+  { x:2 ,y:1 ,name: 'block',color:'purple'},
+  { x:1 ,y:1 ,name: 'slanter'},
+  { x:3 ,y:7 ,name: 'slanter'},
+  { x:2 ,y:0 ,name: 'pipe' ,color:'red'   ,pipeStatus:{x:3 ,y:8 ,direction:'right'} },
+  { x:4 ,y:2 ,name: 'pipe' ,color:'green'   ,pipeStatus:{x:2 ,y:8 ,direction:'right'} },
+  { x:6 ,y:2 ,name: 'pipe' ,color:'blue'   ,pipeStatus:{x:3 ,y:9 ,direction:'up'} },
+  { x:3 ,y:3 ,name: 'block',color:'purple'},
+  { x:6 ,y:3 ,name: 'diffusioner'},
+  { x:4 ,y:8 ,name: 'block',color:'orange'},
+  { x:5 ,y:8 ,name: 'slanter'},
+  { x:7 ,y:6 ,name: 'slanter'},
+  { x:6 ,y:8 ,name: 'block',color:'orange'},
+  { x:0 ,y:0 ,name: 'star'},
+  { x:5 ,y:9 ,name: 'star'},
+  { x:4 ,y:6 ,name: 'star'},
+  { x:6 ,y:5 ,name: 'goal'}
+];
 
 var LANGUAGE = {
 	ja:{
@@ -1887,7 +1960,7 @@ function createStageScene(){
   // BOX構築
   for(var x = 0; x < 10; x++){
     for(var y = 0; y < 10; y++){
-      var box = new Box(stageScene);
+      var box = new Box();
       box.x = x*BOX_SIZE;
       box.y = y*BOX_SIZE;
       stageScene.addChild(box);
