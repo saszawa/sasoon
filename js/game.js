@@ -2220,15 +2220,11 @@ var Box = Class.create(Sprite,{
 	},
 	ontouchend: function(){
 		this._element.className = 'box';
-		console.log('ontouchend');
 		if(!this.parentNode.canTap){
-			console.log('Can not tap');
 			return;
 		} else if(this.moved){
-			console.log('Tap cansel');
 			return;
 		}
-		console.log('Set block');
 		this.parentNode.canTap = false;
 		var block = new Block('white');
 		block.x = this.x;
@@ -2277,7 +2273,6 @@ var Timer = Class.create(Label,{
 	},
 	onaddedtoscene: function(){
 		this.tl.scaleTo(0.1,0.1,600);
-		console.log('timer add');
 	},
 	onenterframe: function(){
 		if(this.age % 30 === 0){
@@ -2296,7 +2291,6 @@ var Timer = Class.create(Label,{
 			} else if(this.timer <= 0){
 				this.parentNode.addChild(this.parentNode.retryLabel);
 
-				console.log('Not yet tap.');
 				this.parentNode.canTap = false;
 				currentStage[0].run();
 				this.parentNode.removeChild(this);
