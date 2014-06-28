@@ -2,7 +2,7 @@ sasoon
 ======
 
 http://touchbloomy.com
-上記URLのブラウザゲーム　TouchBloomy　のソースコードのリポジトリです。
+左記URLのブラウザゲーム　TouchBloomy　のソースコードのリポジトリです。
 
 
 
