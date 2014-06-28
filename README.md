@@ -1,6 +1,11 @@
 sasoon
 ======
 
+http://touchbloomy.com
+上記URLのブラウザゲーム　TouchBloomy　のソースコードのリポジトリです。
+
+
+
 このリポジトリの内容はGPLライセンスが適用されています。
 
 TouchBloomy This is browser game.
