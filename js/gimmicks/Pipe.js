@@ -51,6 +51,8 @@ var Pipe = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
+    GAME.assets['sound/pipe.mp3'].clone().play();
+
     var arc = new HitArc(this.color);
     arc.x = this.pipeOut.x-128;
     arc.y = this.pipeOut.y-128;

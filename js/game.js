@@ -1082,6 +1082,7 @@ var tutorialScene = null;
 enchant();
 window.onload = function () {
   GAME = new Game(640, 640);
+  GAME.preload('sound/white.mp3','sound/goal.mp3','sound/start.mp3','sound/orange.mp3','sound/purple.mp3','sound/green.mp3','sound/red.mp3','sound/slanter.mp3','sound/pipe.mp3','sound/blue.mp3','sound/star.mp3','sound/diffusioner.mp3');
   GAME.fps = 30;
   GAME.onload = function () {
 
@@ -2601,75 +2602,96 @@ var Beam = Class.create(Sprite,{
 });
 
 var Block = Class.create(Sprite,{
-	initialize: function(color){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
+  initialize: function(color){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
 
-		// DOMモード
-		this._element = document.createElement('div');
-		this._element.className = color;
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = color;
 
-		this.color = color;
+    this.color = color;
 
-		if(this.color === 'orange'){
-			this.image = ORANGE;
-		} else if(this.color === 'purple'){
-			this.image = PURPLE;
-		}
+    if(this.color === 'orange'){
+      this.image = ORANGE;
+    } else if(this.color === 'purple'){
+      this.image = PURPLE;
+    }
 
-		// Beam用ステータス
-		this.beamStatus = {
-			top:{
-				moveX: 0,
-				moveY: -MOVE_PX,
-			},
-			right:{
-				moveX: MOVE_PX,
-				moveY: 0
-			},
-			down:{
-				moveX: 0,
-				moveY: MOVE_PX
-			},
-			left:{
-				moveX: -MOVE_PX,
-				moveY: 0
-			}
-		};
-	},
-	/**
-	* Block.run()
-	* 	4方向にBeamを出します
-	*/
-	run: function(){
-		clearTimeout(this.parentNode.endTimer);
-		this.parentNode.endTimer = setTimeout(function(){
-			GAME.currentScene.gameOver();
-		},3500);
+    // Beam用ステータス
+    this.beamStatus = {
+      top:{
+        moveX: 0,
+        moveY: -MOVE_PX,
+      },
+      right:{
+        moveX: MOVE_PX,
+        moveY: 0
+      },
+      down:{
+        moveX: 0,
+        moveY: MOVE_PX
+      },
+      left:{
+        moveX: -MOVE_PX,
+        moveY: 0
+      }
+    };
+  },
+  /**
+   * Block.run()
+   * 	4方向にBeamを出します
+   */
+  run: function(){
+    clearTimeout(this.parentNode.endTimer);
+    this.parentNode.endTimer = setTimeout(function(){
+      GAME.currentScene.gameOver();
+    },3500);
 
-		if( 0 < effectLevel){
-			var arc = new HitArc(this.color);
-			arc.x = this.x-128;
-			arc.y = this.y-128;
-			this.parentNode.addChild(arc);
-		}
+    switch (this.color){
+      case "blue":
+        GAME.assets['sound/blue.mp3'].clone().play();
+        break;
+      case "green":
+        GAME.assets['sound/green.mp3'].clone().play();
+        break;
+      case "red":
+        GAME.assets['sound/red.mp3'].clone().play();
+        break;
+      case "purple":
+        GAME.assets['sound/purple.mp3'].clone().play();
+        break;
+      case "orange":
+        GAME.assets['sound/orange.mp3'].clone().play();
+        break;
+      case "white":
+        GAME.assets['sound/white.mp3'].clone().play();
+        break;
+    }
 
-		var i = 0;
-		for(var beam in this.beamStatus){
-			if(DIRECTIONS[this.color][i]){
-				// 初期設定的な
-				var beamInit = {
-					x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-					y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-					parentBlock:this,
-					beamLength:BEAM_LENGTH
-				}
-				this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
-			}
-			i++;
-		}
-		//	出したら消滅
-		this.parentNode.removeChild(this);
-	}
+    if( 0 < effectLevel){
+      var arc = new HitArc(this.color);
+      arc.x = this.x-128;
+      arc.y = this.y-128;
+      this.parentNode.addChild(arc);
+    }
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      if(DIRECTIONS[this.color][i]){
+        // 初期設定的な
+        var beamInit = {
+          x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+          y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+          parentBlock:this,
+          beamLength:BEAM_LENGTH
+        }
+        this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
+      }
+      i++;
+    }
+    //	出したら消滅
+    this.parentNode.removeChild(this);
+  }
 });
 
 var CountBlock = Class.create(Sprite,{
@@ -2770,6 +2792,8 @@ var Start = Class.create(Sprite,{
 		arc.y = this.y-128;
 		this.parentNode.addChild(arc);
 
+    GAME.assets['sound/start.mp3'].clone().play();
+
 		var i = 0;
 		for(var beam in this.beamStatus){
 			if(DIRECTIONS['white'][i]){
@@ -2808,6 +2832,8 @@ var Goal = Class.create(Sprite,{
 
 		this.parentNode.removeChild(this.parentNode.retryLabel);
 
+    GAME.assets['sound/goal.mp3'].clone().play();
+
 		var that = this;
 
 		// 星の削除
@@ -2830,79 +2856,83 @@ var Goal = Class.create(Sprite,{
 });
 
 var Star = Class.create(Sprite,{
-	initialize: function(){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
 
-		//星を描く
-		this._element = document.createElement('div');
-		this.image = WHITE_STAR;
-		this.hited = false;
-	},
-	onaddedtoscene: function(){
-		this.parentNode.stars.push(this);
-	},
-	run: function(){
-		var that = this;
-		this.hited = true;
-		this.tl.scaleTo(0.5,0.5,7).scaleTo(1,1,2).then(function(){
-			that.tl.clear();
-			that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
-		});
-		this.image = YELLOW_STAR;
-		this.parentNode.star++;
-	}
+    //星を描く
+    this._element = document.createElement('div');
+    this.image = WHITE_STAR;
+    this.hited = false;
+  },
+  onaddedtoscene: function(){
+    this.parentNode.stars.push(this);
+  },
+  run: function(){
+    var that = this;
+    this.hited = true;
+    this.tl.scaleTo(0.5,0.5,7).scaleTo(1,1,2).then(function(){
+      that.tl.clear();
+      that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
+    });
+    this.image = YELLOW_STAR;
+    GAME.assets['sound/star.mp3'].clone().play();
+    this.parentNode.star++;
+  }
 });
 
 var Diffusioner = Class.create(Sprite,{
-	initialize: function(){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
-		this._element = document.createElement('div');
-		this._element.className = 'diffusioner';
-		this.image = DIFFUSIONER;
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'diffusioner';
+    this.image = DIFFUSIONER;
 
-		// 倍の早さ
-		var movePx = MOVE_PX*2;
+    // 倍の早さ
+    var movePx = MOVE_PX*2;
 
-		this.beamStatus = {
-			top:      {moveX: 0        ,moveY: -movePx},
-			topRight: {moveX: movePx   ,moveY: -movePx},
-			right:    {moveX: movePx   ,moveY: 0       },
-			rightDown:{moveX: movePx   ,moveY: movePx },
-			down:     {moveX: 0        ,moveY: movePx },
-			downLeft: {moveX: -movePx  ,moveY: movePx },
-			left:     {moveX: -movePx  ,moveY: 0       },
-			leftTop:  {moveX: -movePx  ,moveY: -movePx}
-		};
+    this.beamStatus = {
+      top:      {moveX: 0        ,moveY: -movePx},
+      topRight: {moveX: movePx   ,moveY: -movePx},
+      right:    {moveX: movePx   ,moveY: 0       },
+      rightDown:{moveX: movePx   ,moveY: movePx },
+      down:     {moveX: 0        ,moveY: movePx },
+      downLeft: {moveX: -movePx  ,moveY: movePx },
+      left:     {moveX: -movePx  ,moveY: 0       },
+      leftTop:  {moveX: -movePx  ,moveY: -movePx}
+    };
 
-		this.color = "red";
+    this.color = "red";
 
-	},
-	run: function(){
-		clearTimeout(this.parentNode.endTimer);
-		this.parentNode.endTimer = setTimeout(function(){
-			GAME.currentScene.gameOver();
-		},3500);
+  },
+  run: function(){
+    clearTimeout(this.parentNode.endTimer);
+    this.parentNode.endTimer = setTimeout(function(){
+      GAME.currentScene.gameOver();
+    },3500);
 
-		var arc = new HitArc(this.color);
-		arc.x = this.x-128;
-		arc.y = this.y-128;
-		this.parentNode.addChild(arc);
 
-		var i = 0;
-		for(var beam in this.beamStatus){
-			// 初期設定的な
-			var beamInit = {
-				x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-				y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-				parentBlock:this,
-				beamLength: 1
-			}
-			this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
-			i++;
-		}
-		//	出したら消滅
-		this.parentNode.removeChild(this);
-	}
+    GAME.assets['sound/diffusioner.mp3'].clone().play();
+
+    var arc = new HitArc(this.color);
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    this.parentNode.addChild(arc);
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 1
+      }
+      this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
+      i++;
+    }
+    //	出したら消滅
+    this.parentNode.removeChild(this);
+  }
 });
 
 var Slanter = Class.create(Sprite,{
@@ -2928,6 +2958,8 @@ var Slanter = Class.create(Sprite,{
 		this.parentNode.endTimer = setTimeout(function(){
 			GAME.currentScene.gameOver();
 		},3500);
+
+    GAME.assets['sound/slanter.mp3'].clone().play();
 
 		var arc = new HitArc(this.color);
 		arc.x = this.x-128;
@@ -2979,6 +3011,8 @@ var Linker = Class.create(Sprite,{
 	},
 	run: function(){
 		var gimmicks = this.currentStage.length;
+
+
 		var runNum = [];
 		for(var i = 0; i < gimmicks; i++){
 			if(this.currentStage[i].color === this.color && this !== this.currentStage[i]){
@@ -2992,6 +3026,7 @@ var Linker = Class.create(Sprite,{
 		this.parentNode.removeChild(this);
 	}
 });
+
 var Pipe = Class.create(Sprite,{
   initialize: function(color,pipeStatus){
     Sprite.call(this,BOX_SIZE,BOX_SIZE);
@@ -3044,6 +3079,8 @@ var Pipe = Class.create(Sprite,{
     this.parentNode.endTimer = setTimeout(function(){
       GAME.currentScene.gameOver();
     },3500);
+
+    GAME.assets['sound/pipe.mp3'].clone().play();
 
     var arc = new HitArc(this.color);
     arc.x = this.pipeOut.x-128;
