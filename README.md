@@ -6,6 +6,18 @@ http://touchbloomy.com
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 このリポジトリの内容はGPLライセンスが適用されています。
 
 TouchBloomy This is browser game.
