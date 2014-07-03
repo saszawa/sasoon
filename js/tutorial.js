@@ -71,6 +71,14 @@ var TutoBlock = Class.create(Sprite,{
 
     this.parentNode.removeChild(thirdStartMsg);
 
+    if(this.color == "start"){
+      GAME.assets['sound/start.mp3'].clone().play();
+    }else if(this.color == "blue"){
+      GAME.assets['sound/blue.mp3'].clone().play();
+    }else if (this.color == "white"){
+      GAME.assets['sound/white.mp3'].clone().play();
+    }
+
     for(var beam in this.beamStatus){
       if(TUTODIRECTIONS[this.color][i]){
         // 初期設定的な
@@ -186,6 +194,8 @@ var TutoGoal = Class.create(Sprite,{
     //this.tl.scaleTo(30,30,0,30);
     clearTimeout(this.parentNode.endTimer);
     this.parentNode.cleared = true;
+
+    GAME.assets['sound/goal.mp3'].clone().play();
 
     //どのシーンのゴールかで挙動変わる
     if(this.nextEndFlg){

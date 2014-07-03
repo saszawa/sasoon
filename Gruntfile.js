@@ -10,6 +10,7 @@ module.exports = function(grunt) {
         src: [
           'js/define.js',
           'js/i18n.js',
+          'js/Sound.js',
           'js/main.js',
           'js/TitleBackAnim.js',
           'js/creaters/ObjectsCreaters.js',
