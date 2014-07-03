@@ -176,10 +176,15 @@ function createOptionMenu(){
     }
   }
 
-  var test = new ExLabel('<input id="volumeSlider" type="range"/>');
-  test.x = 100;
-  test.y = 300;
-  menuGroup.addChild(test);
+  // 音量
+  var volumeLabel = new ExLabel(LANGUAGE[COUNTRYCODE].volumeOption);
+  volumeLabel.setClassName('optionLayer effectLabel');
+  volumeLabel.y = 264;
+  menuGroup.addChild(volumeLabel);
+
+  //音量調節スライダー
+  var volumeSlider = new VolumeSlider();
+  menuGroup.addChild(volumeSlider);
 
   // すべてを削除ボタン
   var deleteDataLabel = new ExLabel('<button id="deleteButton" class="btn-long">'+LANGUAGE[COUNTRYCODE].optionDeleteData+'</button>');

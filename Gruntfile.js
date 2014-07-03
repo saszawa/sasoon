@@ -36,7 +36,8 @@ module.exports = function(grunt) {
           'js/gimmicks/Slanter.js',
           'js/gimmicks/Linker.js',
           'js/gimmicks/Pipe.js',
-          'js/tutorial.js'
+          'js/tutorial.js',
+          'js/VolumeSlider.js'
         ],
         dest: 'js/game.js'
       }

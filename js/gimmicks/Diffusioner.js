@@ -28,8 +28,7 @@ var Diffusioner = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-
-    GAME.assets['sound/diffusioner.mp3'].clone().play();
+    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
 
     var arc = new HitArc(this.color);
     arc.x = this.x-128;

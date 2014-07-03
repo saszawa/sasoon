@@ -28,7 +28,8 @@ var LANGUAGE = {
     tutoClearMsg:"ゲームクリアです!",
     tutoClearMsg2:"本番のステージでは<br/>オブジェクトを置くまでに時間制限があります",
     tutoClearMsg3:"それでは、ゲームをお楽しみ下さい",
-    backToTop:"TOPへ戻る"
+    backToTop:"TOPへ戻る",
+    volumeOption:"音量"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -45,7 +46,7 @@ var LANGUAGE = {
     gameRetry:"Retry",
     howToPlay:"How to play",
     startTutorial:"Let's start tutorial'",
-    sirotama:"First, White Object is broken",
+    sirotama:"First, This Object is broken",
     aotama:"When Snipets touch another object,the object is broken",
     prevGoal:"This is Goal Object,and breaking this is Stage Clear",
     tutoClear:"It's Clear",
@@ -59,6 +60,7 @@ var LANGUAGE = {
     tutoClearMsg:"You did it!",
     tutoClearMsg2:"If this is real game,It have a time limit",
     tutoClearMsg3:"Enjoy your game!",
-    backToTop:"Back to Top"
+    backToTop:"Back to Top",
+    volumeOption:"音量"
   }
 }

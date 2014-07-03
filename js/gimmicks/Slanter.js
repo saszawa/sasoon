@@ -22,7 +22,7 @@ var Slanter = Class.create(Sprite,{
 			GAME.currentScene.gameOver();
 		},3500);
 
-    GAME.assets['sound/slanter.mp3'].clone().play();
+    playSound(GAME.assets['sound/slanter.mp3'].clone());
 
 		var arc = new HitArc(this.color);
 		arc.x = this.x-128;

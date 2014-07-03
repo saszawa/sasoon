@@ -1006,6 +1006,8 @@ function browserLanguage() {
 
 var COUNTRYCODE = browserLanguage();
 
+var VOLUME = 1.0;
+
 var userData;
 var stageBoxes = [];
 var stageGroup;
@@ -1041,7 +1043,8 @@ var LANGUAGE = {
     tutoClearMsg:"ゲームクリアです!",
     tutoClearMsg2:"本番のステージでは<br/>オブジェクトを置くまでに時間制限があります",
     tutoClearMsg3:"それでは、ゲームをお楽しみ下さい",
-    backToTop:"TOPへ戻る"
+    backToTop:"TOPへ戻る",
+    volumeOption:"音量"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -1058,7 +1061,7 @@ var LANGUAGE = {
     gameRetry:"Retry",
     howToPlay:"How to play",
     startTutorial:"Let's start tutorial'",
-    sirotama:"First, White Object is broken",
+    sirotama:"First, This Object is broken",
     aotama:"When Snipets touch another object,the object is broken",
     prevGoal:"This is Goal Object,and breaking this is Stage Clear",
     tutoClear:"It's Clear",
@@ -1072,17 +1075,14 @@ var LANGUAGE = {
     tutoClearMsg:"You did it!",
     tutoClearMsg2:"If this is real game,It have a time limit",
     tutoClearMsg3:"Enjoy your game!",
-    backToTop:"Back to Top"
+    backToTop:"Back to Top",
+    volumeOption:"音量"
   }
 }
 
 function playSound(sound){
   sound.volume = VOLUME;
-  if(SOUNDFLG){
-    sound.play();
-  }else{
-    return;
-  }
+  sound.play();
 }
 
 //チュートリアルを連続でyareruyouni
@@ -1394,10 +1394,15 @@ function createOptionMenu(){
     }
   }
 
-  var test = new ExLabel('<input id="volumeSlider" type="range"/>');
-  test.x = 100;
-  test.y = 300;
-  menuGroup.addChild(test);
+  // 音量
+  var volumeLabel = new ExLabel(LANGUAGE[COUNTRYCODE].volumeOption);
+  volumeLabel.setClassName('optionLayer effectLabel');
+  volumeLabel.y = 264;
+  menuGroup.addChild(volumeLabel);
+
+  //音量調節スライダー
+  var volumeSlider = new VolumeSlider();
+  menuGroup.addChild(volumeSlider);
 
   // すべてを削除ボタン
   var deleteDataLabel = new ExLabel('<button id="deleteButton" class="btn-long">'+LANGUAGE[COUNTRYCODE].optionDeleteData+'</button>');
@@ -2446,7 +2451,7 @@ var Result = Class.create(Group,{
       .delay(15*i)
       .scaleTo(1.3,1.3,10).and().rotateTo(144,10).then(function(){
         that.resultStars[cnt++].image = YELLOW_STAR;
-        GAME.assets['sound/star.mp3'].clone().play();
+        playSound(GAME.assets['sound/star.mp3'].clone());
       });
     }
     this.tl.delay(50 + i*15).then(function(){
@@ -2548,18 +2553,19 @@ var GameOver = Class.create(Group,{
 });
 
 var ExLabel = Class.create(Sprite,{
-	initialize: function(text,w,h){
-		var width = w || 640;
-		var height = h || 64;
-		Sprite.call(this,width,height);
+  initialize: function(text,w,h){
+    var width = w || 640;
+    var height = h || 64;
+    Sprite.call(this,width,height);
 
-		this._element = document.createElement('div');
-		this._element.innerHTML = text;
-	},
-	setClassName: function(className){
-		this._element.className = className;
-	}
+    this._element = document.createElement('div');
+    this._element.innerHTML = text;
+  },
+  setClassName: function(className){
+    this._element.className = className;
+  }
 });
+
 var Beam = Class.create(Sprite,{
 	initialize: function(direction ,init){
 		Sprite.call(this,BEAM_SIZE,BEAM_SIZE);
@@ -2665,22 +2671,22 @@ var Block = Class.create(Sprite,{
 
     switch (this.color){
       case "blue":
-        GAME.assets['sound/blue.mp3'].clone().play();
+        playSound(GAME.assets['sound/blue.mp3'].clone());
         break;
       case "green":
-        GAME.assets['sound/green.mp3'].clone().play();
+        playSound(GAME.assets['sound/green.mp3'].clone());
         break;
       case "red":
-        GAME.assets['sound/red.mp3'].clone().play();
+        playSound(GAME.assets['sound/red.mp3'].clone());
         break;
       case "purple":
-        GAME.assets['sound/purple.mp3'].clone().play();
+        playSound(GAME.assets['sound/purple.mp3'].clone());
         break;
       case "orange":
-        GAME.assets['sound/orange.mp3'].clone().play();
+        playSound(GAME.assets['sound/orange.mp3'].clone());
         break;
       case "white":
-        GAME.assets['sound/white.mp3'].clone().play();
+        playSound(GAME.assets['sound/white.mp3'].clone());
         break;
     }
 
@@ -2808,7 +2814,7 @@ var Start = Class.create(Sprite,{
 		arc.y = this.y-128;
 		this.parentNode.addChild(arc);
 
-    GAME.assets['sound/start.mp3'].clone().play();
+    playSound(GAME.assets['sound/start.mp3'].clone());
 
 		var i = 0;
 		for(var beam in this.beamStatus){
@@ -2848,7 +2854,7 @@ var Goal = Class.create(Sprite,{
 
 		this.parentNode.removeChild(this.parentNode.retryLabel);
 
-    GAME.assets['sound/goal.mp3'].clone().play();
+    playSound(GAME.assets['sound/goal.mp3'].clone());
 
 		var that = this;
 
@@ -2891,7 +2897,7 @@ var Star = Class.create(Sprite,{
       that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
     });
     this.image = YELLOW_STAR;
-    GAME.assets['sound/star.mp3'].clone().play();
+    playSound(GAME.assets['sound/star.mp3'].clone());
     this.parentNode.star++;
   }
 });
@@ -2926,8 +2932,7 @@ var Diffusioner = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-
-    GAME.assets['sound/diffusioner.mp3'].clone().play();
+    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
 
     var arc = new HitArc(this.color);
     arc.x = this.x-128;
@@ -2975,7 +2980,7 @@ var Slanter = Class.create(Sprite,{
 			GAME.currentScene.gameOver();
 		},3500);
 
-    GAME.assets['sound/slanter.mp3'].clone().play();
+    playSound(GAME.assets['sound/slanter.mp3'].clone());
 
 		var arc = new HitArc(this.color);
 		arc.x = this.x-128;
@@ -3096,7 +3101,7 @@ var Pipe = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-    GAME.assets['sound/pipe.mp3'].clone().play();
+    playSound(GAME.assets['sound/pipe.mp3'].clone());
 
     var arc = new HitArc(this.color);
     arc.x = this.pipeOut.x-128;
@@ -3191,11 +3196,11 @@ var TutoBlock = Class.create(Sprite,{
     this.parentNode.removeChild(thirdStartMsg);
 
     if(this.color == "start"){
-      GAME.assets['sound/start.mp3'].clone().play();
+      playSound(GAME.assets['sound/start.mp3'].clone());
     }else if(this.color == "blue"){
-      GAME.assets['sound/blue.mp3'].clone().play();
+      playSound(GAME.assets['sound/blue.mp3'].clone());
     }else if (this.color == "white"){
-      GAME.assets['sound/white.mp3'].clone().play();
+      playSound(GAME.assets['sound/white.mp3'].clone());
     }
 
     for(var beam in this.beamStatus){
@@ -3314,7 +3319,7 @@ var TutoGoal = Class.create(Sprite,{
     clearTimeout(this.parentNode.endTimer);
     this.parentNode.cleared = true;
 
-    GAME.assets['sound/goal.mp3'].clone().play();
+    playSound(GAME.assets['sound/goal.mp3'].clone());
 
     //どのシーンのゴールかで挙動変わる
     if(this.nextEndFlg){
@@ -3566,5 +3571,23 @@ var PointerArrow = Class.create(Sprite,{
     tutoCurrentStage.splice(0,1);
     ARROWARRAY[0].erase();
     ARROWARRAY.splice(0,1);
+  }
+});
+
+var VolumeSlider = Class.create(Sprite,{
+  initialize: function(w,h){
+    var width = w || 640;
+    var height = h || 64;
+    Sprite.call(this,width,height);
+    this.x = 118;
+    this.y = 330;
+
+    this._element = document.createElement('div');
+    this._element.innerHTML = '<input type="range" max="1.0" step="0.1"/>';
+    this._element.className = 'volumeSlider';
+  },
+  ontouchend: function(){
+    //childNodes[0]がinput rangeであると仮定
+    VOLUME = this._element.childNodes[0].value;
   }
 });

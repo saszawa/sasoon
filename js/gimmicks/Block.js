@@ -46,22 +46,22 @@ var Block = Class.create(Sprite,{
 
     switch (this.color){
       case "blue":
-        GAME.assets['sound/blue.mp3'].clone().play();
+        playSound(GAME.assets['sound/blue.mp3'].clone());
         break;
       case "green":
-        GAME.assets['sound/green.mp3'].clone().play();
+        playSound(GAME.assets['sound/green.mp3'].clone());
         break;
       case "red":
-        GAME.assets['sound/red.mp3'].clone().play();
+        playSound(GAME.assets['sound/red.mp3'].clone());
         break;
       case "purple":
-        GAME.assets['sound/purple.mp3'].clone().play();
+        playSound(GAME.assets['sound/purple.mp3'].clone());
         break;
       case "orange":
-        GAME.assets['sound/orange.mp3'].clone().play();
+        playSound(GAME.assets['sound/orange.mp3'].clone());
         break;
       case "white":
-        GAME.assets['sound/white.mp3'].clone().play();
+        playSound(GAME.assets['sound/white.mp3'].clone());
         break;
     }
 
