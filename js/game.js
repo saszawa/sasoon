@@ -1082,6 +1082,7 @@ var LANGUAGE = {
 
 function playSound(sound){
   sound.volume = VOLUME;
+  sound._element.style.zIndex = 1;
   sound.play();
 }
 
@@ -2815,8 +2816,6 @@ var Start = Class.create(Sprite,{
 		arc.y = this.y-128;
 		this.parentNode.addChild(arc);
 
-    playSound(GAME.assets['sound/start.mp3'].clone());
-
 		var i = 0;
 		for(var beam in this.beamStatus){
 			if(DIRECTIONS['white'][i]){
@@ -2832,6 +2831,7 @@ var Start = Class.create(Sprite,{
 			}
 			i++;
 		}
+    playSound(GAME.assets['sound/start.mp3'].clone());
 		//	出したら消滅
 		this.parentNode.removeChild(this);
 	}
@@ -2933,8 +2933,6 @@ var Diffusioner = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
-
     var arc = new HitArc(this.color);
     arc.x = this.x-128;
     arc.y = this.y-128;
@@ -2952,6 +2950,8 @@ var Diffusioner = Class.create(Sprite,{
       this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
       i++;
     }
+
+    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
     //	出したら消滅
     this.parentNode.removeChild(this);
   }
@@ -2981,8 +2981,6 @@ var Slanter = Class.create(Sprite,{
 			GAME.currentScene.gameOver();
 		},3500);
 
-    playSound(GAME.assets['sound/slanter.mp3'].clone());
-
 		var arc = new HitArc(this.color);
 		arc.x = this.x-128;
 		arc.y = this.y-128;
@@ -3000,6 +2998,8 @@ var Slanter = Class.create(Sprite,{
 			this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
 			i++;
 		}
+
+    playSound(GAME.assets['sound/slanter.mp3'].clone());
 		//	出したら消滅
 		this.parentNode.removeChild(this);
 	}
@@ -3102,8 +3102,6 @@ var Pipe = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-    playSound(GAME.assets['sound/pipe.mp3'].clone());
-
     var arc = new HitArc(this.color);
     arc.x = this.pipeOut.x-128;
     arc.y = this.pipeOut.y-128;
@@ -3117,6 +3115,7 @@ var Pipe = Class.create(Sprite,{
       beamLength:BEAM_LENGTH
     }
     this.parentNode.addChild(new Beam(this.beamStatus[this.pipeStatus.direction],beamInit));
+    playSound(GAME.assets['sound/pipe.mp3'].clone());
     //	出したら消滅
     GAME.currentScene.removeChild(this.pipeOut);
     GAME.currentScene.removeChild(this);
@@ -3196,14 +3195,6 @@ var TutoBlock = Class.create(Sprite,{
 
     this.parentNode.removeChild(thirdStartMsg);
 
-    if(this.color == "start"){
-      playSound(GAME.assets['sound/start.mp3'].clone());
-    }else if(this.color == "blue"){
-      playSound(GAME.assets['sound/blue.mp3'].clone());
-    }else if (this.color == "white"){
-      playSound(GAME.assets['sound/white.mp3'].clone());
-    }
-
     for(var beam in this.beamStatus){
       if(TUTODIRECTIONS[this.color][i]){
         // 初期設定的な
@@ -3219,6 +3210,15 @@ var TutoBlock = Class.create(Sprite,{
       }
       i++;
     }
+
+    if(this.color == "start"){
+      playSound(GAME.assets['sound/start.mp3'].clone());
+    }else if(this.color == "blue"){
+      playSound(GAME.assets['sound/blue.mp3'].clone());
+    }else if (this.color == "white"){
+      playSound(GAME.assets['sound/white.mp3'].clone());
+    }
+
     //最後の場合
     if(this.lastFlg){
       var thatNode = this.parentNode;
