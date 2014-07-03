@@ -127,14 +127,14 @@ function createOptionMenu(){
   // エフェクト
   var switchLabel = new ExLabel(LANGUAGE[COUNTRYCODE].optionTitle);
   switchLabel.setClassName('optionLayer effectLabel');
-  switchLabel.y = 140;
+  switchLabel.y = 120;
   menuGroup.addChild(switchLabel);
 
   var lowSwitch = new ExLabel('<button id="low">'+LANGUAGE[COUNTRYCODE].optionEffect[0]+'</button>',160);
   lowSwitch.setClassName('effectSwitch optionLayer');
   lowSwitch.quality = 'low';
   lowSwitch.x = 80;
-  lowSwitch.y = 192;
+  lowSwitch.y = 172;
   lowSwitch.on('touchend',function(){
     qualityCheck(this.quality);
     effectLevel = 0;
@@ -145,7 +145,7 @@ function createOptionMenu(){
   medSwitch.setClassName('effectSwitch optionLayer active');
   medSwitch.quality = 'med';
   medSwitch.x = 240;
-  medSwitch.y = 192;
+  medSwitch.y = 172;
   medSwitch.on('touchend',function(){
     qualityCheck(this.quality);
     effectLevel = 1;
@@ -156,7 +156,7 @@ function createOptionMenu(){
   highSwitch.setClassName('effectSwitch optionLayer');
   highSwitch.quality = 'high';
   highSwitch.x = 400;
-  highSwitch.y = 192;
+  highSwitch.y = 172;
   highSwitch.on('touchend',function(){
     qualityCheck(this.quality);
     effectLevel = 2;
@@ -176,10 +176,15 @@ function createOptionMenu(){
     }
   }
 
+  var test = new ExLabel('<input id="volumeSlider" type="range"/>');
+  test.x = 100;
+  test.y = 300;
+  menuGroup.addChild(test);
+
   // すべてを削除ボタン
   var deleteDataLabel = new ExLabel('<button id="deleteButton" class="btn-long">'+LANGUAGE[COUNTRYCODE].optionDeleteData+'</button>');
   deleteDataLabel.setClassName('deleteData optionLayer');
-  deleteDataLabel.y = 320;
+  deleteDataLabel.y = 365;
   deleteDataLabel.on('touchend',function(){
   	if(window.confirm(LANGUAGE[COUNTRYCODE].optionDeleteConf)){
       localStorage.clear();
@@ -199,7 +204,7 @@ function createOptionMenu(){
     localStorage.setItem("hal", JSON.stringify(allData));
     alert(LANGUAGE[COUNTRYCODE].optionAllStageUnlock);
   });
-  openAllStage.y = 448;
+  openAllStage.y = 460;
   menuGroup.addChild(openAllStage);
 
   return menuGroup;

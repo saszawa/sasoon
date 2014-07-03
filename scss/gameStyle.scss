@@ -124,12 +124,12 @@ div.optionLayer{
 		border: solid 3px $col-white;
 		background: $col-blue;
 		color: $col-white;
-		font-size: 32px;
+		font-size: 28px;
 		width: 400px;
 	}
 }
 div.effectLabel{
-	font-size: 48px;
+	font-size: 36px;
 }
 div.effectSwitch{
 	button{
@@ -137,7 +137,7 @@ div.effectSwitch{
 		border: solid 2px $col-white;
 		margin: 0;
 		padding: 5px 10px;
-		font-size: 32px;
+		font-size: 28px;
 		background: $col-white;
 		width: 160px;
 	}
@@ -146,6 +146,9 @@ div.effectSwitch{
 		border: solid 2px $col-green;
 		color: $col-white !important;
 	}
+}
+#volumeSlider {
+  z-index:9999;
 }
 div.optionBackground{
 	z-index: 9998 !important;
