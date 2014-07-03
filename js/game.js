@@ -1006,74 +1006,84 @@ function browserLanguage() {
 
 var COUNTRYCODE = browserLanguage();
 
+var VOLUME = 1.0;
+
 var userData;
 var stageBoxes = [];
 var stageGroup;
 var effectLevel = 1;
 
 var LANGUAGE = {
-	ja:{
-		title:"Touch<br /><span>Bloomy</span>",
-		touchStart: "画面をタッチ",
-		optionTitle:"エフェクト",
-		optionEffect:["控えめ","普通","ど派手"],
-		optionDeleteData: "セーブデータを削除",
-		optionDeleteConf: "本当に削除しますか？",
-		optionDeleteComp: "セーブデータを削除しました",
-		optionAllStage: "全ステージを解放(大会用)",
-		optionAllStageUnlock: "全てのステージで遊べるようになりました！",
-		gameStart:"ゲーム開始",
+  ja:{
+    title:"Touch<br /><span>Bloomy</span>",
+    touchStart: "画面をタッチ",
+    optionTitle:"エフェクト",
+    optionEffect:["控えめ","普通","ど派手"],
+    optionDeleteData: "セーブデータを削除",
+    optionDeleteConf: "本当に削除しますか？",
+    optionDeleteComp: "セーブデータを削除しました",
+    optionAllStage: "全ステージを解放(大会用)",
+    optionAllStageUnlock: "全てのステージで遊べるようになりました！",
+    gameStart:"ゲーム開始",
     gameOver:"Game Over",
-		gameRetry:"リトライ",
-		howToPlay:"遊び方",
+    gameRetry:"リトライ",
+    howToPlay:"遊び方",
     startTutorial:"今からこのゲームのチュートリアルを始めます",
-		sirotama:"ゲーム開始時このオブジェクトが四散します",
-		aotama:"破片が他のオブジェクトに当たると誘爆します",
-		prevGoal:"黄色いゴールオブジェクトに当てればクリアです",
-		tutoClear:"このようにゴールオブジェクトを<br/>壊せばクリアです",
-		nextLosePattern:"それでは、<br/>次は負けパターンを見てみましょう",
-		losePattern:"負けパターンを始めます",
-		endChain:"このままでは連鎖が途切れてしまいます",
-		loseMsg:"これであなたの負けです",
-		yourMission:"あなたは一つオブジェクトを置いて<br/>ゴールまで導く事が出来ます",
-		letsWin:"さあ次はクリアしましょう",
-		tutoThirdStartMsg:"画面をタップしてオブジェクトを置き,<br/>ゴールオブジェクトまで連鎖させましょう",
+    sirotama:"ゲーム開始時このオブジェクトが四散します",
+    aotama:"破片が他のオブジェクトに当たると誘爆します",
+    prevGoal:"黄色いゴールオブジェクトに当てればクリアです",
+    tutoClear:"このようにゴールオブジェクトを<br/>壊せばクリアです",
+    nextLosePattern:"それでは、<br/>次は負けパターンを見てみましょう",
+    losePattern:"負けパターンを始めます",
+    endChain:"このままでは連鎖が途切れてしまいます",
+    loseMsg:"これであなたの負けです",
+    yourMission:"あなたは一つオブジェクトを置いて<br/>ゴールまで導く事が出来ます",
+    letsWin:"さあ次はクリアしましょう",
+    tutoThirdStartMsg:"画面をタップしてオブジェクトを置き,<br/>ゴールオブジェクトまで連鎖させましょう",
     tutoClearMsg:"ゲームクリアです!",
     tutoClearMsg2:"本番のステージでは<br/>オブジェクトを置くまでに時間制限があります",
     tutoClearMsg3:"それでは、ゲームをお楽しみ下さい",
-    backToTop:"TOPへ戻る"
-	},
-	en:{
-		title:"Touch<br /><span>Bloomy</span>",
-		touchStart: "Touch Screen",
-		optionTitle:"Effect",
-		optionEffect:["Low","Normal","HIGH"],
-		optionDeleteData: "Delete Save Data",
-		optionDeleteConf: "Are you sure you want to delete?",
-		optionDeleteComp: "Save Data was deleted",
-		optionAllStage: "All Stage unlock (For html5jcup)",
-		optionAllStageUnlock: "Stage of all has been unlocked!",
-		gameStart:"Start Game",
+    backToTop:"TOPへ戻る",
+    volumeOption:"音量"
+  },
+  en:{
+    title:"Touch<br /><span>Bloomy</span>",
+    touchStart: "Touch Screen",
+    optionTitle:"Effect",
+    optionEffect:["Low","Normal","HIGH"],
+    optionDeleteData: "Delete Save Data",
+    optionDeleteConf: "Are you sure you want to delete?",
+    optionDeleteComp: "Save Data was deleted",
+    optionAllStage: "All Stage unlock (For html5jcup)",
+    optionAllStageUnlock: "Stage of all has been unlocked!",
+    gameStart:"Start Game",
     gameOver:"Game Over",
-		gameRetry:"Retry",
-		howToPlay:"How to play",
+    gameRetry:"Retry",
+    howToPlay:"How to play",
     startTutorial:"Let's start tutorial'",
-		sirotama:"First, White Object is broken",
-		aotama:"When Snipets touch another object,the object is broken",
-		prevGoal:"This is Goal Object,and breaking this is Stage Clear",
-		tutoClear:"It's Clear",
-		nextLosePattern:"OK? <br/>Next Lose pattern!",
-		losePattern:"This is lose pattern",
-		endChain:"This case,chaining come to an end",
-		loseMsg:"You lose",
-		yourMission:"Your Mission:All break and Chain to Goal",
-		letsWin:"Next Let's Win!",
-		tutoThirdStartMsg:"You can put one Circle to Chain to Goal",
+    sirotama:"First, This Object is broken",
+    aotama:"When Snipets touch another object,the object is broken",
+    prevGoal:"This is Goal Object,and breaking this is Stage Clear",
+    tutoClear:"It's Clear",
+    nextLosePattern:"OK? <br/>Next Lose pattern!",
+    losePattern:"This is lose pattern",
+    endChain:"This case,chaining come to an end",
+    loseMsg:"You lose",
+    yourMission:"Your Mission:All break and Chain to Goal",
+    letsWin:"Next Let's Win!",
+    tutoThirdStartMsg:"You can put one Circle to Chain to Goal",
     tutoClearMsg:"You did it!",
     tutoClearMsg2:"If this is real game,It have a time limit",
     tutoClearMsg3:"Enjoy your game!",
-    backToTop:"Back to Top"
-	}
+    backToTop:"Back to Top",
+    volumeOption:"音量"
+  }
+}
+
+function playSound(sound){
+  sound.volume = VOLUME;
+  sound._element.style.zIndex = 1;
+  sound.play();
 }
 
 //チュートリアルを連続でyareruyouni
@@ -1137,73 +1147,74 @@ function initTutorialScene(){
 }
 
 var TitleBackAnim = Class.create(Group,{
-    initialize: function(){
-        Group.call(this);
+  initialize: function(){
+    Group.call(this);
 
-        this.count = 3;
-        this.next = 0;
+    this.count = 3;
+    this.next = 0;
 
-        this.blocks = [new Block('red') ,new Block('blue') ,new Block('green')];
+    this.blocks = [new Block('red') ,new Block('blue') ,new Block('green')];
 
-        this.positions = [{x:1,y:1},{x:8,y:1},{x:8,y:8},{x:1,y:8}];
+    this.positions = [{x:1,y:1},{x:8,y:1},{x:8,y:8},{x:1,y:8}];
 
-    },
-    onaddedtoscene: function(){
+  },
+  onaddedtoscene: function(){
 
-        var that = this;
+    var that = this;
 
-        for(var i = 0;i<this.blocks.length;i++){
-            var block = this.blocks[i];
-            block.x = this.positions[i].x * BOX_SIZE;
-            block.y = this.positions[i].y * BOX_SIZE;
-            this.parentNode.addChild(block);
+    for(var i = 0;i<this.blocks.length;i++){
+      var block = this.blocks[i];
+      block.x = this.positions[i].x * BOX_SIZE;
+      block.y = this.positions[i].y * BOX_SIZE;
+      this.parentNode.addChild(block);
 
-            block.run = function(){
-                if(!this.parentNode){
-                    return;
-                }
-
-                var thatBlock = this;
-                var arc = new HitArc(this.color);
-                arc.x = this.x-128;
-                arc.y = this.y-128;
-                this.parentNode.addChild(arc);
-
-                that.next++;
-                if(that.next===3){
-                    that.next = 0;
-                }
-
-                for(var beam in this.beamStatus){
-                    // 初期設定的な
-                    var beamInit = {
-                        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-                        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-                        color: this.color,
-                        parentBlock:this,
-                        beamLength:BEAM_LENGTH
-                    }
-                    this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
-                }
-                //	出したら移動
-                thatBlock.tl.moveTo(
-                  that.positions[that.count].x * BOX_SIZE,
-                  that.positions[that.count].y * BOX_SIZE,
-                  30);
-                that.count++;
-
-                if(that.count === 4){
-                    that.count = 0;
-                }
-            }
+      block.run = function(){
+        if(!this.parentNode){
+          return;
         }
-    },
-    startAnim: function(){
-        var that = this;
-        this.parentNode.loopTimer = setInterval(function(){
-            that.blocks[that.next].run();
-        },2500);
+
+        var thatBlock = this;
+        var arc = new HitArc(this.color);
+        arc.x = this.x-128;
+        arc.y = this.y-128;
+        this.parentNode.addChild(arc);
+
+        that.next++;
+        if(that.next===3){
+          that.next = 0;
+        }
+
+        for(var beam in this.beamStatus){
+          // 初期設定的な
+          var beamInit = {
+            x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+            y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+            color: this.color,
+            parentBlock:this,
+            beamLength:BEAM_LENGTH
+          }
+          this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
+        }
+        //	出したら移動
+        thatBlock.tl.moveTo(
+          that.positions[that.count].x * BOX_SIZE,
+          that.positions[that.count].y * BOX_SIZE,
+          30);
+          that.count++;
+
+          if(that.count === 4){
+            that.count = 0;
+          }
+
+      }
     }
+  },
+  startAnim: function(){
+    var that = this;
+    this.parentNode.loopTimer = setInterval(function(){
+      that.blocks[that.next].run();
+    },2500);
+  }
 });
 
 //チュートリアル最初の矢印
@@ -1335,14 +1346,14 @@ function createOptionMenu(){
   // エフェクト
   var switchLabel = new ExLabel(LANGUAGE[COUNTRYCODE].optionTitle);
   switchLabel.setClassName('optionLayer effectLabel');
-  switchLabel.y = 140;
+  switchLabel.y = 120;
   menuGroup.addChild(switchLabel);
 
   var lowSwitch = new ExLabel('<button id="low">'+LANGUAGE[COUNTRYCODE].optionEffect[0]+'</button>',160);
   lowSwitch.setClassName('effectSwitch optionLayer');
   lowSwitch.quality = 'low';
   lowSwitch.x = 80;
-  lowSwitch.y = 192;
+  lowSwitch.y = 172;
   lowSwitch.on('touchend',function(){
     qualityCheck(this.quality);
     effectLevel = 0;
@@ -1353,7 +1364,7 @@ function createOptionMenu(){
   medSwitch.setClassName('effectSwitch optionLayer active');
   medSwitch.quality = 'med';
   medSwitch.x = 240;
-  medSwitch.y = 192;
+  medSwitch.y = 172;
   medSwitch.on('touchend',function(){
     qualityCheck(this.quality);
     effectLevel = 1;
@@ -1364,7 +1375,7 @@ function createOptionMenu(){
   highSwitch.setClassName('effectSwitch optionLayer');
   highSwitch.quality = 'high';
   highSwitch.x = 400;
-  highSwitch.y = 192;
+  highSwitch.y = 172;
   highSwitch.on('touchend',function(){
     qualityCheck(this.quality);
     effectLevel = 2;
@@ -1384,10 +1395,20 @@ function createOptionMenu(){
     }
   }
 
+  // 音量
+  var volumeLabel = new ExLabel(LANGUAGE[COUNTRYCODE].volumeOption);
+  volumeLabel.setClassName('optionLayer effectLabel');
+  volumeLabel.y = 264;
+  menuGroup.addChild(volumeLabel);
+
+  //音量調節スライダー
+  var volumeSlider = new VolumeSlider();
+  menuGroup.addChild(volumeSlider);
+
   // すべてを削除ボタン
   var deleteDataLabel = new ExLabel('<button id="deleteButton" class="btn-long">'+LANGUAGE[COUNTRYCODE].optionDeleteData+'</button>');
   deleteDataLabel.setClassName('deleteData optionLayer');
-  deleteDataLabel.y = 320;
+  deleteDataLabel.y = 365;
   deleteDataLabel.on('touchend',function(){
   	if(window.confirm(LANGUAGE[COUNTRYCODE].optionDeleteConf)){
       localStorage.clear();
@@ -1407,7 +1428,7 @@ function createOptionMenu(){
     localStorage.setItem("hal", JSON.stringify(allData));
     alert(LANGUAGE[COUNTRYCODE].optionAllStageUnlock);
   });
-  openAllStage.y = 448;
+  openAllStage.y = 460;
   menuGroup.addChild(openAllStage);
 
   return menuGroup;
@@ -2431,7 +2452,7 @@ var Result = Class.create(Group,{
       .delay(15*i)
       .scaleTo(1.3,1.3,10).and().rotateTo(144,10).then(function(){
         that.resultStars[cnt++].image = YELLOW_STAR;
-        GAME.assets['sound/star.mp3'].clone().play();
+        playSound(GAME.assets['sound/star.mp3'].clone());
       });
     }
     this.tl.delay(50 + i*15).then(function(){
@@ -2533,18 +2554,19 @@ var GameOver = Class.create(Group,{
 });
 
 var ExLabel = Class.create(Sprite,{
-	initialize: function(text,w,h){
-		var width = w || 640;
-		var height = h || 64;
-		Sprite.call(this,width,height);
+  initialize: function(text,w,h){
+    var width = w || 640;
+    var height = h || 64;
+    Sprite.call(this,width,height);
 
-		this._element = document.createElement('div');
-		this._element.innerHTML = text;
-	},
-	setClassName: function(className){
-		this._element.className = className;
-	}
+    this._element = document.createElement('div');
+    this._element.innerHTML = text;
+  },
+  setClassName: function(className){
+    this._element.className = className;
+  }
 });
+
 var Beam = Class.create(Sprite,{
 	initialize: function(direction ,init){
 		Sprite.call(this,BEAM_SIZE,BEAM_SIZE);
@@ -2648,26 +2670,6 @@ var Block = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-    switch (this.color){
-      case "blue":
-        GAME.assets['sound/blue.mp3'].clone().play();
-        break;
-      case "green":
-        GAME.assets['sound/green.mp3'].clone().play();
-        break;
-      case "red":
-        GAME.assets['sound/red.mp3'].clone().play();
-        break;
-      case "purple":
-        GAME.assets['sound/purple.mp3'].clone().play();
-        break;
-      case "orange":
-        GAME.assets['sound/orange.mp3'].clone().play();
-        break;
-      case "white":
-        GAME.assets['sound/white.mp3'].clone().play();
-        break;
-    }
 
     if( 0 < effectLevel){
       var arc = new HitArc(this.color);
@@ -2689,6 +2691,27 @@ var Block = Class.create(Sprite,{
         this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
       }
       i++;
+    }
+
+    switch (this.color){
+      case "blue":
+        playSound(GAME.assets['sound/blue.mp3'].clone());
+        break;
+      case "green":
+        playSound(GAME.assets['sound/green.mp3'].clone());
+        break;
+      case "red":
+        playSound(GAME.assets['sound/red.mp3'].clone());
+        break;
+      case "purple":
+        playSound(GAME.assets['sound/purple.mp3'].clone());
+        break;
+      case "orange":
+        playSound(GAME.assets['sound/orange.mp3'].clone());
+        break;
+      case "white":
+        playSound(GAME.assets['sound/white.mp3'].clone());
+        break;
     }
     //	出したら消滅
     this.parentNode.removeChild(this);
@@ -2793,8 +2816,6 @@ var Start = Class.create(Sprite,{
 		arc.y = this.y-128;
 		this.parentNode.addChild(arc);
 
-    GAME.assets['sound/start.mp3'].clone().play();
-
 		var i = 0;
 		for(var beam in this.beamStatus){
 			if(DIRECTIONS['white'][i]){
@@ -2810,6 +2831,7 @@ var Start = Class.create(Sprite,{
 			}
 			i++;
 		}
+    playSound(GAME.assets['sound/start.mp3'].clone());
 		//	出したら消滅
 		this.parentNode.removeChild(this);
 	}
@@ -2833,7 +2855,7 @@ var Goal = Class.create(Sprite,{
 
 		this.parentNode.removeChild(this.parentNode.retryLabel);
 
-    GAME.assets['sound/goal.mp3'].clone().play();
+    playSound(GAME.assets['sound/goal.mp3'].clone());
 
 		var that = this;
 
@@ -2876,7 +2898,7 @@ var Star = Class.create(Sprite,{
       that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
     });
     this.image = YELLOW_STAR;
-    GAME.assets['sound/star.mp3'].clone().play();
+    playSound(GAME.assets['sound/star.mp3'].clone());
     this.parentNode.star++;
   }
 });
@@ -2911,9 +2933,6 @@ var Diffusioner = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-
-    GAME.assets['sound/diffusioner.mp3'].clone().play();
-
     var arc = new HitArc(this.color);
     arc.x = this.x-128;
     arc.y = this.y-128;
@@ -2931,6 +2950,8 @@ var Diffusioner = Class.create(Sprite,{
       this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
       i++;
     }
+
+    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
     //	出したら消滅
     this.parentNode.removeChild(this);
   }
@@ -2960,8 +2981,6 @@ var Slanter = Class.create(Sprite,{
 			GAME.currentScene.gameOver();
 		},3500);
 
-    GAME.assets['sound/slanter.mp3'].clone().play();
-
 		var arc = new HitArc(this.color);
 		arc.x = this.x-128;
 		arc.y = this.y-128;
@@ -2979,6 +2998,8 @@ var Slanter = Class.create(Sprite,{
 			this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
 			i++;
 		}
+
+    playSound(GAME.assets['sound/slanter.mp3'].clone());
 		//	出したら消滅
 		this.parentNode.removeChild(this);
 	}
@@ -3081,8 +3102,6 @@ var Pipe = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-    GAME.assets['sound/pipe.mp3'].clone().play();
-
     var arc = new HitArc(this.color);
     arc.x = this.pipeOut.x-128;
     arc.y = this.pipeOut.y-128;
@@ -3096,6 +3115,7 @@ var Pipe = Class.create(Sprite,{
       beamLength:BEAM_LENGTH
     }
     this.parentNode.addChild(new Beam(this.beamStatus[this.pipeStatus.direction],beamInit));
+    playSound(GAME.assets['sound/pipe.mp3'].clone());
     //	出したら消滅
     GAME.currentScene.removeChild(this.pipeOut);
     GAME.currentScene.removeChild(this);
@@ -3198,6 +3218,15 @@ var TutoBlock = Class.create(Sprite,{
       }
       i++;
     }
+
+    if(this.color == "start"){
+      playSound(GAME.assets['sound/start.mp3'].clone());
+    }else if(this.color == "blue"){
+      playSound(GAME.assets['sound/blue.mp3'].clone());
+    }else if (this.color == "white"){
+      playSound(GAME.assets['sound/white.mp3'].clone());
+    }
+
     //最後の場合
     if(this.lastFlg){
       var thatNode = this.parentNode;
@@ -3299,7 +3328,7 @@ var TutoGoal = Class.create(Sprite,{
     clearTimeout(this.parentNode.endTimer);
     this.parentNode.cleared = true;
 
-     GAME.assets['sound/goal.mp3'].clone().play();
+    playSound(GAME.assets['sound/goal.mp3'].clone());
 
     //どのシーンのゴールかで挙動変わる
     if(this.nextEndFlg){
@@ -3551,5 +3580,23 @@ var PointerArrow = Class.create(Sprite,{
     tutoCurrentStage.splice(0,1);
     ARROWARRAY[0].erase();
     ARROWARRAY.splice(0,1);
+  }
+});
+
+var VolumeSlider = Class.create(Sprite,{
+  initialize: function(w,h){
+    var width = w || 640;
+    var height = h || 64;
+    Sprite.call(this,width,height);
+    this.x = 118;
+    this.y = 330;
+
+    this._element = document.createElement('div');
+    this._element.innerHTML = '<input type="range" max="1.0" step="0.1"/>';
+    this._element.className = 'volumeSlider';
+  },
+  ontouchend: function(){
+    //childNodes[0]がinput rangeであると仮定
+    VOLUME = this._element.childNodes[0].value;
   }
 });

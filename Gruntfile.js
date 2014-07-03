@@ -10,6 +10,7 @@ module.exports = function(grunt) {
         src: [
           'js/define.js',
           'js/i18n.js',
+          'js/Sound.js',
           'js/main.js',
           'js/TitleBackAnim.js',
           'js/creaters/ObjectsCreaters.js',
@@ -35,7 +36,8 @@ module.exports = function(grunt) {
           'js/gimmicks/Slanter.js',
           'js/gimmicks/Linker.js',
           'js/gimmicks/Pipe.js',
-          'js/tutorial.js'
+          'js/tutorial.js',
+          'js/VolumeSlider.js'
         ],
         dest: 'js/game.js'
       }
@@ -59,8 +61,8 @@ module.exports = function(grunt) {
 
     watch: {
       scripts: {
-        files: ['js/*.js','js/game.js','js/gimmicks/*.js'],
-        tasks: ['concat','uglify'],
+        files: ['js/*.js','js/game.js','js/gimmicks/*.js','css/*.css'],
+        tasks: ['concat','uglify','cssmin'],
         options: {
           spawn: true,
         }

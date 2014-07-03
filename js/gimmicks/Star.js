@@ -18,7 +18,7 @@ var Star = Class.create(Sprite,{
       that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
     });
     this.image = YELLOW_STAR;
-    GAME.assets['sound/star.mp3'].clone().play();
+    playSound(GAME.assets['sound/star.mp3'].clone());
     this.parentNode.star++;
   }
 });
