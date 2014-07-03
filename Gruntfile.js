@@ -10,7 +10,6 @@ module.exports = function(grunt) {
         src: [
           'js/define.js',
           'js/i18n.js',
-          'js/Sound.js',
           'js/main.js',
           'js/TitleBackAnim.js',
           'js/creaters/ObjectsCreaters.js',
@@ -37,7 +36,8 @@ module.exports = function(grunt) {
           'js/gimmicks/Linker.js',
           'js/gimmicks/Pipe.js',
           'js/tutorial.js',
-          'js/VolumeSlider.js'
+          'js/VolumeSlider.js',
+          'js/Sound.js'
         ],
         dest: 'js/game.js'
       }

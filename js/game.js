@@ -1080,12 +1080,6 @@ var LANGUAGE = {
   }
 }
 
-function playSound(sound){
-  sound.volume = VOLUME;
-  sound._element.style.zIndex = 1;
-  sound.play();
-}
-
 //チュートリアルを連続でyareruyouni
 var tutorialScene = null;
 
@@ -3195,14 +3189,6 @@ var TutoBlock = Class.create(Sprite,{
 
     this.parentNode.removeChild(thirdStartMsg);
 
-    if(this.color == "start"){
-      GAME.assets['sound/start.mp3'].clone().play();
-    }else if(this.color == "blue"){
-      GAME.assets['sound/blue.mp3'].clone().play();
-    }else if (this.color == "white"){
-      GAME.assets['sound/white.mp3'].clone().play();
-    }
-
     for(var beam in this.beamStatus){
       if(TUTODIRECTIONS[this.color][i]){
         // 初期設定的な
@@ -3600,3 +3586,9 @@ var VolumeSlider = Class.create(Sprite,{
     VOLUME = this._element.childNodes[0].value;
   }
 });
+
+function playSound(sound){
+  sound.volume = VOLUME;
+  sound._element.style.zIndex = 1;
+  sound.play();
+}
