@@ -71,14 +71,6 @@ var TutoBlock = Class.create(Sprite,{
 
     this.parentNode.removeChild(thirdStartMsg);
 
-    if(this.color == "start"){
-      playSound(GAME.assets['sound/start.mp3'].clone());
-    }else if(this.color == "blue"){
-      playSound(GAME.assets['sound/blue.mp3'].clone());
-    }else if (this.color == "white"){
-      playSound(GAME.assets['sound/white.mp3'].clone());
-    }
-
     for(var beam in this.beamStatus){
       if(TUTODIRECTIONS[this.color][i]){
         // 初期設定的な
@@ -94,6 +86,15 @@ var TutoBlock = Class.create(Sprite,{
       }
       i++;
     }
+
+    if(this.color == "start"){
+      playSound(GAME.assets['sound/start.mp3'].clone());
+    }else if(this.color == "blue"){
+      playSound(GAME.assets['sound/blue.mp3'].clone());
+    }else if (this.color == "white"){
+      playSound(GAME.assets['sound/white.mp3'].clone());
+    }
+
     //最後の場合
     if(this.lastFlg){
       var thatNode = this.parentNode;
