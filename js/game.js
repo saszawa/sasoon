@@ -3195,6 +3195,14 @@ var TutoBlock = Class.create(Sprite,{
 
     this.parentNode.removeChild(thirdStartMsg);
 
+    if(this.color == "start"){
+      GAME.assets['sound/start.mp3'].clone().play();
+    }else if(this.color == "blue"){
+      GAME.assets['sound/blue.mp3'].clone().play();
+    }else if (this.color == "white"){
+      GAME.assets['sound/white.mp3'].clone().play();
+    }
+
     for(var beam in this.beamStatus){
       if(TUTODIRECTIONS[this.color][i]){
         // 初期設定的な
@@ -3312,7 +3320,7 @@ var TutoGoal = Class.create(Sprite,{
   run: function(){
     this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).unloop();
     var that = this;
-   // this.parentNode.addChild(arc);
+    // this.parentNode.addChild(arc);
     if(tutoCurrentStage.length > 1){
       return;
     }
@@ -3371,13 +3379,13 @@ var TutoGoal = Class.create(Sprite,{
           tutorialScene.addChild(nextLosePatternLabel);
         })
 
-//        tutoSecondScene = createTutorialSecondScene();
-       // kokokaraセカンドシーン作成
+        //        tutoSecondScene = createTutorialSecondScene();
+        // kokokaraセカンドシーン作成
         tutoSecondScene = new Scene();
 
         var titleScene = createTitleScene();
 
-       //戻るボタン
+        //戻るボタン
         var backToTop = createBacktoTopLabel();
 
         tutoSecondScene.backToTop = function(){
@@ -3480,7 +3488,7 @@ var TutoBeam = Class.create(Sprite,{
             if(this.parentNode.aotamaEndFlg){
               var prevGoalLabel = createPrevGoalLabel();
               this.parentNode.addChild(prevGoalLabel);
-            //負けパターンのとき
+              //負けパターンのとき
             }else if(this.parentNode.loseAotamaFlg){
               var endChainLabel = createEndChainLabel();
               this.parentNode.addChild(endChainLabel);
