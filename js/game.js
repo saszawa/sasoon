@@ -1082,6 +1082,7 @@ var tutorialScene = null;
 enchant();
 window.onload = function () {
   GAME = new Game(640, 640);
+  GAME.preload('sound/white.mp3','sound/goal.mp3','sound/start.mp3','sound/orange.mp3','sound/purple.mp3','sound/green.mp3','sound/red.mp3','sound/slanter.mp3','sound/pipe.mp3','sound/blue.mp3','sound/star.mp3','sound/diffusioner.mp3');
   GAME.fps = 30;
   GAME.onload = function () {
 
@@ -2301,163 +2302,164 @@ var Timer = Class.create(Label,{
 });
 
 var Result = Class.create(Group,{
-	initialize: function(){
-		Group.call(this);
+  initialize: function(){
+    Group.call(this);
 
-		var that = this;
+    var that = this;
 
-		this._element = document.createElement('div');
+    this._element = document.createElement('div');
 
-		this.clearLabel = new ExLabel('Stage '+(LEVEL+1)+' Clear !',640,80);
-		this.clearLabel.setClassName('clearText');
-		this.clearLabel.opacity = 0;
-		this.clearLabel.x = 0;
-		this.clearLabel.y = 100;
-		this.addChild(this.clearLabel);
-
-
-		//===============================//
-		// Star
-		//===============================//
-		this.resultStars = [];
-
-		this.resultStars[0] = new Star();
-		this.resultStars[0].x = 160;
-		this.resultStars[0].y = 320;
-
-		this.resultStars[1] = new Star();
-		this.resultStars[1].x = 288;
-		this.resultStars[1].y = 288;
-
-		this.resultStars[2] = new Star();
-		this.resultStars[2].x = 416;
-		this.resultStars[2].y = 320;
-
-		this.resultStars.forEach(function(star){
-			star.onaddedtoscene = null;
-			star.scaleX = 0.8;
-			star.scaleY = 0.8;
-			star.opacity = 0;
-
-			that.addChild(star);
-		});
-
-		//===============================//
-		//  prev,next,stage,retry
-		//===============================//
-		this.nextStage = new Block('black');
-		this.nextStage._element.className = 'black forResultBlock';
-		this.nextStage._element.innerHTML = '<i class="icon-pageforward">';
-		this.nextStage.x = 7 * 64;
-		this.nextStage.y = 480;
-		this.nextStage.addEventListener('touchend',function(){
-
-			var arc = new HitArc('black');
-			arc.x = that.nextStage.x-128;
-			arc.y = that.nextStage.y-128;
-			that.parentNode.addChild(arc);
-			LEVEL++;
-			that.parentNode.initStage();
-			removeResult();
-		});
-
-		this.prevStage = new Block('black');
-		this.prevStage._element.className = 'black forResultBlock';
-		this.prevStage._element.innerHTML = '<i class="icon-pageback">';
-		this.prevStage.x = 2 * 64;
-		this.prevStage.y = 480;
-		this.prevStage.addEventListener('touchend',function(){
-
-			var arc = new HitArc('black');
-			arc.x = that.prevStage.x-128;
-			arc.y = that.prevStage.y-128;
-			that.parentNode.addChild(arc);
-			LEVEL--;
-			that.parentNode.initStage();
-			removeResult();
-		});
-
-		this.stageSelect = new Block('black');
-		this.stageSelect._element.className = 'black forResultBlock';
-		this.stageSelect._element.innerHTML = '<i class="icon-th">';
-		this.stageSelect.x = 4*64+32;
-		this.stageSelect.y = 432;
-		this.stageSelect.addEventListener('touchend',function(){
-			that.parentNode.removeChild(BACKGROUND_ARC);
-			removeResult();
-			GAME.currentScene.stageSelect();
-		});
-
-		this.retry = new Block('black');
-		this.retry._element.className = 'black forResultBlock';
-		this.retry._element.innerHTML = '<i class="icon-repeat">';
-		this.retry.x = 4*64+32;
-		this.retry.y = 528;
-		this.retry.addEventListener('touchend',function(){
-			var arc = new HitArc('black');
-			arc.x = that.retry.x-128;
-			arc.y = that.retry.y-128;
-			that.parentNode.addChild(arc);
-			that.parentNode.initStage();
-			removeResult();
-		});
+    this.clearLabel = new ExLabel('Stage '+(LEVEL+1)+' Clear !',640,80);
+    this.clearLabel.setClassName('clearText');
+    this.clearLabel.opacity = 0;
+    this.clearLabel.x = 0;
+    this.clearLabel.y = 100;
+    this.addChild(this.clearLabel);
 
 
-		function removeResult(){
-			that.removeChild(that.clearLabel);
-			that.removeChild(that.nextStage);
-			for(var i = 0 ;i < that.resultStars.length ;i++){
-				that.removeChild(that.resultStars[i]);
-			}
-			that.parentNode.removeChild(that.prevStage);
-			that.parentNode.removeChild(that.nextStage);
-			that.parentNode.removeChild(that.stageSelect);
-			that.parentNode.removeChild(that.retry);
-			that.parentNode.removeChild(that);
-		}
+    //===============================//
+    // Star
+    //===============================//
+    this.resultStars = [];
 
-	},
-	onaddedtoscene: function(){
-		var that = this;
-		var cnt = 0;
+    this.resultStars[0] = new Star();
+    this.resultStars[0].x = 160;
+    this.resultStars[0].y = 320;
 
-		this.clearLabel.tl.delay(10).fadeTo(1,10);
-		for(var i = 0; i < this.parentNode.star; i++){
-			this.resultStars[i].tl
-				.delay(25)
-				.fadeTo(1,10)
-				.delay(15)
-				.delay(15*i)
-				.scaleTo(1.3,1.3,10).and().rotateTo(144,10).then(function(){
-					that.resultStars[cnt++].image = YELLOW_STAR;
-				});
-		}
-		this.tl.delay(50 + i*15).then(function(){
-			if(LEVEL){
-				that.parentNode.addChild(that.prevStage);
-				that.prevStage.tl.scaleTo(0,0,0).then(function(){
-					that.prevStage._element.className = 'black changeBu';
-				}).scaleTo(1,1,15,BOUNCE_EASEOUT);
-			}
+    this.resultStars[1] = new Star();
+    this.resultStars[1].x = 288;
+    this.resultStars[1].y = 288;
 
-			if(LEVEL !== STAGES.length - 1){
-				that.parentNode.addChild(that.nextStage);
-				that.nextStage.tl.scaleTo(0,0,0).then(function(){
-					that.nextStage._element.className = 'black changeBu';
-				}).scaleTo(1,1,15,BOUNCE_EASEOUT);
-			}
+    this.resultStars[2] = new Star();
+    this.resultStars[2].x = 416;
+    this.resultStars[2].y = 320;
 
-			that.parentNode.addChild(that.stageSelect);
-			that.stageSelect.tl.scaleTo(0,0,0).then(function(){
-				that.stageSelect._element.className = 'black';
-			}).scaleTo(1,1,15,BOUNCE_EASEOUT);
+    this.resultStars.forEach(function(star){
+      star.onaddedtoscene = null;
+      star.scaleX = 0.8;
+      star.scaleY = 0.8;
+      star.opacity = 0;
 
-			that.parentNode.addChild(that.retry);
-			that.retry.tl.scaleTo(0,0,0).then(function(){
-				that.retry._element.className = 'black';
-			}).scaleTo(1,1,15,BOUNCE_EASEOUT);
-		});
-	}
+      that.addChild(star);
+    });
+
+    //===============================//
+    //  prev,next,stage,retry
+    //===============================//
+    this.nextStage = new Block('black');
+    this.nextStage._element.className = 'black forResultBlock';
+    this.nextStage._element.innerHTML = '<i class="icon-pageforward">';
+    this.nextStage.x = 7 * 64;
+    this.nextStage.y = 480;
+    this.nextStage.addEventListener('touchend',function(){
+
+      var arc = new HitArc('black');
+      arc.x = that.nextStage.x-128;
+      arc.y = that.nextStage.y-128;
+      that.parentNode.addChild(arc);
+      LEVEL++;
+      that.parentNode.initStage();
+      removeResult();
+    });
+
+    this.prevStage = new Block('black');
+    this.prevStage._element.className = 'black forResultBlock';
+    this.prevStage._element.innerHTML = '<i class="icon-pageback">';
+    this.prevStage.x = 2 * 64;
+    this.prevStage.y = 480;
+    this.prevStage.addEventListener('touchend',function(){
+
+      var arc = new HitArc('black');
+      arc.x = that.prevStage.x-128;
+      arc.y = that.prevStage.y-128;
+      that.parentNode.addChild(arc);
+      LEVEL--;
+      that.parentNode.initStage();
+      removeResult();
+    });
+
+    this.stageSelect = new Block('black');
+    this.stageSelect._element.className = 'black forResultBlock';
+    this.stageSelect._element.innerHTML = '<i class="icon-th">';
+    this.stageSelect.x = 4*64+32;
+    this.stageSelect.y = 432;
+    this.stageSelect.addEventListener('touchend',function(){
+      that.parentNode.removeChild(BACKGROUND_ARC);
+      removeResult();
+      GAME.currentScene.stageSelect();
+    });
+
+    this.retry = new Block('black');
+    this.retry._element.className = 'black forResultBlock';
+    this.retry._element.innerHTML = '<i class="icon-repeat">';
+    this.retry.x = 4*64+32;
+    this.retry.y = 528;
+    this.retry.addEventListener('touchend',function(){
+      var arc = new HitArc('black');
+      arc.x = that.retry.x-128;
+      arc.y = that.retry.y-128;
+      that.parentNode.addChild(arc);
+      that.parentNode.initStage();
+      removeResult();
+    });
+
+
+    function removeResult(){
+      that.removeChild(that.clearLabel);
+      that.removeChild(that.nextStage);
+      for(var i = 0 ;i < that.resultStars.length ;i++){
+        that.removeChild(that.resultStars[i]);
+      }
+      that.parentNode.removeChild(that.prevStage);
+      that.parentNode.removeChild(that.nextStage);
+      that.parentNode.removeChild(that.stageSelect);
+      that.parentNode.removeChild(that.retry);
+      that.parentNode.removeChild(that);
+    }
+
+  },
+  onaddedtoscene: function(){
+    var that = this;
+    var cnt = 0;
+
+    this.clearLabel.tl.delay(10).fadeTo(1,10);
+    for(var i = 0; i < this.parentNode.star; i++){
+      this.resultStars[i].tl
+      .delay(25)
+      .fadeTo(1,10)
+      .delay(15)
+      .delay(15*i)
+      .scaleTo(1.3,1.3,10).and().rotateTo(144,10).then(function(){
+        that.resultStars[cnt++].image = YELLOW_STAR;
+        GAME.assets['sound/star.mp3'].clone().play();
+      });
+    }
+    this.tl.delay(50 + i*15).then(function(){
+      if(LEVEL){
+        that.parentNode.addChild(that.prevStage);
+        that.prevStage.tl.scaleTo(0,0,0).then(function(){
+          that.prevStage._element.className = 'black changeBu';
+        }).scaleTo(1,1,15,BOUNCE_EASEOUT);
+      }
+
+      if(LEVEL !== STAGES.length - 1){
+        that.parentNode.addChild(that.nextStage);
+        that.nextStage.tl.scaleTo(0,0,0).then(function(){
+          that.nextStage._element.className = 'black changeBu';
+        }).scaleTo(1,1,15,BOUNCE_EASEOUT);
+      }
+
+      that.parentNode.addChild(that.stageSelect);
+      that.stageSelect.tl.scaleTo(0,0,0).then(function(){
+        that.stageSelect._element.className = 'black';
+      }).scaleTo(1,1,15,BOUNCE_EASEOUT);
+
+      that.parentNode.addChild(that.retry);
+      that.retry.tl.scaleTo(0,0,0).then(function(){
+        that.retry._element.className = 'black';
+      }).scaleTo(1,1,15,BOUNCE_EASEOUT);
+    });
+  }
 });
 
 var GameOver = Class.create(Group,{
@@ -2601,75 +2603,96 @@ var Beam = Class.create(Sprite,{
 });
 
 var Block = Class.create(Sprite,{
-	initialize: function(color){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
+  initialize: function(color){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
 
-		// DOMモード
-		this._element = document.createElement('div');
-		this._element.className = color;
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = color;
 
-		this.color = color;
+    this.color = color;
 
-		if(this.color === 'orange'){
-			this.image = ORANGE;
-		} else if(this.color === 'purple'){
-			this.image = PURPLE;
-		}
+    if(this.color === 'orange'){
+      this.image = ORANGE;
+    } else if(this.color === 'purple'){
+      this.image = PURPLE;
+    }
 
-		// Beam用ステータス
-		this.beamStatus = {
-			top:{
-				moveX: 0,
-				moveY: -MOVE_PX,
-			},
-			right:{
-				moveX: MOVE_PX,
-				moveY: 0
-			},
-			down:{
-				moveX: 0,
-				moveY: MOVE_PX
-			},
-			left:{
-				moveX: -MOVE_PX,
-				moveY: 0
-			}
-		};
-	},
-	/**
-	* Block.run()
-	* 	4方向にBeamを出します
-	*/
-	run: function(){
-		clearTimeout(this.parentNode.endTimer);
-		this.parentNode.endTimer = setTimeout(function(){
-			GAME.currentScene.gameOver();
-		},3500);
+    // Beam用ステータス
+    this.beamStatus = {
+      top:{
+        moveX: 0,
+        moveY: -MOVE_PX,
+      },
+      right:{
+        moveX: MOVE_PX,
+        moveY: 0
+      },
+      down:{
+        moveX: 0,
+        moveY: MOVE_PX
+      },
+      left:{
+        moveX: -MOVE_PX,
+        moveY: 0
+      }
+    };
+  },
+  /**
+   * Block.run()
+   * 	4方向にBeamを出します
+   */
+  run: function(){
+    clearTimeout(this.parentNode.endTimer);
+    this.parentNode.endTimer = setTimeout(function(){
+      GAME.currentScene.gameOver();
+    },3500);
 
-		if( 0 < effectLevel){
-			var arc = new HitArc(this.color);
-			arc.x = this.x-128;
-			arc.y = this.y-128;
-			this.parentNode.addChild(arc);
-		}
+    switch (this.color){
+      case "blue":
+        GAME.assets['sound/blue.mp3'].clone().play();
+        break;
+      case "green":
+        GAME.assets['sound/green.mp3'].clone().play();
+        break;
+      case "red":
+        GAME.assets['sound/red.mp3'].clone().play();
+        break;
+      case "purple":
+        GAME.assets['sound/purple.mp3'].clone().play();
+        break;
+      case "orange":
+        GAME.assets['sound/orange.mp3'].clone().play();
+        break;
+      case "white":
+        GAME.assets['sound/white.mp3'].clone().play();
+        break;
+    }
 
-		var i = 0;
-		for(var beam in this.beamStatus){
-			if(DIRECTIONS[this.color][i]){
-				// 初期設定的な
-				var beamInit = {
-					x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-					y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-					parentBlock:this,
-					beamLength:BEAM_LENGTH
-				}
-				this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
-			}
-			i++;
-		}
-		//	出したら消滅
-		this.parentNode.removeChild(this);
-	}
+    if( 0 < effectLevel){
+      var arc = new HitArc(this.color);
+      arc.x = this.x-128;
+      arc.y = this.y-128;
+      this.parentNode.addChild(arc);
+    }
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      if(DIRECTIONS[this.color][i]){
+        // 初期設定的な
+        var beamInit = {
+          x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+          y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+          parentBlock:this,
+          beamLength:BEAM_LENGTH
+        }
+        this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
+      }
+      i++;
+    }
+    //	出したら消滅
+    this.parentNode.removeChild(this);
+  }
 });
 
 var CountBlock = Class.create(Sprite,{
@@ -2770,6 +2793,8 @@ var Start = Class.create(Sprite,{
 		arc.y = this.y-128;
 		this.parentNode.addChild(arc);
 
+    GAME.assets['sound/start.mp3'].clone().play();
+
 		var i = 0;
 		for(var beam in this.beamStatus){
 			if(DIRECTIONS['white'][i]){
@@ -2808,6 +2833,8 @@ var Goal = Class.create(Sprite,{
 
 		this.parentNode.removeChild(this.parentNode.retryLabel);
 
+    GAME.assets['sound/goal.mp3'].clone().play();
+
 		var that = this;
 
 		// 星の削除
@@ -2830,79 +2857,83 @@ var Goal = Class.create(Sprite,{
 });
 
 var Star = Class.create(Sprite,{
-	initialize: function(){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
 
-		//星を描く
-		this._element = document.createElement('div');
-		this.image = WHITE_STAR;
-		this.hited = false;
-	},
-	onaddedtoscene: function(){
-		this.parentNode.stars.push(this);
-	},
-	run: function(){
-		var that = this;
-		this.hited = true;
-		this.tl.scaleTo(0.5,0.5,7).scaleTo(1,1,2).then(function(){
-			that.tl.clear();
-			that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
-		});
-		this.image = YELLOW_STAR;
-		this.parentNode.star++;
-	}
+    //星を描く
+    this._element = document.createElement('div');
+    this.image = WHITE_STAR;
+    this.hited = false;
+  },
+  onaddedtoscene: function(){
+    this.parentNode.stars.push(this);
+  },
+  run: function(){
+    var that = this;
+    this.hited = true;
+    this.tl.scaleTo(0.5,0.5,7).scaleTo(1,1,2).then(function(){
+      that.tl.clear();
+      that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
+    });
+    this.image = YELLOW_STAR;
+    GAME.assets['sound/star.mp3'].clone().play();
+    this.parentNode.star++;
+  }
 });
 
 var Diffusioner = Class.create(Sprite,{
-	initialize: function(){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
-		this._element = document.createElement('div');
-		this._element.className = 'diffusioner';
-		this.image = DIFFUSIONER;
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'diffusioner';
+    this.image = DIFFUSIONER;
 
-		// 倍の早さ
-		var movePx = MOVE_PX*2;
+    // 倍の早さ
+    var movePx = MOVE_PX*2;
 
-		this.beamStatus = {
-			top:      {moveX: 0        ,moveY: -movePx},
-			topRight: {moveX: movePx   ,moveY: -movePx},
-			right:    {moveX: movePx   ,moveY: 0       },
-			rightDown:{moveX: movePx   ,moveY: movePx },
-			down:     {moveX: 0        ,moveY: movePx },
-			downLeft: {moveX: -movePx  ,moveY: movePx },
-			left:     {moveX: -movePx  ,moveY: 0       },
-			leftTop:  {moveX: -movePx  ,moveY: -movePx}
-		};
+    this.beamStatus = {
+      top:      {moveX: 0        ,moveY: -movePx},
+      topRight: {moveX: movePx   ,moveY: -movePx},
+      right:    {moveX: movePx   ,moveY: 0       },
+      rightDown:{moveX: movePx   ,moveY: movePx },
+      down:     {moveX: 0        ,moveY: movePx },
+      downLeft: {moveX: -movePx  ,moveY: movePx },
+      left:     {moveX: -movePx  ,moveY: 0       },
+      leftTop:  {moveX: -movePx  ,moveY: -movePx}
+    };
 
-		this.color = "red";
+    this.color = "red";
 
-	},
-	run: function(){
-		clearTimeout(this.parentNode.endTimer);
-		this.parentNode.endTimer = setTimeout(function(){
-			GAME.currentScene.gameOver();
-		},3500);
+  },
+  run: function(){
+    clearTimeout(this.parentNode.endTimer);
+    this.parentNode.endTimer = setTimeout(function(){
+      GAME.currentScene.gameOver();
+    },3500);
 
-		var arc = new HitArc(this.color);
-		arc.x = this.x-128;
-		arc.y = this.y-128;
-		this.parentNode.addChild(arc);
 
-		var i = 0;
-		for(var beam in this.beamStatus){
-			// 初期設定的な
-			var beamInit = {
-				x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-				y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-				parentBlock:this,
-				beamLength: 1
-			}
-			this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
-			i++;
-		}
-		//	出したら消滅
-		this.parentNode.removeChild(this);
-	}
+    GAME.assets['sound/diffusioner.mp3'].clone().play();
+
+    var arc = new HitArc(this.color);
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    this.parentNode.addChild(arc);
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 1
+      }
+      this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
+      i++;
+    }
+    //	出したら消滅
+    this.parentNode.removeChild(this);
+  }
 });
 
 var Slanter = Class.create(Sprite,{
@@ -2928,6 +2959,8 @@ var Slanter = Class.create(Sprite,{
 		this.parentNode.endTimer = setTimeout(function(){
 			GAME.currentScene.gameOver();
 		},3500);
+
+    GAME.assets['sound/slanter.mp3'].clone().play();
 
 		var arc = new HitArc(this.color);
 		arc.x = this.x-128;
@@ -2979,6 +3012,8 @@ var Linker = Class.create(Sprite,{
 	},
 	run: function(){
 		var gimmicks = this.currentStage.length;
+
+
 		var runNum = [];
 		for(var i = 0; i < gimmicks; i++){
 			if(this.currentStage[i].color === this.color && this !== this.currentStage[i]){
@@ -2992,6 +3027,7 @@ var Linker = Class.create(Sprite,{
 		this.parentNode.removeChild(this);
 	}
 });
+
 var Pipe = Class.create(Sprite,{
   initialize: function(color,pipeStatus){
     Sprite.call(this,BOX_SIZE,BOX_SIZE);
@@ -3044,6 +3080,8 @@ var Pipe = Class.create(Sprite,{
     this.parentNode.endTimer = setTimeout(function(){
       GAME.currentScene.gameOver();
     },3500);
+
+    GAME.assets['sound/pipe.mp3'].clone().play();
 
     var arc = new HitArc(this.color);
     arc.x = this.pipeOut.x-128;

@@ -26,6 +26,8 @@ var Linker = Class.create(Sprite,{
 	},
 	run: function(){
 		var gimmicks = this.currentStage.length;
+
+
 		var runNum = [];
 		for(var i = 0; i < gimmicks; i++){
 			if(this.currentStage[i].color === this.color && this !== this.currentStage[i]){
