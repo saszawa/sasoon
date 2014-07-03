@@ -33,6 +33,8 @@ var Start = Class.create(Sprite,{
 		arc.y = this.y-128;
 		this.parentNode.addChild(arc);
 
+    GAME.assets['sound/start.mp3'].clone().play();
+
 		var i = 0;
 		for(var beam in this.beamStatus){
 			if(DIRECTIONS['white'][i]){
