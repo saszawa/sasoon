@@ -1006,6 +1006,8 @@ function browserLanguage() {
 
 var COUNTRYCODE = browserLanguage();
 
+var VOLUME = 1.0;
+
 var userData;
 var stageBoxes = [];
 var stageGroup;

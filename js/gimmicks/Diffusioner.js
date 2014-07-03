@@ -28,9 +28,6 @@ var Diffusioner = Class.create(Sprite,{
       GAME.currentScene.gameOver();
     },3500);
 
-
-    GAME.assets['sound/diffusioner.mp3'].clone().play();
-
     var arc = new HitArc(this.color);
     arc.x = this.x-128;
     arc.y = this.y-128;
@@ -48,6 +45,8 @@ var Diffusioner = Class.create(Sprite,{
       this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
       i++;
     }
+
+    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
     //	出したら消滅
     this.parentNode.removeChild(this);
   }
