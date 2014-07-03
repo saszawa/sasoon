@@ -3299,6 +3299,8 @@ var TutoGoal = Class.create(Sprite,{
     clearTimeout(this.parentNode.endTimer);
     this.parentNode.cleared = true;
 
+     GAME.assets['sound/goal.mp3'].clone().play();
+
     //どのシーンのゴールかで挙動変わる
     if(this.nextEndFlg){
 
