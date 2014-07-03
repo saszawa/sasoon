@@ -854,7 +854,7 @@ var STAGES = [
   //46
   { x:5 ,y:5 ,name: 'start'},
   { x:5 ,y:7 ,name: 'slanter'},
-  { x:7 ,y:5 ,name: 'pipe' ,color:'red' ,pipeStatus:{x:3 ,y:7 ,direction:'right'} },
+  { x:7 ,y:5 ,name: 'pipe' ,color:'red' ,pipeStatus:{x:3 ,y:7 ,direction:'left'} },
   { x:3 ,y:5 ,name: 'diffusioner'},
   { x:5 ,y:3 ,name: 'block',color:'blue'},
   { x:3 ,y:3 ,name: 'slanter'},
