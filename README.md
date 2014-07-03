@@ -4,12 +4,10 @@ sasoon
 http://touchbloomy.com
 左記URLのブラウザゲーム　TouchBloomy　のソースコードのリポジトリです。
 
-
-
-
-
-
-
+このリポジトリに関するお問い合わせは
+吉村　智志
+satoshi.yoshimura.so@gmail.com
+まで
 
 
 
@@ -19,6 +17,10 @@ http://touchbloomy.com
 
 
 このリポジトリの内容はGPLライセンスが適用されています。
+
+GNU 一般公衆利用許諾契約書
+http://www.opensource.jp/gpl/gpl.ja.html
+
 
 TouchBloomy This is browser game.
 Copyright (C) 2014  Satoshi Yoshimura
