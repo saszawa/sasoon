@@ -55,6 +55,7 @@ function createStageScene(){
   }
   stageScene.gameOver = function(){
     var GameOverGroup = new GameOver();
+    stageScene.removeChild(stageScene.retryLabel);
     this.addChild(GameOverGroup);
   }
 
