@@ -1082,8 +1082,8 @@ var LANGUAGE = {
 
 function playSound(sound){
   sound.volume = VOLUME;
-  sound._element.style.zIndex = 1;
   sound.play();
+  
 }
 
 //チュートリアルを連続でyareruyouni
@@ -1958,6 +1958,7 @@ function createStageScene(){
   }
   stageScene.gameOver = function(){
     var GameOverGroup = new GameOver();
+    stageScene.removeChild(stageScene.retryLabel);
     this.addChild(GameOverGroup);
   }
 
@@ -2163,7 +2164,8 @@ function createSelectScene(){
   }
 
   stageScene.retryLabel = createRetryLabelOnGame();
-  stageScene.retryLabel.on('touchend',function(){
+  stageScene.retryLabel.on('touchstart',function(){
+    clearTimeout(stageScene.endTimer);
     selectScene.selectedStage(LEVEL);
   });
   return selectScene;
