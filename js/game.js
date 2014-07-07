@@ -3699,7 +3699,13 @@ var EditBox = Class.create(Box,{
     Box.call(this,BOX_SIZE,BOX_SIZE);
     // DOMモード
     this._element = document.createElement('div');
-    this._element.className = 'box';
+    //下線対応
+    console.log(yNumber);
+    if(yNumber == 9){
+      this._element.className = 'box edit_underline';
+    }else{
+      this._element.className = 'box';
+    }
     this.moved = false;
     //idを降ってステージ作成に活かす
     this.xId = xNumber || -1;
