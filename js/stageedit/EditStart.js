@@ -47,14 +47,15 @@ var EditStart = Class.create(Start,{
           parentBlock:this,
           beamLength:BEAM_LENGTH
         }
-        GAME.currentScene.addChild(new Beam(this.beamStatus[beam],beamInit));
+        GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
       }
       i++;
     }
+
     playSound(GAME.assets['sound/start.mp3'].clone());
+
     //出したら消滅
     GAME.currentScene.removeChild(this);
-    delete creater.currentStage[this.xId][this.yId];
     creater.startObj = null;
   }
 });

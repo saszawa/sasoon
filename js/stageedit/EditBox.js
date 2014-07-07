@@ -24,11 +24,11 @@ var EditBox = Class.create(Box,{
       creater.putStartFlg = true;
       creater.startObj = obj;
     }else{
-      var obj = new Block(penColor);
+      var obj = new EditBlock(penColor);
+      creater.currentStage.push(obj);
     }
     obj.x = this.x;
     obj.y = this.y;
-    creater.currentStage[this.xId][this.yId] = obj;
     this.parentNode.addChild(obj);
 
     //TODO 上書き機能

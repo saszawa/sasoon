@@ -2657,60 +2657,60 @@ var ExLabel = Class.create(Sprite,{
 });
 
 var Beam = Class.create(Sprite,{
-	initialize: function(direction ,init){
-		Sprite.call(this,BEAM_SIZE,BEAM_SIZE);
+  initialize: function(direction ,init){
+    Sprite.call(this,BEAM_SIZE,BEAM_SIZE);
 
-		// DOMモード
-		this._element = document.createElement('div');
-		this._element.className = 'beam';
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'beam';
 
-		// 初期状態
-		this.direction = direction;
-		this.initX = init.x;
-		this.initY = init.y;
-		this.x = init.x;
-		this.y = init.y;
+    // 初期状態
+    this.direction = direction;
+    this.initX = init.x;
+    this.initY = init.y;
+    this.x = init.x;
+    this.y = init.y;
 
-		this.currentStage = currentStage;
-		this.parentBlock = init.parentBlock;
-		this.beamLength = init.beamLength*BOX_SIZE;
+    this.currentStage = currentStage;
+    this.parentBlock = init.parentBlock;
+    this.beamLength = init.beamLength*BOX_SIZE;
 
-		this.COLORS = COLORS;
+    this.COLORS = COLORS;
 
-	},
-	onenterframe: function(){
-		// 衝突検知
-		// やっぱこうなるの・・・
-		var gimmicks = this.currentStage.length;
-		var distance = BOX_HALF+12;
-		for(var i = 0; i < gimmicks; i++){
-			if(!this.currentStage[i]){
-				GAME.currentScene.removeChild(this);
-			} else if(this.within(this.currentStage[i],this.currentStage[i].distance || distance) && this.currentStage[i] !== this.parentBlock && !this.parentNode.cleared){
-				// 発射！
-				this.currentStage[i].run();
+  },
+  onenterframe: function(){
+    // 衝突検知
+    // やっぱこうなるの・・・
+    var gimmicks = this.currentStage.length;
+    var distance = BOX_HALF+12;
+    for(var i = 0; i < gimmicks; i++){
+      if(!this.currentStage[i]){
+        GAME.currentScene.removeChild(this);
+      } else if(this.within(this.currentStage[i],this.currentStage[i].distance || distance) && this.currentStage[i] !== this.parentBlock && !this.parentNode.cleared){
+        // 発射！
+        this.currentStage[i].run();
 
-				// 当たったら消える
-				delete this.currentStage[i];
-				this.currentStage.splice(i,1);
-				GAME.currentScene.removeChild(this);
-				return;
-			}
-		}
+        // 当たったら消える
+        delete this.currentStage[i];
+        this.currentStage.splice(i,1);
+        GAME.currentScene.removeChild(this);
+        return;
+      }
+    }
 
-		// Beamの移動と生存期間
-		if(Math.abs(this.initX-this.x) < this.beamLength
-			&&  Math.abs(this.initY-this.y) < this.beamLength){
-			this.x += this.direction.moveX;
-			this.y += this.direction.moveY;
-		} else {
-			// 生存期間を過ぎると消えていく
-			this.opacity -= 0.1;
-			if(this.opacity < 0){
-				GAME.currentScene.removeChild(this);
-			}
-		}
-	}
+    // Beamの移動と生存期間
+    if(Math.abs(this.initX-this.x) < this.beamLength
+       &&  Math.abs(this.initY-this.y) < this.beamLength){
+         this.x += this.direction.moveX;
+         this.y += this.direction.moveY;
+       } else {
+         // 生存期間を過ぎると消えていく
+         this.opacity -= 0.1;
+         if(this.opacity < 0){
+           GAME.currentScene.removeChild(this);
+         }
+       }
+  }
 });
 
 var Block = Class.create(Sprite,{
@@ -3714,11 +3714,11 @@ var EditBox = Class.create(Box,{
       creater.putStartFlg = true;
       creater.startObj = obj;
     }else{
-      var obj = new Block(penColor);
+      var obj = new EditBlock(penColor);
+      creater.currentStage.push(obj);
     }
     obj.x = this.x;
     obj.y = this.y;
-    creater.currentStage[this.xId][this.yId] = obj;
     this.parentNode.addChild(obj);
 
     //TODO 上書き機能
@@ -3765,6 +3765,8 @@ var BlockInk = Class.create(Block,{
 var Creater =  function(color){
   this.penColor = color || 'white';
   this.stages = new Array(10);
+  //スタートが置かれるまでは-1のまま
+  this.startPin = -1;
   var that = this;
   //ステージ生成の元
   for(var x = 0; x < 10; x++){
@@ -3776,9 +3778,6 @@ var Creater =  function(color){
 
   //これで実行のcurrentStage管理
   this.currentStage = new Array(10);
-  for(var i = 0; i < 10; i++){
-    that.currentStage[i] = new Array(10);
-  }
 
 }
 
@@ -3861,14 +3860,160 @@ var EditStart = Class.create(Start,{
           parentBlock:this,
           beamLength:BEAM_LENGTH
         }
-        GAME.currentScene.addChild(new Beam(this.beamStatus[beam],beamInit));
+        GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
       }
       i++;
     }
+
     playSound(GAME.assets['sound/start.mp3'].clone());
+
     //出したら消滅
     GAME.currentScene.removeChild(this);
-    delete creater.currentStage[this.xId][this.yId];
     creater.startObj = null;
+  }
+});
+
+var EditBeam = Class.create(Beam,{
+  initialize: function(direction ,init){
+    Beam.call(this,BEAM_SIZE,BEAM_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'beam';
+
+    // 初期状態
+    this.direction = direction;
+    this.initX = init.x;
+    this.initY = init.y;
+    this.x = init.x;
+    this.y = init.y;
+
+    this.currentStage = currentStage;
+    this.parentBlock = init.parentBlock;
+    this.beamLength = init.beamLength*BOX_SIZE;
+
+    this.COLORS = COLORS;
+
+  },
+  onenterframe: function(){
+    // 衝突検知
+    // やっぱこうなるの・・・
+    var gimmicks = creater.currentStage.length;
+    var distance = BOX_HALF+12;
+    for(var i = 0; i < gimmicks; i++){
+      if(!creater.currentStage[i]){
+      } else
+      if(this.within(creater.currentStage[i], distance) && creater.currentStage[i] !== this.parentBlock){
+        // 発射！
+        creater.currentStage[i].run();
+
+        // 当たったら消える
+        delete creater.currentStage[i];
+        creater.currentStage.splice(i,1);
+        GAME.currentScene.removeChild(this);
+        return;
+      }
+    }
+
+    // Beamの移動と生存期間
+    if(Math.abs(this.initX-this.x) < this.beamLength
+       &&  Math.abs(this.initY-this.y) < this.beamLength){
+         this.x += this.direction.moveX;
+         this.y += this.direction.moveY;
+       } else {
+         // 生存期間を過ぎると消えていく
+         this.opacity -= 0.1;
+         if(this.opacity < 0){
+           GAME.currentScene.removeChild(this);
+         }
+       }
+  }
+});
+
+var EditBlock = Class.create(Block,{
+  initialize: function(color){
+    Block.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = color;
+
+    this.color = color;
+
+    if(this.color === 'orange'){
+      this.image = ORANGE;
+    } else if(this.color === 'purple'){
+      this.image = PURPLE;
+    }
+
+    // Beam用ステータス
+    this.beamStatus = {
+      top:{
+        moveX: 0,
+        moveY: -MOVE_PX,
+      },
+      right:{
+        moveX: MOVE_PX,
+        moveY: 0
+      },
+      down:{
+        moveX: 0,
+        moveY: MOVE_PX
+      },
+      left:{
+        moveX: -MOVE_PX,
+        moveY: 0
+      }
+    };
+  },
+  /**
+   * Block.run()
+   * 	4方向にBeamを出します
+   */
+  run: function(){
+    if( 0 < effectLevel){
+      var arc = new HitArc(this.color);
+      arc.x = this.x-128;
+      arc.y = this.y-128;
+      GAME.currentScene.addChild(arc);
+    }
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      if(DIRECTIONS[this.color][i]){
+        // 初期設定的な
+        var beamInit = {
+          x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+          y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+          parentBlock:this,
+          beamLength:BEAM_LENGTH
+        }
+        GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      }
+      i++;
+    }
+
+    switch (this.color){
+      case "blue":
+        playSound(GAME.assets['sound/blue.mp3'].clone());
+        break;
+      case "green":
+        playSound(GAME.assets['sound/green.mp3'].clone());
+        break;
+      case "red":
+        playSound(GAME.assets['sound/red.mp3'].clone());
+        break;
+      case "purple":
+        playSound(GAME.assets['sound/purple.mp3'].clone());
+        break;
+      case "orange":
+        playSound(GAME.assets['sound/orange.mp3'].clone());
+        break;
+      case "white":
+        playSound(GAME.assets['sound/white.mp3'].clone());
+        break;
+    }
+    //	出したら消滅
+    GAME.currentScene.removeChild(this);1
   }
 });
