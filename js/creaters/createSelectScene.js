@@ -94,7 +94,8 @@ function createSelectScene(){
   }
 
   stageScene.retryLabel = createRetryLabelOnGame();
-  stageScene.retryLabel.on('touchend',function(){
+  stageScene.retryLabel.on('touchstart',function(){
+    clearTimeout(stageScene.endTimer);
     selectScene.selectedStage(LEVEL);
   });
   return selectScene;
