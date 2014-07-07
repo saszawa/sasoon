@@ -2238,6 +2238,11 @@ function createStageEditScene(){
   startInk.y = 700;
   stageEditScene.addChild(startInk);
 
+  var slanterInk = new SlanterInk('green');
+  slanterInk.x = 400;
+  slanterInk.y = 700;
+  stageEditScene.addChild(slanterInk);
+
   //送信ボタン
   var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);
   sendButton.on('touchend',function(){
@@ -3047,51 +3052,51 @@ var Diffusioner = Class.create(Sprite,{
 });
 
 var Slanter = Class.create(Sprite,{
-	initialize: function(){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
-		this._element = document.createElement('div');
-		this._element.className = 'slanter';
-		this.image = SLANTER;
-		this.rotation = 45;
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'slanter';
+    this.image = SLANTER;
+    this.rotation = 45;
 
-		this.beamStatus = {
-			topRight: {moveX: MOVE_PX  ,moveY: -MOVE_PX},
-			rightDown:{moveX: MOVE_PX  ,moveY: MOVE_PX },
-			downLeft: {moveX: -MOVE_PX ,moveY: MOVE_PX },
-			leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
-		};
+    this.beamStatus = {
+      topRight: {moveX: MOVE_PX  ,moveY: -MOVE_PX},
+      rightDown:{moveX: MOVE_PX  ,moveY: MOVE_PX },
+      downLeft: {moveX: -MOVE_PX ,moveY: MOVE_PX },
+      leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
+    };
 
-		this.color = "green";
+    this.color = "green";
 
-	},
-	run: function(){
-		clearTimeout(this.parentNode.endTimer);
-		this.parentNode.endTimer = setTimeout(function(){
-			GAME.currentScene.gameOver();
-		},3500);
+  },
+  run: function(){
+    clearTimeout(this.parentNode.endTimer);
+    this.parentNode.endTimer = setTimeout(function(){
+      GAME.currentScene.gameOver();
+    },3500);
 
-		var arc = new HitArc(this.color);
-		arc.x = this.x-128;
-		arc.y = this.y-128;
-		this.parentNode.addChild(arc);
+    var arc = new HitArc(this.color);
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    this.parentNode.addChild(arc);
 
-		var i = 0;
-		for(var beam in this.beamStatus){
-			// 初期設定的な
-			var beamInit = {
-				x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-				y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-				parentBlock:this,
-				beamLength: 2
-			}
-			this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
-			i++;
-		}
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 2
+      }
+      this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
+      i++;
+    }
 
     playSound(GAME.assets['sound/slanter.mp3'].clone());
-		//	出したら消滅
-		this.parentNode.removeChild(this);
-	}
+    //	出したら消滅
+    this.parentNode.removeChild(this);
+  }
 });
 
 var Linker = Class.create(Sprite,{
@@ -3709,12 +3714,15 @@ var EditBox = Class.create(Box,{
     var obj = null;
 
     if(penColor == "start"){
-      var obj = new EditStart(this.xId,this.yId);
+      obj = new EditStart();
       //クリエイターがみんなから見えるので色々持たす
       creater.putStartFlg = true;
       creater.startObj = obj;
-    }else{
-      var obj = new EditBlock(penColor);
+    }else if(penColor == "slanter" ){
+      obj = new EditSlanter(this.xId,this.yId);
+      creater.currentStage.push(obj);
+    } else{
+      obj = new EditBlock(penColor);
       creater.currentStage.push(obj);
     }
     obj.x = this.x;
@@ -3812,7 +3820,7 @@ var TestPlayButton = Class.create(ExLabel,{
 });
 
 var EditStart = Class.create(Start,{
-  initialize: function(xNumber,yNumber){
+  initialize: function(){
     Start.call(this,BOX_SIZE,BOX_SIZE);
 
     // DOMモード
@@ -3839,8 +3847,6 @@ var EditStart = Class.create(Start,{
         moveY: 0
       }
     };
-    this.xId = xNumber;
-    this.yId = yNumber;
   },
   run: function(){
     //爆発した場所のxId,yIdを引き数に持つ
@@ -4015,5 +4021,66 @@ var EditBlock = Class.create(Block,{
     }
     //	出したら消滅
     GAME.currentScene.removeChild(this);1
+  }
+});
+
+var EditSlanter = Class.create(Slanter,{
+  initialize: function(){
+    Slanter.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'slanter';
+    this.image = SLANTER;
+    this.rotation = 45;
+
+    this.beamStatus = {
+      topRight: {moveX: MOVE_PX  ,moveY: -MOVE_PX},
+      rightDown:{moveX: MOVE_PX  ,moveY: MOVE_PX },
+      downLeft: {moveX: -MOVE_PX ,moveY: MOVE_PX },
+      leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
+    };
+
+    this.color = "green";
+
+  },
+  run: function(){
+
+    var arc = new HitArc(this.color);
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    GAME.currentScene.addChild(arc);
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 2
+      }
+      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      i++;
+    }
+
+    playSound(GAME.assets['sound/slanter.mp3'].clone());
+    //	出したら消滅
+    GAME.currentScene.removeChild(this);
+  }
+});
+
+var SlanterInk = Class.create(Slanter,{
+  initialize: function(color){
+    Slanter.call(this,BOX_SIZE,BOX_SIZE);
+
+    this._element = document.createElement('div');
+    this._element.className = 'slanter';
+    this.image = SLANTER;
+    this.rotation = 45;
+
+    this.color = "green";
+
+  },
+  ontouchstart: function(){
+    creater.penColor = 'slanter';
   }
 });

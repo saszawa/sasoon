@@ -48,6 +48,11 @@ function createStageEditScene(){
   startInk.y = 700;
   stageEditScene.addChild(startInk);
 
+  var slanterInk = new SlanterInk('green');
+  slanterInk.x = 400;
+  slanterInk.y = 700;
+  stageEditScene.addChild(slanterInk);
+
   //送信ボタン
   var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);
   sendButton.on('touchend',function(){

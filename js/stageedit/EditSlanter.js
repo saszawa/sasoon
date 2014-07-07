@@ -1,6 +1,6 @@
-var Slanter = Class.create(Sprite,{
+var EditSlanter = Class.create(Slanter,{
   initialize: function(){
-    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    Slanter.call(this,BOX_SIZE,BOX_SIZE);
     this._element = document.createElement('div');
     this._element.className = 'slanter';
     this.image = SLANTER;
@@ -17,15 +17,11 @@ var Slanter = Class.create(Sprite,{
 
   },
   run: function(){
-    clearTimeout(this.parentNode.endTimer);
-    this.parentNode.endTimer = setTimeout(function(){
-      GAME.currentScene.gameOver();
-    },3500);
 
     var arc = new HitArc(this.color);
     arc.x = this.x-128;
     arc.y = this.y-128;
-    this.parentNode.addChild(arc);
+    GAME.currentScene.addChild(arc);
 
     var i = 0;
     for(var beam in this.beamStatus){
@@ -36,12 +32,12 @@ var Slanter = Class.create(Sprite,{
         parentBlock:this,
         beamLength: 2
       }
-      this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
+      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
       i++;
     }
 
     playSound(GAME.assets['sound/slanter.mp3'].clone());
     //	出したら消滅
-    this.parentNode.removeChild(this);
+    GAME.currentScene.removeChild(this);
   }
 });

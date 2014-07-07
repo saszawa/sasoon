@@ -1,5 +1,5 @@
 var EditStart = Class.create(Start,{
-  initialize: function(xNumber,yNumber){
+  initialize: function(){
     Start.call(this,BOX_SIZE,BOX_SIZE);
 
     // DOMモード
@@ -26,8 +26,6 @@ var EditStart = Class.create(Start,{
         moveY: 0
       }
     };
-    this.xId = xNumber;
-    this.yId = yNumber;
   },
   run: function(){
     //爆発した場所のxId,yIdを引き数に持つ

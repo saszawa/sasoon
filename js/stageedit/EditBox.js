@@ -19,12 +19,15 @@ var EditBox = Class.create(Box,{
     var obj = null;
 
     if(penColor == "start"){
-      var obj = new EditStart(this.xId,this.yId);
+      obj = new EditStart();
       //クリエイターがみんなから見えるので色々持たす
       creater.putStartFlg = true;
       creater.startObj = obj;
-    }else{
-      var obj = new EditBlock(penColor);
+    }else if(penColor == "slanter" ){
+      obj = new EditSlanter(this.xId,this.yId);
+      creater.currentStage.push(obj);
+    } else{
+      obj = new EditBlock(penColor);
       creater.currentStage.push(obj);
     }
     obj.x = this.x;
