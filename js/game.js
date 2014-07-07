@@ -1008,6 +1008,8 @@ var COUNTRYCODE = browserLanguage();
 
 var VOLUME = 1.0;
 
+var creater;
+
 var userData;
 var stageBoxes = [];
 var stageGroup;
@@ -1044,7 +1046,10 @@ var LANGUAGE = {
     tutoClearMsg2:"本番のステージでは<br/>オブジェクトを置くまでに時間制限があります",
     tutoClearMsg3:"それでは、ゲームをお楽しみ下さい",
     backToTop:"TOPへ戻る",
-    volumeOption:"音量"
+    volumeOption:"音量",
+    stageEdit:"ステージを作る",
+    post:"投稿する",
+    testplay:"試す"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -1076,7 +1081,10 @@ var LANGUAGE = {
     tutoClearMsg2:"If this is real game,It have a time limit",
     tutoClearMsg3:"Enjoy your game!",
     backToTop:"Back to Top",
-    volumeOption:"音量"
+    volumeOption:"SoundVolume",
+    stageEdit:"Edit Stage",
+    post:"Post your Stage!",
+    testplay:"Test play"
   }
 }
 
@@ -1085,7 +1093,7 @@ var tutorialScene = null;
 
 enchant();
 window.onload = function () {
-  GAME = new Game(640, 640);
+  GAME = new Game(640, 800);
   GAME.preload('sound/white.mp3','sound/goal.mp3','sound/start.mp3','sound/orange.mp3','sound/purple.mp3','sound/green.mp3','sound/red.mp3','sound/slanter.mp3','sound/pipe.mp3','sound/blue.mp3','sound/star.mp3','sound/diffusioner.mp3');
   GAME.fps = 30;
   GAME.onload = function () {
@@ -1835,6 +1843,15 @@ function createSurfaces(){
     orange:{pipe:PIPE_ORANGE ,pipeOut:PIPE_ORANGE_OUT}
   };
 }
+//タイトルのステージ選択ラベル
+function createStageEditLabel(){
+  var stageEditLabel = new ExLabel(LANGUAGE[COUNTRYCODE].stageEdit);
+  stageEditLabel.setClassName('stageEditLabel');
+  stageEditLabel.x = 90;
+  stageEditLabel.y = 560;
+
+  return stageEditLabel;
+}
 
 function createTutorialScene(){
 
@@ -1994,17 +2011,17 @@ function createTitleScene(){
   // hidden プロパティおよび可視性の変更イベントの名前を設定
   var hidden, visibilityChange;
   if (typeof document.hidden !== "undefined") { // Opera 12.10 や Firefox 18 以降でサポート
-  	hidden = "hidden";
-  	visibilityChange = "visibilitychange";
+    hidden = "hidden";
+    visibilityChange = "visibilitychange";
   } else if (typeof document.mozHidden !== "undefined") {
-  	hidden = "mozHidden";
-  	visibilityChange = "mozvisibilitychange";
+    hidden = "mozHidden";
+    visibilityChange = "mozvisibilitychange";
   } else if (typeof document.msHidden !== "undefined") {
-  	hidden = "msHidden";
-  	visibilityChange = "msvisibilitychange";
+    hidden = "msHidden";
+    visibilityChange = "msvisibilitychange";
   } else if (typeof document.webkitHidden !== "undefined") {
-  	hidden = "webkitHidden";
-  	visibilityChange = "webkitvisibilitychange";
+    hidden = "webkitHidden";
+    visibilityChange = "webkitvisibilitychange";
   }
 
   if (!(typeof document.addEventListener === "undefined" || typeof hidden === "undefined")){
@@ -2012,11 +2029,11 @@ function createTitleScene(){
   }
 
   function handleVisibilityChange() {
-  	if (document[hidden]) {
-  		clearInterval(titleScene.loopTimer);
-  	} else if(GAME.currentScene === titleScene){
-  		titleBackAnim.startAnim();
-  	}
+    if (document[hidden]) {
+      clearInterval(titleScene.loopTimer);
+    } else if(GAME.currentScene === titleScene){
+      titleBackAnim.startAnim();
+    }
   }
 
   var touchStartLabel = createTouchStartLabel();
@@ -2034,6 +2051,14 @@ function createTitleScene(){
   tutorialLabel.on('touchend',function(){
     GAME.replaceScene(tutorialScene);
   });
+
+  //stageエディット画面
+  var stageEditScene = createStageEditScene();
+  var stageEditLabel = createStageEditLabel();
+  stageEditLabel.on('touchend',function(){
+    GAME.replaceScene(stageEditScene);
+  });
+  titleScene.addChild(stageEditLabel);
 
   var optionMenuButton = createOptionMenuButton();
   var optionMenu = createOptionMenu();
@@ -2163,6 +2188,76 @@ function createSelectScene(){
   return selectScene;
 }
 
+function createStageEditScene(){
+  var stageEditScene = new Scene();
+
+  // ステージの初期化
+  for(var i = 0; i < currentStage.length;i++){
+    this.removeChild(currentStage[i]);
+    delete currentStage[i];
+  }
+
+  // BOX構築
+  for(var x = 0; x < 10; x++){
+    for(var y = 0; y < 10; y++){
+      var box = new EditBox(x,y);
+      box.x = x*BOX_SIZE;
+      box.y = y*BOX_SIZE;
+      stageEditScene.addChild(box);
+    }
+  }
+
+  //クリエイターを生成
+  //必須　シーンきりかえ時にメモリ解放する
+  creater = new Creater('blue');
+
+  //パレット開閉スイッチ
+//  var optionMenuButton = new Sprite(BOX_SIZE,BOX_SIZE);
+//  optionMenuButton._element = document.createElement('div');
+//  optionMenuButton._element.className = 'optionMenuButton';
+//  optionMenuButton.x = 500;
+//  optionMenuButton.y = 600; 
+//  optionMenuButton.menuOpen = false;
+
+  //パレットの作成  //
+  //この辺グループかクラスにしたい
+//  var pallet = new ExLabel();
+  //選択用Blockを置いていく
+  var blueInk = new BlockInk('blue');
+  blueInk.x = 100;
+  blueInk.y = 700;
+  stageEditScene.addChild(blueInk);
+
+  var redInk = new BlockInk('red');
+  redInk.x = 200;
+  redInk.y = 700;
+  stageEditScene.addChild(redInk);
+
+  var startInk = new BlockInk('start');
+  startInk.x = 300;
+  startInk.y = 700;
+  stageEditScene.addChild(startInk);
+
+  //送信ボタン
+  var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);
+  sendButton.on('touchend',function(){
+    makeJSON(creater.stages);
+  });
+  sendButton.x = 500;
+  sendButton.y = 700;
+  stageEditScene.addChild(sendButton);
+
+  //動きを確かめるボタン
+  var testPlayButton = new TestPlayButton(LANGUAGE[COUNTRYCODE].testplay);
+  testPlayButton.x = 600;
+  testPlayButton.y = 700;
+  stageEditScene.addChild(testPlayButton);
+
+//  stageEditScene.addChild(optionMenuButton);
+
+  return stageEditScene;
+}
+
 var StageGroup = Class.create(Group,{
 	initialize: function(){
 		Group.call(this);
@@ -2217,37 +2312,37 @@ var StageBox = Class.create(Sprite,{
 });
 
 var Box = Class.create(Sprite,{
-	initialize: function(){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
-		// DOMモード
-		this._element = document.createElement('div');
-		this._element.className = 'box';
-		this.moved = false;
-	},
-	ontouchstart: function(e){
-		this.startEvent = e;
-		this.moved = false;
-		this._element.className = 'box touched';
-	},
-	ontouchmove: function(e){
-		if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
-			this.moved = true;
-		}
-	},
-	ontouchend: function(){
-		this._element.className = 'box';
-		if(!this.parentNode.canTap){
-			return;
-		} else if(this.moved){
-			return;
-		}
-		this.parentNode.canTap = false;
-		var block = new Block('white');
-		block.x = this.x;
-		block.y = this.y;
-		currentStage.push(block);
-		this.parentNode.addChild(block);
-	}
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'box';
+    this.moved = false;
+  },
+  ontouchstart: function(e){
+    this.startEvent = e;
+    this.moved = false;
+    this._element.className = 'box touched';
+  },
+  ontouchmove: function(e){
+    if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
+      this.moved = true;
+    }
+  },
+  ontouchend: function(){
+    this._element.className = 'box';
+    if(!this.parentNode.canTap){
+      return;
+    } else if(this.moved){
+      return;
+    }
+    this.parentNode.canTap = false;
+    var block = new Block('white');
+    block.x = this.x;
+    block.y = this.y;
+    currentStage.push(block);
+    this.parentNode.addChild(block);
+  }
 });
 
 var HitArc = Class.create(Sprite,{
@@ -3592,3 +3687,188 @@ function playSound(sound){
   sound._element.style.zIndex = 1;
   sound.play();
 }
+
+var EditBox = Class.create(Box,{
+  initialize: function(xNumber,yNumber){
+  //生成時にBoxの場所を引き数に持つ
+    Box.call(this,BOX_SIZE,BOX_SIZE);
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'box';
+    this.moved = false;
+    //idを降ってステージ作成に活かす
+    this.xId = xNumber || -1;
+    this.yId = yNumber || -1;
+  },
+  ontouchstart: function(e){
+    this.startEvent = e;
+    this.moved = false;
+    this._element.className = 'box touched';
+
+    var penColor = creater.penColor;
+    var obj = null;
+
+    if(penColor == "start"){
+      var obj = new EditStart(this.xId,this.yId);
+      //クリエイターがみんなから見えるので色々持たす
+      creater.putStartFlg = true;
+      creater.startObj = obj;
+    }else{
+      var obj = new Block(penColor);
+    }
+    obj.x = this.x;
+    obj.y = this.y;
+    creater.currentStage[this.xId][this.yId] = obj;
+    this.parentNode.addChild(obj);
+
+    //TODO 上書き機能
+    creater.stages[this.xId][this.yId] = obj.color;
+
+  },
+  ontouchmove: function(e){
+    if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
+      this.moved = true;
+    }
+  },
+  ontouchend: function(){
+    this._element.className = 'box';
+    if(!this.parentNode.canTap){
+      return;
+    } else if(this.moved){
+      return;
+    }
+    this.parentNode.canTap = false;
+    var block = new Block('white');
+    block.x = this.x;
+    block.y = this.y;
+    currentStage.push(block);
+    this.parentNode.addChild(block);
+  }
+});
+
+var BlockInk = Class.create(Block,{
+  initialize: function(color){
+    Block.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = color;
+
+    this.color = color;
+
+  },
+  ontouchstart: function(){
+    creater.penColor = this.color;
+  }
+});
+
+var Creater =  function(color){
+  this.penColor = color || 'white';
+  this.stages = new Array(10);
+  var that = this;
+  //ステージ生成の元
+  for(var x = 0; x < 10; x++){
+    that.stages[x] = new Array(10);
+  }
+  //スタート地点を置いたフラグこれがないと実行出来ないようにする
+  this.putStartFlg = false;
+  this.startObj = null;
+
+  //これで実行のcurrentStage管理
+  this.currentStage = new Array(10);
+  for(var i = 0; i < 10; i++){
+    that.currentStage[i] = new Array(10);
+  }
+
+}
+
+function makeJSON(stages){
+  console.log(stages);
+  var json = JSON.stringify(stages);
+  console.log(json);
+}
+
+function doPost(action){
+  var submitType = document.createElement("input");
+  submitType.setAttribute("type","hidden");
+}
+
+var TestPlayButton = Class.create(ExLabel,{
+  initialize: function(text,w,h){
+    ExLabel.call(this,BOX_SIZE,BOX_SIZE);
+    var width = w || 640;
+    var height = h || 64;
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.innerHTML = text;
+  },
+  ontouchstart: function(){
+    //実行
+    creater.startObj.run(); 
+  },
+  setClassName: function(className){
+    this._element.className = className;
+  }
+});
+
+var EditStart = Class.create(Start,{
+  initialize: function(xNumber,yNumber){
+    Start.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'start';
+    this.backgroundColor = COLORS.white;
+
+    // Beam用ステータス
+    this.beamStatus = {
+      top:{
+        moveX: 0,
+        moveY: -MOVE_PX,
+      },
+      right:{
+        moveX: MOVE_PX,
+        moveY: 0
+      },
+      down:{
+        moveX: 0,
+        moveY: MOVE_PX
+      },
+      left:{
+        moveX: -MOVE_PX,
+        moveY: 0
+      }
+    };
+    this.xId = xNumber;
+    this.yId = yNumber;
+  },
+  run: function(){
+    //爆発した場所のxId,yIdを引き数に持つ
+    var arc = new HitArc('white');
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    GAME.currentScene.addChild(arc);
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      if(DIRECTIONS['white'][i]){
+        // 初期設定的な
+        var beamInit = {
+          x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+          y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+          color: 'white',
+          parentBlock:this,
+          beamLength:BEAM_LENGTH
+        }
+        GAME.currentScene.addChild(new Beam(this.beamStatus[beam],beamInit));
+      }
+      i++;
+    }
+    playSound(GAME.assets['sound/start.mp3'].clone());
+    //出したら消滅
+    GAME.currentScene.removeChild(this);
+    delete creater.currentStage[this.xId][this.yId];
+    creater.startObj = null;
+  }
+});

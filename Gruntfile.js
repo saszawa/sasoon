@@ -17,6 +17,7 @@ module.exports = function(grunt) {
           'js/creaters/createStageScene.js',
           'js/creaters/createTitleScene.js',
           'js/creaters/createSelectScene.js',
+          'js/creaters/createStageEditScene.js',
           'js/StageGroup.js',
           'js/StageBox.js',
           'js/Box.js',
@@ -37,7 +38,14 @@ module.exports = function(grunt) {
           'js/gimmicks/Pipe.js',
           'js/tutorial.js',
           'js/VolumeSlider.js',
-          'js/Sound.js'
+          'js/Sound.js',
+          'js/stageedit/EditBox.js',
+          'js/stageedit/BlockInk.js',
+          'js/stageedit/Creater.js',
+          'js/stageedit/makeJSON.js',
+          'js/stageedit/Post.js',
+          'js/stageedit/TestPlayButton.js',
+          'js/stageedit/EditStart.js'
         ],
         dest: 'js/game.js'
       }
@@ -61,7 +69,7 @@ module.exports = function(grunt) {
 
     watch: {
       scripts: {
-        files: ['js/*.js','js/game.js','js/gimmicks/*.js','css/*.css'],
+        files: ['js/*.js','js/game.js','js/gimmicks/*.js','js/creaters/*.js','js/stageedit/*.js','css/gameStyle.css'],
         tasks: ['concat','uglify','cssmin'],
         options: {
           spawn: true,
