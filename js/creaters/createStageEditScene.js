@@ -34,31 +34,37 @@ function createStageEditScene(){
 //  var pallet = new ExLabel();
   //選択用Blockを置いていく
   var blueInk = new BlockInk('blue');
-  blueInk.x = 100;
+  blueInk.x = 10;
   blueInk.y = 700;
   stageEditScene.addChild(blueInk);
 
   var redInk = new BlockInk('red');
-  redInk.x = 200;
+  redInk.x = 90;
   redInk.y = 700;
   stageEditScene.addChild(redInk);
 
   var startInk = new BlockInk('start');
-  startInk.x = 300;
+  startInk.x = 170;
   startInk.y = 700;
   stageEditScene.addChild(startInk);
 
   var slanterInk = new SlanterInk('green');
-  slanterInk.x = 400;
+  slanterInk.x = 250;
   slanterInk.y = 700;
   stageEditScene.addChild(slanterInk);
+
+  var diffusionerInk = new DiffusionerInk();
+  diffusionerInk.x = 330;
+  diffusionerInk.y = 700;
+  stageEditScene.addChild(diffusionerInk);
+
 
   //送信ボタン
   var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);
   sendButton.on('touchend',function(){
     makeJSON(creater.stages);
   });
-  sendButton.x = 500;
+  sendButton.x = 510;
   sendButton.y = 700;
   stageEditScene.addChild(sendButton);
 

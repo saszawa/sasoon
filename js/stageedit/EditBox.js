@@ -23,25 +23,34 @@ var EditBox = Class.create(Box,{
     var penColor = creater.penColor;
     var obj = null;
 
+    //TODO ここもメソッドかしたい
     if(penColor == "start"){
       obj = new EditStart();
       //クリエイターがみんなから見えるので色々持たす
       creater.putStartFlg = true;
       creater.startObj = obj;
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = "start";
     }else if(penColor == "slanter" ){
       obj = new EditSlanter(this.xId,this.yId);
       creater.currentStage.push(obj);
-    } else{
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = "slanter";
+    }else if(penColor == "diffusioner"){
+      obj = new EditDiffusioner();
+      creater.currentStage.push(obj);
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = "diffusioner";
+    }
+    else{
       obj = new EditBlock(penColor);
       creater.currentStage.push(obj);
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = obj.color;
     }
     obj.x = this.x;
     obj.y = this.y;
     this.parentNode.addChild(obj);
-
-    //TODO 上書き機能
-    creater.stages[this.xId][this.yId] = obj.color;
-
   },
   ontouchmove: function(e){
     if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){

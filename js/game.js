@@ -2224,31 +2224,37 @@ function createStageEditScene(){
 //  var pallet = new ExLabel();
   //選択用Blockを置いていく
   var blueInk = new BlockInk('blue');
-  blueInk.x = 100;
+  blueInk.x = 10;
   blueInk.y = 700;
   stageEditScene.addChild(blueInk);
 
   var redInk = new BlockInk('red');
-  redInk.x = 200;
+  redInk.x = 90;
   redInk.y = 700;
   stageEditScene.addChild(redInk);
 
   var startInk = new BlockInk('start');
-  startInk.x = 300;
+  startInk.x = 170;
   startInk.y = 700;
   stageEditScene.addChild(startInk);
 
   var slanterInk = new SlanterInk('green');
-  slanterInk.x = 400;
+  slanterInk.x = 250;
   slanterInk.y = 700;
   stageEditScene.addChild(slanterInk);
+
+  var diffusionerInk = new DiffusionerInk();
+  diffusionerInk.x = 330;
+  diffusionerInk.y = 700;
+  stageEditScene.addChild(diffusionerInk);
+
 
   //送信ボタン
   var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);
   sendButton.on('touchend',function(){
     makeJSON(creater.stages);
   });
-  sendButton.x = 500;
+  sendButton.x = 510;
   sendButton.y = 700;
   stageEditScene.addChild(sendButton);
 
@@ -3700,7 +3706,6 @@ var EditBox = Class.create(Box,{
     // DOMモード
     this._element = document.createElement('div');
     //下線対応
-    console.log(yNumber);
     if(yNumber == 9){
       this._element.className = 'box edit_underline';
     }else{
@@ -3719,25 +3724,34 @@ var EditBox = Class.create(Box,{
     var penColor = creater.penColor;
     var obj = null;
 
+    //TODO ここもメソッドかしたい
     if(penColor == "start"){
       obj = new EditStart();
       //クリエイターがみんなから見えるので色々持たす
       creater.putStartFlg = true;
       creater.startObj = obj;
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = "start";
     }else if(penColor == "slanter" ){
       obj = new EditSlanter(this.xId,this.yId);
       creater.currentStage.push(obj);
-    } else{
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = "slanter";
+    }else if(penColor == "diffusioner"){
+      obj = new EditDiffusioner();
+      creater.currentStage.push(obj);
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = "diffusioner";
+    }
+    else{
       obj = new EditBlock(penColor);
       creater.currentStage.push(obj);
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = obj.color;
     }
     obj.x = this.x;
     obj.y = this.y;
     this.parentNode.addChild(obj);
-
-    //TODO 上書き機能
-    creater.stages[this.xId][this.yId] = obj.color;
-
   },
   ontouchmove: function(e){
     if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
@@ -4088,5 +4102,73 @@ var SlanterInk = Class.create(Slanter,{
   },
   ontouchstart: function(){
     creater.penColor = 'slanter';
+  }
+});
+
+var DiffusionerInk = Class.create(Diffusioner,{
+  initialize: function(){
+    Diffusioner.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'diffusioner';
+    this.image = DIFFUSIONER;
+
+    // 倍の早さ
+    var movePx = MOVE_PX*2;
+
+    this.color = "red";
+
+  },
+  ontouchstart: function(){
+    creater.penColor = "diffusioner";
+  }
+});
+
+var EditDiffusioner = Class.create(Diffusioner,{
+  initialize: function(){
+    Diffusioner.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'diffusioner';
+    this.image = DIFFUSIONER;
+
+    // 倍の早さ
+    var movePx = MOVE_PX*2;
+
+    this.beamStatus = {
+      top:      {moveX: 0        ,moveY: -movePx},
+      topRight: {moveX: movePx   ,moveY: -movePx},
+      right:    {moveX: movePx   ,moveY: 0       },
+      rightDown:{moveX: movePx   ,moveY: movePx },
+      down:     {moveX: 0        ,moveY: movePx },
+      downLeft: {moveX: -movePx  ,moveY: movePx },
+      left:     {moveX: -movePx  ,moveY: 0       },
+      leftTop:  {moveX: -movePx  ,moveY: -movePx}
+    };
+
+    this.color = "red";
+
+  },
+  run: function(){
+
+    var arc = new HitArc(this.color);
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    GAME.currentScene.addChild(arc);
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 1
+      }
+      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      i++;
+    }
+
+    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
+    //	出したら消滅
+    GAME.currentScene.removeChild(this);
   }
 });
