@@ -32,7 +32,12 @@ var LANGUAGE = {
     volumeOption:"音量",
     stageEdit:"ステージを作る",
     post:"投稿する",
-    testplay:"試す"
+    testplay:"試す",
+    pipeColorButton:"色を変える",
+    pipeDirectionUpper:"上に発射",
+    pipeDirectionLefter:"左に発射",
+    pipeDirectionRighter:"右に発射",
+    pipeDirectionDowner:"下に発射"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -67,6 +72,11 @@ var LANGUAGE = {
     volumeOption:"SoundVolume",
     stageEdit:"Edit Stage",
     post:"Post your Stage!",
-    testplay:"Test play"
+    testplay:"Test play",
+    pipeColorButton:"Change Color",
+    pipeDirectionUpper:"turn up shoot",
+    pipeDirectionLefter:"turn left shoot",
+    pipeDirectionRighter:"turn right shoot",
+    pipeDirectionDowner:"turn down shoot"
   }
 }

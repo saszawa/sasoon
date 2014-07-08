@@ -7,7 +7,6 @@ var BlockInk = Class.create(Block,{
     this._element.className = color;
 
     this.color = color;
-
   },
   ontouchstart: function(){
     creater.penColor = this.color;

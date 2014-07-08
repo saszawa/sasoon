@@ -18,8 +18,13 @@ function createStageEditScene(){
   }
 
   //クリエイターを生成
-  //必須　シーンきりかえ時にメモリ解放する
+  // TODO 必須　シーンきりかえ時にメモリ解放する
   creater = new Creater('blue');
+  //パイプマネージャー作成
+  //TODO これも　シーンきりかえ時にメモリ解放しなければならない
+  pipeManager = new PipeManager();
+
+  createSurfaces();
 
   //パレット開閉スイッチ
 //  var optionMenuButton = new Sprite(BOX_SIZE,BOX_SIZE);
@@ -35,29 +40,40 @@ function createStageEditScene(){
   //選択用Blockを置いていく
   var blueInk = new BlockInk('blue');
   blueInk.x = 10;
-  blueInk.y = 700;
+  blueInk.y = 670;
   stageEditScene.addChild(blueInk);
 
   var redInk = new BlockInk('red');
   redInk.x = 90;
-  redInk.y = 700;
+  redInk.y = 670;
   stageEditScene.addChild(redInk);
 
   var startInk = new BlockInk('start');
   startInk.x = 170;
-  startInk.y = 700;
+  startInk.y = 670;
   stageEditScene.addChild(startInk);
 
   var slanterInk = new SlanterInk('green');
   slanterInk.x = 250;
-  slanterInk.y = 700;
+  slanterInk.y = 670;
   stageEditScene.addChild(slanterInk);
 
   var diffusionerInk = new DiffusionerInk();
   diffusionerInk.x = 330;
-  diffusionerInk.y = 700;
+  diffusionerInk.y = 670;
   stageEditScene.addChild(diffusionerInk);
 
+  var pipeInk = new PipeInk('blue');
+  pipeInk.x = 410;
+  pipeInk.y = 670;
+  //パイプは親置いたら子供置けるようにインク変えるのでその対応
+  pipeManager.pipeInk = pipeInk;
+  stageEditScene.addChild(pipeInk);
+
+  var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
+  pipeColorButton.x = 410;
+  pipeColorButton.y = 750;
+  stageEditScene.addChild(pipeColorButton);
 
   //送信ボタン
   var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);

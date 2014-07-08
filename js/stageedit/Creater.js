@@ -1,10 +1,11 @@
 var Creater =  function(color){
   this.penColor = color || 'white';
+  //パイプ制御用
+  this.pipeColor = "blue";
   this.stages = new Array(10);
-  //スタートが置かれるまでは-1のまま
-  this.startPin = -1;
   var that = this;
   //ステージ生成の元
+  //TODO ここをdefineのstage配列に整形できるように定義し直す
   for(var x = 0; x < 10; x++){
     that.stages[x] = new Array(10);
   }
@@ -14,5 +15,4 @@ var Creater =  function(color){
 
   //これで実行のcurrentStage管理
   this.currentStage = new Array(10);
-
 }
