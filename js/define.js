@@ -1008,6 +1008,9 @@ var COUNTRYCODE = browserLanguage();
 
 var VOLUME = 1.0;
 
+var creater;
+var pipeManager;
+
 var userData;
 var stageBoxes = [];
 var stageGroup;

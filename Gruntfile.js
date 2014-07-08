@@ -10,7 +10,6 @@ module.exports = function(grunt) {
         src: [
           'js/define.js',
           'js/i18n.js',
-          'js/Sound.js',
           'js/main.js',
           'js/TitleBackAnim.js',
           'js/creaters/ObjectsCreaters.js',
@@ -18,6 +17,7 @@ module.exports = function(grunt) {
           'js/creaters/createStageScene.js',
           'js/creaters/createTitleScene.js',
           'js/creaters/createSelectScene.js',
+          'js/creaters/createStageEditScene.js',
           'js/StageGroup.js',
           'js/StageBox.js',
           'js/Box.js',
@@ -37,7 +37,28 @@ module.exports = function(grunt) {
           'js/gimmicks/Linker.js',
           'js/gimmicks/Pipe.js',
           'js/tutorial.js',
-          'js/VolumeSlider.js'
+          'js/VolumeSlider.js',
+          'js/Sound.js',
+          'js/stageedit/EditBox.js',
+          'js/stageedit/BlockInk.js',
+          'js/stageedit/Creater.js',
+          'js/stageedit/makeJSON.js',
+          'js/stageedit/Post.js',
+          'js/stageedit/TestPlayButton.js',
+          'js/stageedit/EditStart.js',
+          'js/stageedit/EditBeam.js',
+          'js/stageedit/EditBlock.js',
+          'js/stageedit/EditSlanter.js',
+          'js/stageedit/SlanterInk.js',
+          'js/stageedit/DiffusionerInk.js',
+          'js/stageedit/EditDiffusioner.js',
+          'js/stageedit/PipeInk.js',
+          'js/stageedit/EditPipe.js',
+          'js/stageedit/EditChildPipe.js',
+          'js/stageedit/PipeColorButton.js',
+          'js/stageedit/PipeManager.js',
+          'js/stageedit/PipeDirectionArrow.js',
+          'js/stageedit/ChildPipeInk.js'
         ],
         dest: 'js/game.js'
       }
@@ -61,7 +82,7 @@ module.exports = function(grunt) {
 
     watch: {
       scripts: {
-        files: ['js/*.js','js/game.js','js/gimmicks/*.js','js/creaters/*.js','css/*.css'],
+        files: ['js/*.js','js/game.js','js/gimmicks/*.js','js/creaters/*.js','js/stageedit/*.js','css/gameStyle.css'],
         tasks: ['concat','uglify','cssmin'],
         options: {
           spawn: true,

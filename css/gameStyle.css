@@ -456,3 +456,8 @@ div.pointerArrow:after {
 .msg {
   font-size: 20px;
 }
+
+/* line 442, ../scss/gameStyle.scss */
+div.edit_underline {
+  border-bottom: solid 1px #ddd;
+}

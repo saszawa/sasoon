@@ -622,3 +622,12 @@ function createSurfaces(){
     orange:{pipe:PIPE_ORANGE ,pipeOut:PIPE_ORANGE_OUT}
   };
 }
+//タイトルのステージ選択ラベル
+function createStageEditLabel(){
+  var stageEditLabel = new ExLabel(LANGUAGE[COUNTRYCODE].stageEdit);
+  stageEditLabel.setClassName('stageEditLabel');
+  stageEditLabel.x = 90;
+  stageEditLabel.y = 560;
+
+  return stageEditLabel;
+}

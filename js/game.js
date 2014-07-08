@@ -1008,6 +1008,9 @@ var COUNTRYCODE = browserLanguage();
 
 var VOLUME = 1.0;
 
+var creater;
+var pipeManager;
+
 var userData;
 var stageBoxes = [];
 var stageGroup;
@@ -1044,7 +1047,15 @@ var LANGUAGE = {
     tutoClearMsg2:"本番のステージでは<br/>オブジェクトを置くまでに時間制限があります",
     tutoClearMsg3:"それでは、ゲームをお楽しみ下さい",
     backToTop:"TOPへ戻る",
-    volumeOption:"音量"
+    volumeOption:"音量",
+    stageEdit:"ステージを作る",
+    post:"投稿する",
+    testplay:"試す",
+    pipeColorButton:"色を変える",
+    pipeDirectionUpper:"上に発射",
+    pipeDirectionLefter:"左に発射",
+    pipeDirectionRighter:"右に発射",
+    pipeDirectionDowner:"下に発射"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -1076,14 +1087,16 @@ var LANGUAGE = {
     tutoClearMsg2:"If this is real game,It have a time limit",
     tutoClearMsg3:"Enjoy your game!",
     backToTop:"Back to Top",
-    volumeOption:"音量"
+    volumeOption:"SoundVolume",
+    stageEdit:"Edit Stage",
+    post:"Post your Stage!",
+    testplay:"Test play",
+    pipeColorButton:"Change Color",
+    pipeDirectionUpper:"turn up shoot",
+    pipeDirectionLefter:"turn left shoot",
+    pipeDirectionRighter:"turn right shoot",
+    pipeDirectionDowner:"turn down shoot"
   }
-}
-
-function playSound(sound){
-  sound.volume = VOLUME;
-  sound.play();
-  
 }
 
 //チュートリアルを連続でyareruyouni
@@ -1091,7 +1104,7 @@ var tutorialScene = null;
 
 enchant();
 window.onload = function () {
-  GAME = new Game(640, 640);
+  GAME = new Game(640, 800);
   GAME.preload('sound/white.mp3','sound/goal.mp3','sound/start.mp3','sound/orange.mp3','sound/purple.mp3','sound/green.mp3','sound/red.mp3','sound/slanter.mp3','sound/pipe.mp3','sound/blue.mp3','sound/star.mp3','sound/diffusioner.mp3');
   GAME.fps = 30;
   GAME.onload = function () {
@@ -1841,6 +1854,15 @@ function createSurfaces(){
     orange:{pipe:PIPE_ORANGE ,pipeOut:PIPE_ORANGE_OUT}
   };
 }
+//タイトルのステージ選択ラベル
+function createStageEditLabel(){
+  var stageEditLabel = new ExLabel(LANGUAGE[COUNTRYCODE].stageEdit);
+  stageEditLabel.setClassName('stageEditLabel');
+  stageEditLabel.x = 90;
+  stageEditLabel.y = 560;
+
+  return stageEditLabel;
+}
 
 function createTutorialScene(){
 
@@ -2001,17 +2023,17 @@ function createTitleScene(){
   // hidden プロパティおよび可視性の変更イベントの名前を設定
   var hidden, visibilityChange;
   if (typeof document.hidden !== "undefined") { // Opera 12.10 や Firefox 18 以降でサポート
-  	hidden = "hidden";
-  	visibilityChange = "visibilitychange";
+    hidden = "hidden";
+    visibilityChange = "visibilitychange";
   } else if (typeof document.mozHidden !== "undefined") {
-  	hidden = "mozHidden";
-  	visibilityChange = "mozvisibilitychange";
+    hidden = "mozHidden";
+    visibilityChange = "mozvisibilitychange";
   } else if (typeof document.msHidden !== "undefined") {
-  	hidden = "msHidden";
-  	visibilityChange = "msvisibilitychange";
+    hidden = "msHidden";
+    visibilityChange = "msvisibilitychange";
   } else if (typeof document.webkitHidden !== "undefined") {
-  	hidden = "webkitHidden";
-  	visibilityChange = "webkitvisibilitychange";
+    hidden = "webkitHidden";
+    visibilityChange = "webkitvisibilitychange";
   }
 
   if (!(typeof document.addEventListener === "undefined" || typeof hidden === "undefined")){
@@ -2019,11 +2041,11 @@ function createTitleScene(){
   }
 
   function handleVisibilityChange() {
-  	if (document[hidden]) {
-  		clearInterval(titleScene.loopTimer);
-  	} else if(GAME.currentScene === titleScene){
-  		titleBackAnim.startAnim();
-  	}
+    if (document[hidden]) {
+      clearInterval(titleScene.loopTimer);
+    } else if(GAME.currentScene === titleScene){
+      titleBackAnim.startAnim();
+    }
   }
 
   var touchStartLabel = createTouchStartLabel();
@@ -2041,6 +2063,14 @@ function createTitleScene(){
   tutorialLabel.on('touchend',function(){
     GAME.replaceScene(tutorialScene);
   });
+
+  //stageエディット画面
+  var stageEditScene = createStageEditScene();
+  var stageEditLabel = createStageEditLabel();
+  stageEditLabel.on('touchend',function(){
+    GAME.replaceScene(stageEditScene);
+  });
+  titleScene.addChild(stageEditLabel);
 
   var optionMenuButton = createOptionMenuButton();
   var optionMenu = createOptionMenu();
@@ -2171,6 +2201,103 @@ function createSelectScene(){
   return selectScene;
 }
 
+function createStageEditScene(){
+  var stageEditScene = new Scene();
+
+  // ステージの初期化
+  for(var i = 0; i < currentStage.length;i++){
+    this.removeChild(currentStage[i]);
+    delete currentStage[i];
+  }
+
+  // BOX構築
+  for(var x = 0; x < 10; x++){
+    for(var y = 0; y < 10; y++){
+      var box = new EditBox(x,y);
+      box.x = x*BOX_SIZE;
+      box.y = y*BOX_SIZE;
+      stageEditScene.addChild(box);
+    }
+  }
+
+  //クリエイターを生成
+  // TODO 必須　シーンきりかえ時にメモリ解放する
+  creater = new Creater('blue');
+  //パイプマネージャー作成
+  //TODO これも　シーンきりかえ時にメモリ解放しなければならない
+  pipeManager = new PipeManager();
+
+  createSurfaces();
+
+  //パレット開閉スイッチ
+//  var optionMenuButton = new Sprite(BOX_SIZE,BOX_SIZE);
+//  optionMenuButton._element = document.createElement('div');
+//  optionMenuButton._element.className = 'optionMenuButton';
+//  optionMenuButton.x = 500;
+//  optionMenuButton.y = 600; 
+//  optionMenuButton.menuOpen = false;
+
+  //パレットの作成  //
+  //この辺グループかクラスにしたい
+//  var pallet = new ExLabel();
+  //選択用Blockを置いていく
+  var blueInk = new BlockInk('blue');
+  blueInk.x = 10;
+  blueInk.y = 670;
+  stageEditScene.addChild(blueInk);
+
+  var redInk = new BlockInk('red');
+  redInk.x = 90;
+  redInk.y = 670;
+  stageEditScene.addChild(redInk);
+
+  var startInk = new BlockInk('start');
+  startInk.x = 170;
+  startInk.y = 670;
+  stageEditScene.addChild(startInk);
+
+  var slanterInk = new SlanterInk('green');
+  slanterInk.x = 250;
+  slanterInk.y = 670;
+  stageEditScene.addChild(slanterInk);
+
+  var diffusionerInk = new DiffusionerInk();
+  diffusionerInk.x = 330;
+  diffusionerInk.y = 670;
+  stageEditScene.addChild(diffusionerInk);
+
+  var pipeInk = new PipeInk('blue');
+  pipeInk.x = 410;
+  pipeInk.y = 670;
+  //パイプは親置いたら子供置けるようにインク変えるのでその対応
+  pipeManager.pipeInk = pipeInk;
+  stageEditScene.addChild(pipeInk);
+
+  var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
+  pipeColorButton.x = 410;
+  pipeColorButton.y = 750;
+  stageEditScene.addChild(pipeColorButton);
+
+  //送信ボタン
+  var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);
+  sendButton.on('touchend',function(){
+    makeJSON(creater.stages);
+  });
+  sendButton.x = 510;
+  sendButton.y = 700;
+  stageEditScene.addChild(sendButton);
+
+  //動きを確かめるボタン
+  var testPlayButton = new TestPlayButton(LANGUAGE[COUNTRYCODE].testplay);
+  testPlayButton.x = 600;
+  testPlayButton.y = 700;
+  stageEditScene.addChild(testPlayButton);
+
+//  stageEditScene.addChild(optionMenuButton);
+
+  return stageEditScene;
+}
+
 var StageGroup = Class.create(Group,{
 	initialize: function(){
 		Group.call(this);
@@ -2225,37 +2352,37 @@ var StageBox = Class.create(Sprite,{
 });
 
 var Box = Class.create(Sprite,{
-	initialize: function(){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
-		// DOMモード
-		this._element = document.createElement('div');
-		this._element.className = 'box';
-		this.moved = false;
-	},
-	ontouchstart: function(e){
-		this.startEvent = e;
-		this.moved = false;
-		this._element.className = 'box touched';
-	},
-	ontouchmove: function(e){
-		if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
-			this.moved = true;
-		}
-	},
-	ontouchend: function(){
-		this._element.className = 'box';
-		if(!this.parentNode.canTap){
-			return;
-		} else if(this.moved){
-			return;
-		}
-		this.parentNode.canTap = false;
-		var block = new Block('white');
-		block.x = this.x;
-		block.y = this.y;
-		currentStage.push(block);
-		this.parentNode.addChild(block);
-	}
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'box';
+    this.moved = false;
+  },
+  ontouchstart: function(e){
+    this.startEvent = e;
+    this.moved = false;
+    this._element.className = 'box touched';
+  },
+  ontouchmove: function(e){
+    if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
+      this.moved = true;
+    }
+  },
+  ontouchend: function(){
+    this._element.className = 'box';
+    if(!this.parentNode.canTap){
+      return;
+    } else if(this.moved){
+      return;
+    }
+    this.parentNode.canTap = false;
+    var block = new Block('white');
+    block.x = this.x;
+    block.y = this.y;
+    currentStage.push(block);
+    this.parentNode.addChild(block);
+  }
 });
 
 var HitArc = Class.create(Sprite,{
@@ -2570,60 +2697,60 @@ var ExLabel = Class.create(Sprite,{
 });
 
 var Beam = Class.create(Sprite,{
-	initialize: function(direction ,init){
-		Sprite.call(this,BEAM_SIZE,BEAM_SIZE);
+  initialize: function(direction ,init){
+    Sprite.call(this,BEAM_SIZE,BEAM_SIZE);
 
-		// DOMモード
-		this._element = document.createElement('div');
-		this._element.className = 'beam';
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'beam';
 
-		// 初期状態
-		this.direction = direction;
-		this.initX = init.x;
-		this.initY = init.y;
-		this.x = init.x;
-		this.y = init.y;
+    // 初期状態
+    this.direction = direction;
+    this.initX = init.x;
+    this.initY = init.y;
+    this.x = init.x;
+    this.y = init.y;
 
-		this.currentStage = currentStage;
-		this.parentBlock = init.parentBlock;
-		this.beamLength = init.beamLength*BOX_SIZE;
+    this.currentStage = currentStage;
+    this.parentBlock = init.parentBlock;
+    this.beamLength = init.beamLength*BOX_SIZE;
 
-		this.COLORS = COLORS;
+    this.COLORS = COLORS;
 
-	},
-	onenterframe: function(){
-		// 衝突検知
-		// やっぱこうなるの・・・
-		var gimmicks = this.currentStage.length;
-		var distance = BOX_HALF+12;
-		for(var i = 0; i < gimmicks; i++){
-			if(!this.currentStage[i]){
-				GAME.currentScene.removeChild(this);
-			} else if(this.within(this.currentStage[i],this.currentStage[i].distance || distance) && this.currentStage[i] !== this.parentBlock && !this.parentNode.cleared){
-				// 発射！
-				this.currentStage[i].run();
+  },
+  onenterframe: function(){
+    // 衝突検知
+    // やっぱこうなるの・・・
+    var gimmicks = this.currentStage.length;
+    var distance = BOX_HALF+12;
+    for(var i = 0; i < gimmicks; i++){
+      if(!this.currentStage[i]){
+        GAME.currentScene.removeChild(this);
+      } else if(this.within(this.currentStage[i],this.currentStage[i].distance || distance) && this.currentStage[i] !== this.parentBlock && !this.parentNode.cleared){
+        // 発射！
+        this.currentStage[i].run();
 
-				// 当たったら消える
-				delete this.currentStage[i];
-				this.currentStage.splice(i,1);
-				GAME.currentScene.removeChild(this);
-				return;
-			}
-		}
+        // 当たったら消える
+        delete this.currentStage[i];
+        this.currentStage.splice(i,1);
+        GAME.currentScene.removeChild(this);
+        return;
+      }
+    }
 
-		// Beamの移動と生存期間
-		if(Math.abs(this.initX-this.x) < this.beamLength
-			&&  Math.abs(this.initY-this.y) < this.beamLength){
-			this.x += this.direction.moveX;
-			this.y += this.direction.moveY;
-		} else {
-			// 生存期間を過ぎると消えていく
-			this.opacity -= 0.1;
-			if(this.opacity < 0){
-				GAME.currentScene.removeChild(this);
-			}
-		}
-	}
+    // Beamの移動と生存期間
+    if(Math.abs(this.initX-this.x) < this.beamLength
+       &&  Math.abs(this.initY-this.y) < this.beamLength){
+         this.x += this.direction.moveX;
+         this.y += this.direction.moveY;
+       } else {
+         // 生存期間を過ぎると消えていく
+         this.opacity -= 0.1;
+         if(this.opacity < 0){
+           GAME.currentScene.removeChild(this);
+         }
+       }
+  }
 });
 
 var Block = Class.create(Sprite,{
@@ -2960,51 +3087,51 @@ var Diffusioner = Class.create(Sprite,{
 });
 
 var Slanter = Class.create(Sprite,{
-	initialize: function(){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
-		this._element = document.createElement('div');
-		this._element.className = 'slanter';
-		this.image = SLANTER;
-		this.rotation = 45;
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'slanter';
+    this.image = SLANTER;
+    this.rotation = 45;
 
-		this.beamStatus = {
-			topRight: {moveX: MOVE_PX  ,moveY: -MOVE_PX},
-			rightDown:{moveX: MOVE_PX  ,moveY: MOVE_PX },
-			downLeft: {moveX: -MOVE_PX ,moveY: MOVE_PX },
-			leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
-		};
+    this.beamStatus = {
+      topRight: {moveX: MOVE_PX  ,moveY: -MOVE_PX},
+      rightDown:{moveX: MOVE_PX  ,moveY: MOVE_PX },
+      downLeft: {moveX: -MOVE_PX ,moveY: MOVE_PX },
+      leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
+    };
 
-		this.color = "green";
+    this.color = "green";
 
-	},
-	run: function(){
-		clearTimeout(this.parentNode.endTimer);
-		this.parentNode.endTimer = setTimeout(function(){
-			GAME.currentScene.gameOver();
-		},3500);
+  },
+  run: function(){
+    clearTimeout(this.parentNode.endTimer);
+    this.parentNode.endTimer = setTimeout(function(){
+      GAME.currentScene.gameOver();
+    },3500);
 
-		var arc = new HitArc(this.color);
-		arc.x = this.x-128;
-		arc.y = this.y-128;
-		this.parentNode.addChild(arc);
+    var arc = new HitArc(this.color);
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    this.parentNode.addChild(arc);
 
-		var i = 0;
-		for(var beam in this.beamStatus){
-			// 初期設定的な
-			var beamInit = {
-				x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-				y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-				parentBlock:this,
-				beamLength: 2
-			}
-			this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
-			i++;
-		}
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 2
+      }
+      this.parentNode.addChild(new Beam(this.beamStatus[beam],beamInit));
+      i++;
+    }
 
     playSound(GAME.assets['sound/slanter.mp3'].clone());
-		//	出したら消滅
-		this.parentNode.removeChild(this);
-	}
+    //	出したら消滅
+    this.parentNode.removeChild(this);
+  }
 });
 
 var Linker = Class.create(Sprite,{
@@ -3196,14 +3323,6 @@ var TutoBlock = Class.create(Sprite,{
     var i = 0;
 
     this.parentNode.removeChild(thirdStartMsg);
-
-    if(this.color == "start"){
-      GAME.assets['sound/start.mp3'].clone().play();
-    }else if(this.color == "blue"){
-      GAME.assets['sound/blue.mp3'].clone().play();
-    }else if (this.color == "white"){
-      GAME.assets['sound/white.mp3'].clone().play();
-    }
 
     for(var beam in this.beamStatus){
       if(TUTODIRECTIONS[this.color][i]){
@@ -3600,5 +3719,792 @@ var VolumeSlider = Class.create(Sprite,{
   ontouchend: function(){
     //childNodes[0]がinput rangeであると仮定
     VOLUME = this._element.childNodes[0].value;
+  }
+});
+
+function playSound(sound){
+  sound.volume = VOLUME;
+  sound.play();
+  
+}
+
+var EditBox = Class.create(Box,{
+  initialize: function(xNumber,yNumber){
+    //生成時にBoxの場所を引き数に持つ
+    Box.call(this,BOX_SIZE,BOX_SIZE);
+    // DOMモード
+    this._element = document.createElement('div');
+    //下線対応
+    if(yNumber == 9){
+      this._element.className = 'box edit_underline';
+    }else{
+      this._element.className = 'box';
+    }
+    this.moved = false;
+    //idを降ってステージ作成に活かす
+    this.xId = xNumber ;
+    this.yId = yNumber ;
+  },
+  ontouchstart: function(e){
+    this.startEvent = e;
+    this.moved = false;
+    this._element.className = 'box touched';
+
+    var penColor = creater.penColor;
+    var obj = null;
+
+    //TODO ここもメソッドかしたい
+    if(penColor == "start"){
+      obj = new EditStart();
+      //クリエイターがみんなから見えるので色々持たす
+      creater.putStartFlg = true;
+      creater.startObj = obj;
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = "start";
+    }else if(penColor == "slanter" ){
+      obj = new EditSlanter(this.xId,this.yId);
+      creater.currentStage.push(obj);
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = "slanter";
+    }else if(penColor == "diffusioner"){
+      obj = new EditDiffusioner();
+      creater.currentStage.push(obj);
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = "diffusioner";
+    }else if(penColor == "parentPipe"){
+      //親パイプのとき
+      //TODO 親しか置いてないときのエラー処理
+      var color = creater.pipeColor;
+      obj = new EditPipe(color);
+
+      creater.currentStage.push(obj);
+      creater.stages[this.xId][this.yId] = "pipe";
+      pipeManager.pipeStatus[color] = "parentPut";
+      creater.penColor = "childPipe";
+
+      GAME.currentScene.removeChild(pipeManager.pipeInk);
+      pipeManager.pipeInk = void 0;
+      pipeManager.pipeInk = new ChildPipeInk(color);
+      GAME.currentScene.addChild(pipeManager.pipeInk);
+    }else if(penColor == "childPipe"){
+      //子パイプの時
+      var color = creater.pipeColor;
+      obj = new EditChildPipe(color);
+
+      //createrに登録
+      creater.stages[this.xId][this.yId] = "pipeOut";
+      //pipemanagerに登録
+      pipeManager.pipeStatus[color] = "childPut";
+      pipeManager.childPipe[color] = void 0;
+      //なんでこここれでアクセスできんのやろ
+      //console.log(pipeManager.childPipe[color]);
+      
+      //こことか循環リストまわした方が気持ちいいんだけど打ち止めさせたいからいいか
+      switch(color)
+      {
+        case "blue":
+          pipeManager.childPipe.blue = obj;
+          color = "red";
+          creater.pipeColor = "red";
+          break;
+        case "red":
+          pipeManager.childPipe.red = obj;
+          color = "green";
+          creater.pipeColor = "green";
+          break;
+        case "green":
+          pipeManager.childPipe.green = obj;
+          color = "blue";
+          creater.pipeColor = "blue";
+          break;
+      }
+
+      creater.penColor = "parentPipe";
+
+      GAME.currentScene.removeChild(pipeManager.pipeInk);
+      pipeManager.pipeInk = void 0;
+      pipeManager.pipeInk = new PipeInk(color);
+      GAME.currentScene.addChild(pipeManager.pipeInk);
+
+    }else{
+      obj = new EditBlock(penColor);
+      creater.currentStage.push(obj);
+      //TODO 上書き機能
+      creater.stages[this.xId][this.yId] = obj.color;
+    }
+    obj.x = this.x;
+    obj.y = this.y;
+    this.parentNode.addChild(obj);
+  },
+  ontouchmove: function(e){
+    if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
+      this.moved = true;
+    }
+  },
+  ontouchend: function(){
+    this._element.className = 'box';
+    if(!this.parentNode.canTap){
+      return;
+    } else if(this.moved){
+      return;
+    }
+    this.parentNode.canTap = false;
+    var block = new Block('white');
+    block.x = this.x;
+    block.y = this.y;
+    currentStage.push(block);
+    this.parentNode.addChild(block);
+  }
+});
+
+var BlockInk = Class.create(Block,{
+  initialize: function(color){
+    Block.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = color;
+
+    this.color = color;
+  },
+  ontouchstart: function(){
+    creater.penColor = this.color;
+  }
+});
+
+var Creater =  function(color){
+  this.penColor = color || 'white';
+  //パイプ制御用
+  this.pipeColor = "blue";
+  this.stages = new Array(10);
+  var that = this;
+  //ステージ生成の元
+  //TODO ここをdefineのstage配列に整形できるように定義し直す
+  for(var x = 0; x < 10; x++){
+    that.stages[x] = new Array(10);
+  }
+  //スタート地点を置いたフラグこれがないと実行出来ないようにする
+  this.putStartFlg = false;
+  this.startObj = null;
+
+  //これで実行のcurrentStage管理
+  this.currentStage = new Array(10);
+}
+
+function makeJSON(stages){
+  console.log(stages);
+  var json = JSON.stringify(stages);
+  console.log(json);
+}
+
+function doPost(action){
+  var submitType = document.createElement("input");
+  submitType.setAttribute("type","hidden");
+}
+
+var TestPlayButton = Class.create(ExLabel,{
+  initialize: function(text,w,h){
+    ExLabel.call(this,BOX_SIZE,BOX_SIZE);
+    var width = w || 640;
+    var height = h || 64;
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.innerHTML = text;
+  },
+  ontouchstart: function(){
+    //実行
+    creater.startObj.run(); 
+  },
+  setClassName: function(className){
+    this._element.className = className;
+  }
+});
+
+var EditStart = Class.create(Start,{
+  initialize: function(){
+    Start.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'start';
+    this.backgroundColor = COLORS.white;
+
+    // Beam用ステータス
+    this.beamStatus = {
+      top:{
+        moveX: 0,
+        moveY: -MOVE_PX,
+      },
+      right:{
+        moveX: MOVE_PX,
+        moveY: 0
+      },
+      down:{
+        moveX: 0,
+        moveY: MOVE_PX
+      },
+      left:{
+        moveX: -MOVE_PX,
+        moveY: 0
+      }
+    };
+  },
+  run: function(){
+    //爆発した場所のxId,yIdを引き数に持つ
+    var arc = new HitArc('white');
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    GAME.currentScene.addChild(arc);
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      if(DIRECTIONS['white'][i]){
+        // 初期設定的な
+        var beamInit = {
+          x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+          y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+          color: 'white',
+          parentBlock:this,
+          beamLength:BEAM_LENGTH
+        }
+        GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      }
+      i++;
+    }
+
+    playSound(GAME.assets['sound/start.mp3'].clone());
+
+    //出したら消滅
+    GAME.currentScene.removeChild(this);
+    creater.startObj = null;
+  }
+});
+
+var EditBeam = Class.create(Beam,{
+  initialize: function(direction ,init){
+    Beam.call(this,BEAM_SIZE,BEAM_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'beam';
+
+    // 初期状態
+    this.direction = direction;
+    this.initX = init.x;
+    this.initY = init.y;
+    this.x = init.x;
+    this.y = init.y;
+
+    this.currentStage = currentStage;
+    this.parentBlock = init.parentBlock;
+    this.beamLength = init.beamLength*BOX_SIZE;
+
+    this.COLORS = COLORS;
+
+  },
+  onenterframe: function(){
+    // 衝突検知
+    // やっぱこうなるの・・・
+    var gimmicks = creater.currentStage.length;
+    var distance = BOX_HALF+12;
+    for(var i = 0; i < gimmicks; i++){
+      if(!creater.currentStage[i]){
+      } else
+      if(this.within(creater.currentStage[i], distance) && creater.currentStage[i] !== this.parentBlock){
+        // 発射！
+        creater.currentStage[i].run();
+
+        // 当たったら消える
+        delete creater.currentStage[i];
+        creater.currentStage.splice(i,1);
+        GAME.currentScene.removeChild(this);
+        return;
+      }
+    }
+
+    // Beamの移動と生存期間
+    if(Math.abs(this.initX-this.x) < this.beamLength
+       &&  Math.abs(this.initY-this.y) < this.beamLength){
+         this.x += this.direction.moveX;
+         this.y += this.direction.moveY;
+       } else {
+         // 生存期間を過ぎると消えていく
+         this.opacity -= 0.1;
+         if(this.opacity < 0){
+           GAME.currentScene.removeChild(this);
+         }
+       }
+  }
+});
+
+var EditBlock = Class.create(Block,{
+  initialize: function(color){
+    Block.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = color;
+
+    this.color = color;
+
+    if(this.color === 'orange'){
+      this.image = ORANGE;
+    } else if(this.color === 'purple'){
+      this.image = PURPLE;
+    }
+
+    // Beam用ステータス
+    this.beamStatus = {
+      top:{
+        moveX: 0,
+        moveY: -MOVE_PX,
+      },
+      right:{
+        moveX: MOVE_PX,
+        moveY: 0
+      },
+      down:{
+        moveX: 0,
+        moveY: MOVE_PX
+      },
+      left:{
+        moveX: -MOVE_PX,
+        moveY: 0
+      }
+    };
+  },
+  /**
+   * Block.run()
+   * 	4方向にBeamを出します
+   */
+  run: function(){
+    if( 0 < effectLevel){
+      var arc = new HitArc(this.color);
+      arc.x = this.x-128;
+      arc.y = this.y-128;
+      GAME.currentScene.addChild(arc);
+    }
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      if(DIRECTIONS[this.color][i]){
+        // 初期設定的な
+        var beamInit = {
+          x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+          y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+          parentBlock:this,
+          beamLength:BEAM_LENGTH
+        }
+        GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      }
+      i++;
+    }
+
+    switch (this.color){
+      case "blue":
+        playSound(GAME.assets['sound/blue.mp3'].clone());
+        break;
+      case "green":
+        playSound(GAME.assets['sound/green.mp3'].clone());
+        break;
+      case "red":
+        playSound(GAME.assets['sound/red.mp3'].clone());
+        break;
+      case "purple":
+        playSound(GAME.assets['sound/purple.mp3'].clone());
+        break;
+      case "orange":
+        playSound(GAME.assets['sound/orange.mp3'].clone());
+        break;
+      case "white":
+        playSound(GAME.assets['sound/white.mp3'].clone());
+        break;
+    }
+    //	出したら消滅
+    GAME.currentScene.removeChild(this);1
+  }
+});
+
+var EditSlanter = Class.create(Slanter,{
+  initialize: function(){
+    Slanter.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'slanter';
+    this.image = SLANTER;
+    this.rotation = 45;
+
+    this.beamStatus = {
+      topRight: {moveX: MOVE_PX  ,moveY: -MOVE_PX},
+      rightDown:{moveX: MOVE_PX  ,moveY: MOVE_PX },
+      downLeft: {moveX: -MOVE_PX ,moveY: MOVE_PX },
+      leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
+    };
+
+    this.color = "green";
+
+  },
+  run: function(){
+
+    var arc = new HitArc(this.color);
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    GAME.currentScene.addChild(arc);
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 2
+      }
+      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      i++;
+    }
+
+    playSound(GAME.assets['sound/slanter.mp3'].clone());
+    //	出したら消滅
+    GAME.currentScene.removeChild(this);
+  }
+});
+
+var SlanterInk = Class.create(Slanter,{
+  initialize: function(color){
+    Slanter.call(this,BOX_SIZE,BOX_SIZE);
+
+    this._element = document.createElement('div');
+    this._element.className = 'slanter';
+    this.image = SLANTER;
+    this.rotation = 45;
+
+    this.color = "green";
+
+  },
+  ontouchstart: function(){
+    creater.penColor = 'slanter';
+  }
+});
+
+var DiffusionerInk = Class.create(Diffusioner,{
+  initialize: function(){
+    Diffusioner.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'diffusioner';
+    this.image = DIFFUSIONER;
+
+    // 倍の早さ
+    var movePx = MOVE_PX*2;
+
+    this.color = "red";
+
+  },
+  ontouchstart: function(){
+    creater.penColor = "diffusioner";
+  }
+});
+
+var EditDiffusioner = Class.create(Diffusioner,{
+  initialize: function(){
+    Diffusioner.call(this,BOX_SIZE,BOX_SIZE);
+    this._element = document.createElement('div');
+    this._element.className = 'diffusioner';
+    this.image = DIFFUSIONER;
+
+    // 倍の早さ
+    var movePx = MOVE_PX*2;
+
+    this.beamStatus = {
+      top:      {moveX: 0        ,moveY: -movePx},
+      topRight: {moveX: movePx   ,moveY: -movePx},
+      right:    {moveX: movePx   ,moveY: 0       },
+      rightDown:{moveX: movePx   ,moveY: movePx },
+      down:     {moveX: 0        ,moveY: movePx },
+      downLeft: {moveX: -movePx  ,moveY: movePx },
+      left:     {moveX: -movePx  ,moveY: 0       },
+      leftTop:  {moveX: -movePx  ,moveY: -movePx}
+    };
+
+    this.color = "red";
+
+  },
+  run: function(){
+
+    var arc = new HitArc(this.color);
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    GAME.currentScene.addChild(arc);
+
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 1
+      }
+      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      i++;
+    }
+
+    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
+    //	出したら消滅
+    GAME.currentScene.removeChild(this);
+  }
+});
+
+var PipeInk = Class.create(Sprite,{
+  initialize: function(color){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'pipe';
+    this.image = PIPE_COLORS[color].pipe;
+    this.pipeStatus = null;
+    this.color = color;
+    this.x = 410;
+    this.y = 670; 
+  },
+  onaddedtoscene: function(){
+    //this.pipeOut = new Sprite(BOX_SIZE,BOX_SIZE);
+    //this.pipeOut._element = document.createElement('div');
+    //this.pipeOut._element.className = 'pipeOut '+this.pipeStatus.direction;
+    //this.pipeOut.image = PIPE_COLORS[this.color].pipeOut;
+  ////  this.pipeOut.x = this.pipeStatus.x * BOX_SIZE;
+  ////  this.pipeOut.y = this.pipeStatus.y * BOX_SIZE;
+    //this.parentNode.addChild(this.pipeOut);
+  },
+  onremovedfromscene: function(){
+    GAME.currentScene.removeChild(this.pipeOut);
+  },
+  ontouchstart: function(){
+    creater.penColor = "parentPipe";
+    creater.pipeColor = this.color;
+  }
+});
+
+var EditPipe = Class.create(Sprite,{
+  initialize: function(color){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'pipe';
+    this.image = PIPE_COLORS[color].pipe;
+    //パイプステータスは後でつける
+    //this.pipeStatus = pipeStatus;
+    this.color = color;
+
+    // Beam用ステータス
+    this.beamStatus = {
+      up:{
+        moveX: 0,
+        moveY: -MOVE_PX,
+      },
+      right:{
+        moveX: MOVE_PX,
+        moveY: 0
+      },
+      down:{
+        moveX: 0,
+        moveY: MOVE_PX
+      },
+      left:{
+        moveX: -MOVE_PX,
+        moveY: 0
+      }
+    };
+  },
+  /**
+  * Block.run()
+  */
+  run: function(){
+    var theChildPipe = null;
+    var arc = new HitArc(this.color);
+
+    //自分の子供から演出を出す
+    switch(this.color)
+    {
+      case "blue":
+        var theChildPipe = pipeManager.childPipe.blue;
+        break;
+      case "red":
+        var theChildPipe = pipeManager.childPipe.red;
+        break;
+      case "green":
+        var theChildPipe = pipeManager.childPipe.green;
+        break;
+    }
+    arc.x = theChildPipe.x-128;
+    arc.y = theChildPipe.y-128;
+    GAME.currentScene.addChild(arc);
+
+    var beamInit = {
+      x: theChildPipe.x+BOX_SIZE/2-BEAM_SIZE/2,
+      y: theChildPipe.y+BOX_SIZE/2-BEAM_SIZE/2,
+      color: 'white',
+      parentBlock:theChildPipe,
+      beamLength:BEAM_LENGTH
+    }
+    GAME.currentScene.addChild(new EditBeam(this.beamStatus[theChildPipe.direction],beamInit));
+    playSound(GAME.assets['sound/pipe.mp3'].clone());
+    //	出したら消滅
+    GAME.currentScene.removeChild(theChildPipe);
+    GAME.currentScene.removeChild(this);
+  }
+});
+
+var EditChildPipe = Class.create(Sprite,{
+  initialize: function(color){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+
+    this._element = document.createElement('div');
+    this._element.className = 'pipeOut ';
+    this.image = PIPE_COLORS[color].pipeOut;
+    this.color = color;
+    this.direction = "right";
+    this.directionArrow = { up: null, right: null, left: null, down:null };
+
+    // Beam用ステータス
+    this.beamStatus = {
+      up:{
+        moveX: 0,
+        moveY: -MOVE_PX,
+      },
+      right:{
+        moveX: MOVE_PX,
+        moveY: 0
+      },
+      down:{
+        moveX: 0,
+        moveY: MOVE_PX
+      },
+      left:{
+        moveX: -MOVE_PX,
+        moveY: 0
+      }
+    };
+  },
+  onaddedtoscene: function(){
+    //矢印を出現させ方向を決める
+    this.directionArrow.up = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionUpper,this.color);
+    this.directionArrow.up.x = this.x;
+    this.directionArrow.up.y = this.y - 15;
+    this.directionArrow.up.direction = "up";
+    GAME.currentScene.addChild(this.directionArrow.up);
+
+    this.directionArrow.left = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionLefter,this.color);
+    this.directionArrow.left.x = this.x - 40;
+    this.directionArrow.left.y = this.y + 20;
+    this.directionArrow.left.direction = "left";
+    GAME.currentScene.addChild(this.directionArrow.left);
+
+    this.directionArrow.right = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionRighter,this.color);
+    this.directionArrow.right.x = this.x + 60;
+    this.directionArrow.right.y = this.y + 20;
+    this.directionArrow.right.direction = "right";
+    GAME.currentScene.addChild(this.directionArrow.right);
+
+    this.directionArrow.down = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionDowner,this.color);
+    this.directionArrow.down.x = this.x;
+    this.directionArrow.down.y = this.y + 60;
+    this.directionArrow.down.direction = "down";
+    GAME.currentScene.addChild(this.directionArrow.down);
+  }
+});
+
+var PipeColorButton = Class.create(ExLabel,{
+  initialize: function(text,w,h){
+    var width = w || 640;
+    var height = h || 64;
+    ExLabel.call(this,width,height);
+
+    this._element = document.createElement('div');
+    this._element.innerHTML = text; 
+  },
+  setClassName: function(className){
+    this._element.className = className;
+  }
+});
+
+var PipeManager =  function(){
+
+  /*
+   *パイプの状態監視
+   */
+  //nothing == 親も子も置いてない
+  //parentPut == 親置いたけど子供置いてない
+  //childPut == 親も子供も置いた
+  //それ以外はエラー
+  this.pipeStatus = { "blue": "nothing", "red": "nothing", "green": "nothing" };
+
+  //画面に表示されるパイプのインクオブジェクト
+  this.pipeInk = null
+
+  //各子供パイプのオブジェクトをマネージャーに持たせて参照させる
+  this.childPipe = { "blue": null, "red": null ,"green": null };
+}
+
+var PipeDirectionArrow = Class.create(ExLabel,{
+  initialize: function(text,color){
+    var width = 640;
+    var height = 64;
+    ExLabel.call(this,width,height);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.innerHTML = text;
+    this.color = color;
+    this.direction = null;
+  },
+  setClassName: function(className){
+    this._element.className = className;
+  },
+  ontouchend: function(){
+    var theChildPipe;
+    //direction設定
+    switch(this.color)
+    {
+      case "blue":
+        theChildPipe = pipeManager.childPipe.blue;
+        break;
+      case "red":
+        theChildPipe = pipeManager.childPipe.red;
+        break;
+      case "green":
+        theChildPipe = pipeManager.childPipe.green;
+        break;
+    }
+    theChildPipe.direction = this.direction;
+    theChildPipe._element.className = 'pipeOut ' + this.direction;
+    //direction設定したらけし
+    GAME.currentScene.removeChild(theChildPipe.directionArrow.up);
+    GAME.currentScene.removeChild(theChildPipe.directionArrow.left);
+    GAME.currentScene.removeChild(theChildPipe.directionArrow.right);
+    GAME.currentScene.removeChild(theChildPipe.directionArrow.down);
+  }
+});
+
+var ChildPipeInk = Class.create(Sprite,{
+  initialize: function(color){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this.image = PIPE_COLORS[color].pipeOut;
+    this.color = color;
+    this._element.className = 'pipeOut '+ 'right';
+    this.x = 410;
+    this.y = 670; 
+  },
+  onremovedfromscene: function(){
+  //  GAME.currentScene.removeChild(this.pipeOut);
+  },
+  ontouchstart: function(){
+    creater.penColor = "childPipe";
+    creater.pipeColor = this.color;
   }
 });

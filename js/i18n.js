@@ -29,7 +29,15 @@ var LANGUAGE = {
     tutoClearMsg2:"本番のステージでは<br/>オブジェクトを置くまでに時間制限があります",
     tutoClearMsg3:"それでは、ゲームをお楽しみ下さい",
     backToTop:"TOPへ戻る",
-    volumeOption:"音量"
+    volumeOption:"音量",
+    stageEdit:"ステージを作る",
+    post:"投稿する",
+    testplay:"試す",
+    pipeColorButton:"色を変える",
+    pipeDirectionUpper:"上に発射",
+    pipeDirectionLefter:"左に発射",
+    pipeDirectionRighter:"右に発射",
+    pipeDirectionDowner:"下に発射"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -61,6 +69,14 @@ var LANGUAGE = {
     tutoClearMsg2:"If this is real game,It have a time limit",
     tutoClearMsg3:"Enjoy your game!",
     backToTop:"Back to Top",
-    volumeOption:"音量"
+    volumeOption:"SoundVolume",
+    stageEdit:"Edit Stage",
+    post:"Post your Stage!",
+    testplay:"Test play",
+    pipeColorButton:"Change Color",
+    pipeDirectionUpper:"turn up shoot",
+    pipeDirectionLefter:"turn left shoot",
+    pipeDirectionRighter:"turn right shoot",
+    pipeDirectionDowner:"turn down shoot"
   }
 }
