@@ -14,4 +14,17 @@ var PipeManager =  function(){
 
   //各子供パイプのオブジェクトをマネージャーに持たせて参照させる
   this.childPipe = { "blue": null, "red": null ,"green": null };
+
+  this.getPipeErrorFlg = function getPipeErrorFlg(color){
+    for (pipeColor in this.pipeStatus){
+      if(pipeColor == color){
+        if(this.pipeStatus[pipeColor] == "parentPut" || this.pipeStatus[pipeColor] == "childPut" ){
+          //アラートでもならそうか
+          return true;
+        }
+      }
+    }
+
+    return false;
+  };
 }

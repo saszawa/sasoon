@@ -14,14 +14,10 @@ var EditBox = Class.create(Box,{
     //idを降ってステージ作成に活かす
     this.xId = xNumber;
     this.yId = yNumber;
-    this.pipeErrorFlg = false;
-    this.startPutedFlg = false;
-    this.threeStarFlg = false;
   },
   putStart: function putStart(){
       //スタートは一個しか置けない用にする
-      if(creater.startObj != null){
-        this.startPutedFlg = true;
+      if(creater.putStartFlg){
         return;
       }
       var start = new EditStart();
@@ -50,15 +46,19 @@ var EditBox = Class.create(Box,{
     //親パイプのとき
     //既に同色が置いてある場合
     var color = creater.pipeColor;
-    for (pipeColor in pipeManager.pipeStatus){
-      if(pipeColor == color){
-        if(pipeManager.pipeStatus[pipeColor] == "parentPut" || pipeManager.pipeStatus[pipeColor] == "childPut" ){
-          //アラートでもならそうか
-          this.pipeErrorFlg = true;
-          return;
-        }
-      }
+    var pipeErrorFlg = pipeManager.getPipeErrorFlg();
+    if(pipeErrorFlg){
+      return;
     }
+//    for (pipeColor in pipeManager.pipeStatus){
+//      if(pipeColor == color){
+//        if(pipeManager.pipeStatus[pipeColor] == "parentPut" || pipeManager.pipeStatus[pipeColor] == "childPut" ){
+//          //アラートでもならそうか
+//          this.pipeErrorFlg = true;
+//          return;
+//        }
+//      }
+//    }
     var parentPipe = new EditPipe(color);
 
     creater.currentStage.push(parentPipe);
@@ -128,11 +128,6 @@ var EditBox = Class.create(Box,{
   },
   putStar: function putStar(){
     //星を置く
-    //みっつまでしかおけない
-    if(creater.starMany >= 3){
-      this.threeStarFlg = true;
-      return;
-    }
     var star = new EditStar();
     creater.currentStage.push(star);
     creater.stages[this.xId][this.yId] = "star";
@@ -150,21 +145,33 @@ var EditBox = Class.create(Box,{
 
     //TODO ここもメソッドかしたい
     //上書きを禁止
-    if(creater.stages[this.xId][this.yId] != null){
-    }
+//  if(creater.stages[this.xId][this.yId] != null){
+//   }
     if(penColor == "start"){
+      if(creater.putStartFlg){
+        return;
+      }
       obj = this.putStart();
+      creater.putStartFlg = true;
     }else if(penColor == "slanter" ){
       obj = this.putSlanter();
     }else if(penColor == "diffusioner"){
       obj = this.putDiffusioner();
     }else if(penColor == "parentPipe"){
+      var pipeErrorFlg = pipeManager.getPipeErrorFlg(creater.pipeColor);
+      if(pipeErrorFlg){
+        return;
+      }
       obj = this.putParentPipe();
     }else if(penColor == "childPipe"){
       obj = this.putChildPipe();
     }else if(penColor == "goal"){
       obj = this.putGoal();
     }else if(penColor == "star"){
+    //みっつまでしかおけない
+      if(creater.starMany >= 3){
+        return;
+      }
       obj = this.putStar();
     }
     else{
@@ -174,15 +181,7 @@ var EditBox = Class.create(Box,{
       //TODO 上書き機能
       //creater.stages[this.xId][this.yId] = obj.color;
     }
-    if(this.pipeErrorFlg){
-      //フラグはputParentPipeで制御してるからここに書く
-      return;
-    }else if(this.startPutedFlg){
-      //start置かれてたら
-      return;
-    }else if(this.threeStarFlg){
-      return;
-    }
+
     obj.x = this.x;
     obj.y = this.y;
     this.parentNode.addChild(obj);

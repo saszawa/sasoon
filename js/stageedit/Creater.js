@@ -12,6 +12,7 @@ var Creater =  function(color){
   //スタート地点を置いたフラグこれがないと実行出来ないようにする
   this.putStartFlg = false;
   this.startObj = null;
+  this.putStartFlg = false;
   this.goalFlg = null;
   this.starMany = 0;
 
