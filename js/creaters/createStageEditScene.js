@@ -72,13 +72,13 @@ function createStageEditScene(){
   stageEditScene.addChild(pipeInk);
 
   var goalInk = new GoalInk();
-  goalInk.x = 640;
-  goalInk.y = 10;
+  goalInk.x = 10;
+  goalInk.y = 750;
   stageEditScene.addChild(goalInk);
 
   var starInk = new StarInk();
-  starInk.x = 640;
-  starInk.y = 110;
+  starInk.x = 90;
+  starInk.y = 750;
   stageEditScene.addChild(starInk);
 
   var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
