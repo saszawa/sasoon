@@ -12,54 +12,70 @@ var EditBox = Class.create(Box,{
     }
     this.moved = false;
     //idを降ってステージ作成に活かす
-    this.xId = xNumber ;
-    this.yId = yNumber ;
+    this.xId = xNumber;
+    this.yId = yNumber;
+    this.pipeErrorFlg = false;
+    this.startPutedFlg = false;
+    this.threeStarFlg = false;
   },
-  ontouchstart: function(e){
-    this.startEvent = e;
-    this.moved = false;
-    this._element.className = 'box touched';
-
-    var penColor = creater.penColor;
-    var obj = null;
-
-    //TODO ここもメソッドかしたい
-    if(penColor == "start"){
-      obj = new EditStart();
+  putStart: function putStart(){
+      //スタートは一個しか置けない用にする
+      if(creater.startObj != null){
+        this.startPutedFlg = true;
+        return;
+      }
+      var start = new EditStart();
       //クリエイターがみんなから見えるので色々持たす
       creater.putStartFlg = true;
-      creater.startObj = obj;
+      creater.startObj = start;
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "start";
-    }else if(penColor == "slanter" ){
-      obj = new EditSlanter(this.xId,this.yId);
-      creater.currentStage.push(obj);
+      return start;
+  },
+  putSlanter: function putSlanter(){
+      var slanter = new EditSlanter(this.xId,this.yId);
+      creater.currentStage.push(slanter);
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "slanter";
-    }else if(penColor == "diffusioner"){
-      obj = new EditDiffusioner();
-      creater.currentStage.push(obj);
+      return slanter;
+  },
+  putDiffusioner: function putDiffusioner(){
+      var diffusioner  = new EditDiffusioner();
+      creater.currentStage.push(diffusioner);
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "diffusioner";
-    }else if(penColor == "parentPipe"){
-      //親パイプのとき
-      //TODO 親しか置いてないときのエラー処理
-      var color = creater.pipeColor;
-      obj = new EditPipe(color);
+      return diffusioner;
+  },
+  putParentPipe: function putParentPipe(){
+    //親パイプのとき
+    //既に同色が置いてある場合
+    var color = creater.pipeColor;
+    for (pipeColor in pipeManager.pipeStatus){
+      if(pipeColor == color){
+        if(pipeManager.pipeStatus[pipeColor] == "parentPut" || pipeManager.pipeStatus[pipeColor] == "childPut" ){
+          //アラートでもならそうか
+          this.pipeErrorFlg = true;
+          return;
+        }
+      }
+    }
+    var parentPipe = new EditPipe(color);
 
-      creater.currentStage.push(obj);
-      creater.stages[this.xId][this.yId] = "pipe";
-      pipeManager.pipeStatus[color] = "parentPut";
-      creater.penColor = "childPipe";
+    creater.currentStage.push(parentPipe);
+    creater.stages[this.xId][this.yId] = "pipe";
+    pipeManager.pipeStatus[color] = "parentPut";
+    creater.penColor = "childPipe";
 
-      GAME.currentScene.removeChild(pipeManager.pipeInk);
-      pipeManager.pipeInk = void 0;
-      pipeManager.pipeInk = new ChildPipeInk(color);
-      GAME.currentScene.addChild(pipeManager.pipeInk);
-    }else if(penColor == "childPipe"){
+    GAME.currentScene.removeChild(pipeManager.pipeInk);
+    pipeManager.pipeInk = void 0;
+    pipeManager.pipeInk = new ChildPipeInk(color);
+    GAME.currentScene.addChild(pipeManager.pipeInk);
+    return parentPipe;
+  },
+  putChildPipe: function putChildPipe(){
       //子パイプの時
       var color = creater.pipeColor;
-      obj = new EditChildPipe(color);
+      var childPipe = new EditChildPipe(color);
 
       //createrに登録
       creater.stages[this.xId][this.yId] = "pipeOut";
@@ -68,22 +84,22 @@ var EditBox = Class.create(Box,{
       pipeManager.childPipe[color] = void 0;
       //なんでこここれでアクセスできんのやろ
       //console.log(pipeManager.childPipe[color]);
-      
+
       //こことか循環リストまわした方が気持ちいいんだけど打ち止めさせたいからいいか
       switch(color)
       {
         case "blue":
-          pipeManager.childPipe.blue = obj;
+          pipeManager.childPipe.blue = childPipe;
           color = "red";
           creater.pipeColor = "red";
           break;
         case "red":
-          pipeManager.childPipe.red = obj;
+          pipeManager.childPipe.red = childPipe;
           color = "green";
           creater.pipeColor = "green";
           break;
         case "green":
-          pipeManager.childPipe.green = obj;
+          pipeManager.childPipe.green = childPipe;
           color = "blue";
           creater.pipeColor = "blue";
           break;
@@ -96,11 +112,76 @@ var EditBox = Class.create(Box,{
       pipeManager.pipeInk = new PipeInk(color);
       GAME.currentScene.addChild(pipeManager.pipeInk);
 
-    }else{
+      return childPipe;
+  },
+  putGoal: function putGoal(){
+    //goalは一個しか置けない用にするA
+    if(creater.goalFlg){
+      return;
+    }
+    var goal = new EditGoal();
+    creater.currentStage.push(goal);
+    //TODO 上書き機能
+    creater.stages[this.xId][this.yId] = goal.color;
+    creater.goalFlg = true;
+    return goal;
+  },
+  putStar: function putStar(){
+    //星を置く
+    //みっつまでしかおけない
+    if(creater.starMany >= 3){
+      this.threeStarFlg = true;
+      return;
+    }
+    var star = new EditStar();
+    creater.currentStage.push(star);
+    creater.stages[this.xId][this.yId] = "star";
+    creater.starMany++;
+    return star;
+  },
+  ontouchstart: function(e){
+    //スタートがすでに置かれていたら
+    this.startEvent = e;
+    this.moved = false;
+    this._element.className = 'box touched';
+
+    var penColor = creater.penColor;
+    var obj = null;
+
+    //TODO ここもメソッドかしたい
+    //上書きを禁止
+    if(creater.stages[this.xId][this.yId] != null){
+    }
+    if(penColor == "start"){
+      obj = this.putStart();
+    }else if(penColor == "slanter" ){
+      obj = this.putSlanter();
+    }else if(penColor == "diffusioner"){
+      obj = this.putDiffusioner();
+    }else if(penColor == "parentPipe"){
+      obj = this.putParentPipe();
+    }else if(penColor == "childPipe"){
+      obj = this.putChildPipe();
+    }else if(penColor == "goal"){
+      obj = this.putGoal();
+    }else if(penColor == "star"){
+      obj = this.putStar();
+    }
+    else{
+      //赤、緑、青、紫、オレンジ
       obj = new EditBlock(penColor);
       creater.currentStage.push(obj);
       //TODO 上書き機能
-      creater.stages[this.xId][this.yId] = obj.color;
+      //creater.stages[this.xId][this.yId] = obj.color;
+    }
+    if(this.pipeErrorFlg){
+      //フラグはputParentPipeで制御してるからここに書く
+      return;
+    }else if(this.startPutedFlg){
+      //start置かれてたら
+      return;
+    }else if(this.threeStarFlg){
+      return;
     }
     obj.x = this.x;
     obj.y = this.y;

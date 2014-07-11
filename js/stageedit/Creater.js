@@ -12,6 +12,8 @@ var Creater =  function(color){
   //スタート地点を置いたフラグこれがないと実行出来ないようにする
   this.putStartFlg = false;
   this.startObj = null;
+  this.goalFlg = null;
+  this.starMany = 0;
 
   //これで実行のcurrentStage管理
   this.currentStage = new Array(10);

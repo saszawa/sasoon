@@ -27,6 +27,7 @@ function createStageEditScene(){
   createSurfaces();
 
   //パレット開閉スイッチ
+  //インクを開閉式メニューに置く場合
 //  var optionMenuButton = new Sprite(BOX_SIZE,BOX_SIZE);
 //  optionMenuButton._element = document.createElement('div');
 //  optionMenuButton._element.className = 'optionMenuButton';
@@ -69,6 +70,16 @@ function createStageEditScene(){
   //パイプは親置いたら子供置けるようにインク変えるのでその対応
   pipeManager.pipeInk = pipeInk;
   stageEditScene.addChild(pipeInk);
+
+  var goalInk = new GoalInk();
+  goalInk.x = 640;
+  goalInk.y = 10;
+  stageEditScene.addChild(goalInk);
+
+  var starInk = new StarInk();
+  starInk.x = 640;
+  starInk.y = 110;
+  stageEditScene.addChild(starInk);
 
   var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
   pipeColorButton.x = 410;
