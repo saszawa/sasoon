@@ -58,7 +58,11 @@ module.exports = function(grunt) {
           'js/stageedit/PipeColorButton.js',
           'js/stageedit/PipeManager.js',
           'js/stageedit/PipeDirectionArrow.js',
-          'js/stageedit/ChildPipeInk.js'
+          'js/stageedit/ChildPipeInk.js',
+          'js/stageedit/EditGoal.js',
+          'js/stageedit/GoalInk.js',
+          'js/stageedit/StarInk.js',
+          'js/stageedit/EditStar.js'
         ],
         dest: 'js/game.js'
       }

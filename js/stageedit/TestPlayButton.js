@@ -10,6 +10,18 @@ var TestPlayButton = Class.create(ExLabel,{
   },
   ontouchstart: function(){
     //実行
+    //パイプがちゃんと親と子供そろっているか確認
+    for (pipeColor in pipeManager.pipeStatus){
+      if(pipeManager.pipeStatus[pipeColor] == "parentPut"){
+        //アラートでもならそうか
+        return;
+      }
+    }
+
+    //startが置いてあるかどうか
+    if(creater.startObj == null){
+      return;
+    }
     creater.startObj.run(); 
   },
   setClassName: function(className){

@@ -1104,7 +1104,7 @@ var tutorialScene = null;
 
 enchant();
 window.onload = function () {
-  GAME = new Game(640, 800);
+  GAME = new Game(720, 800);
   GAME.preload('sound/white.mp3','sound/goal.mp3','sound/start.mp3','sound/orange.mp3','sound/purple.mp3','sound/green.mp3','sound/red.mp3','sound/slanter.mp3','sound/pipe.mp3','sound/blue.mp3','sound/star.mp3','sound/diffusioner.mp3');
   GAME.fps = 30;
   GAME.onload = function () {
@@ -2230,6 +2230,7 @@ function createStageEditScene(){
   createSurfaces();
 
   //パレット開閉スイッチ
+  //インクを開閉式メニューに置く場合
 //  var optionMenuButton = new Sprite(BOX_SIZE,BOX_SIZE);
 //  optionMenuButton._element = document.createElement('div');
 //  optionMenuButton._element.className = 'optionMenuButton';
@@ -2272,6 +2273,16 @@ function createStageEditScene(){
   //パイプは親置いたら子供置けるようにインク変えるのでその対応
   pipeManager.pipeInk = pipeInk;
   stageEditScene.addChild(pipeInk);
+
+  var goalInk = new GoalInk();
+  goalInk.x = 640;
+  goalInk.y = 10;
+  stageEditScene.addChild(goalInk);
+
+  var starInk = new StarInk();
+  starInk.x = 640;
+  starInk.y = 110;
+  stageEditScene.addChild(starInk);
 
   var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
   pipeColorButton.x = 410;
@@ -2967,44 +2978,44 @@ var Start = Class.create(Sprite,{
 });
 
 var Goal = Class.create(Sprite,{
-	initialize: function(){
-		Sprite.call(this,BOX_SIZE,BOX_SIZE);
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
 
-		this._element = document.createElement('div');
-		this._element.className = 'goal';
-		this.scaleX = 0.8;
-		this.scaleY = 0.8;
-		this.distance = 1;
+    this._element = document.createElement('div');
+    this._element.className = 'goal';
+    this.scaleX = 0.8;
+    this.scaleY = 0.8;
+    this.distance = 1;
 
-		this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).loop();
-	},
-	run: function(){
-		clearTimeout(this.parentNode.endTimer);
-		this.parentNode.cleared = true;
+    this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).loop();
+  },
+  run: function(){
+    clearTimeout(this.parentNode.endTimer);
+    this.parentNode.cleared = true;
 
-		this.parentNode.removeChild(this.parentNode.retryLabel);
+    this.parentNode.removeChild(this.parentNode.retryLabel);
 
     playSound(GAME.assets['sound/goal.mp3'].clone());
 
-		var that = this;
+    var that = this;
 
-		// 星の削除
-		this.parentNode.stars.forEach(function(star){
-			star.run = function(){}
-			that.parentNode.removeChild(star);
-		});
+    // 星の削除
+    this.parentNode.stars.forEach(function(star){
+      star.run = function(){}
+      that.parentNode.removeChild(star);
+    });
 
-		this.tl.clear().scaleTo(30,30,30).then(function(){
-			// 残ったギミックの削除
-			currentStage.forEach(function(gimmick){
-				that.parentNode.removeChild(gimmick);
-			});
-			that.parentNode.removeChild(BACKGROUND_ARC);
-		}).delay(30).fadeTo(0,15).then(function(){
-			that.parentNode.showResult();
-			that.parentNode.removeChild(that);
-		});
-	}
+    this.tl.clear().scaleTo(30,30,30).then(function(){
+      // 残ったギミックの削除
+      currentStage.forEach(function(gimmick){
+        that.parentNode.removeChild(gimmick);
+      });
+      that.parentNode.removeChild(BACKGROUND_ARC);
+    }).delay(30).fadeTo(0,15).then(function(){
+      that.parentNode.showResult();
+      that.parentNode.removeChild(that);
+    });
+  }
 });
 
 var Star = Class.create(Sprite,{
@@ -3742,54 +3753,70 @@ var EditBox = Class.create(Box,{
     }
     this.moved = false;
     //idを降ってステージ作成に活かす
-    this.xId = xNumber ;
-    this.yId = yNumber ;
+    this.xId = xNumber;
+    this.yId = yNumber;
+    this.pipeErrorFlg = false;
+    this.startPutedFlg = false;
+    this.threeStarFlg = false;
   },
-  ontouchstart: function(e){
-    this.startEvent = e;
-    this.moved = false;
-    this._element.className = 'box touched';
-
-    var penColor = creater.penColor;
-    var obj = null;
-
-    //TODO ここもメソッドかしたい
-    if(penColor == "start"){
-      obj = new EditStart();
+  putStart: function putStart(){
+      //スタートは一個しか置けない用にする
+      if(creater.startObj != null){
+        this.startPutedFlg = true;
+        return;
+      }
+      var start = new EditStart();
       //クリエイターがみんなから見えるので色々持たす
       creater.putStartFlg = true;
-      creater.startObj = obj;
+      creater.startObj = start;
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "start";
-    }else if(penColor == "slanter" ){
-      obj = new EditSlanter(this.xId,this.yId);
-      creater.currentStage.push(obj);
+      return start;
+  },
+  putSlanter: function putSlanter(){
+      var slanter = new EditSlanter(this.xId,this.yId);
+      creater.currentStage.push(slanter);
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "slanter";
-    }else if(penColor == "diffusioner"){
-      obj = new EditDiffusioner();
-      creater.currentStage.push(obj);
+      return slanter;
+  },
+  putDiffusioner: function putDiffusioner(){
+      var diffusioner  = new EditDiffusioner();
+      creater.currentStage.push(diffusioner);
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "diffusioner";
-    }else if(penColor == "parentPipe"){
-      //親パイプのとき
-      //TODO 親しか置いてないときのエラー処理
-      var color = creater.pipeColor;
-      obj = new EditPipe(color);
+      return diffusioner;
+  },
+  putParentPipe: function putParentPipe(){
+    //親パイプのとき
+    //既に同色が置いてある場合
+    var color = creater.pipeColor;
+    for (pipeColor in pipeManager.pipeStatus){
+      if(pipeColor == color){
+        if(pipeManager.pipeStatus[pipeColor] == "parentPut" || pipeManager.pipeStatus[pipeColor] == "childPut" ){
+          //アラートでもならそうか
+          this.pipeErrorFlg = true;
+          return;
+        }
+      }
+    }
+    var parentPipe = new EditPipe(color);
 
-      creater.currentStage.push(obj);
-      creater.stages[this.xId][this.yId] = "pipe";
-      pipeManager.pipeStatus[color] = "parentPut";
-      creater.penColor = "childPipe";
+    creater.currentStage.push(parentPipe);
+    creater.stages[this.xId][this.yId] = "pipe";
+    pipeManager.pipeStatus[color] = "parentPut";
+    creater.penColor = "childPipe";
 
-      GAME.currentScene.removeChild(pipeManager.pipeInk);
-      pipeManager.pipeInk = void 0;
-      pipeManager.pipeInk = new ChildPipeInk(color);
-      GAME.currentScene.addChild(pipeManager.pipeInk);
-    }else if(penColor == "childPipe"){
+    GAME.currentScene.removeChild(pipeManager.pipeInk);
+    pipeManager.pipeInk = void 0;
+    pipeManager.pipeInk = new ChildPipeInk(color);
+    GAME.currentScene.addChild(pipeManager.pipeInk);
+    return parentPipe;
+  },
+  putChildPipe: function putChildPipe(){
       //子パイプの時
       var color = creater.pipeColor;
-      obj = new EditChildPipe(color);
+      var childPipe = new EditChildPipe(color);
 
       //createrに登録
       creater.stages[this.xId][this.yId] = "pipeOut";
@@ -3798,22 +3825,22 @@ var EditBox = Class.create(Box,{
       pipeManager.childPipe[color] = void 0;
       //なんでこここれでアクセスできんのやろ
       //console.log(pipeManager.childPipe[color]);
-      
+
       //こことか循環リストまわした方が気持ちいいんだけど打ち止めさせたいからいいか
       switch(color)
       {
         case "blue":
-          pipeManager.childPipe.blue = obj;
+          pipeManager.childPipe.blue = childPipe;
           color = "red";
           creater.pipeColor = "red";
           break;
         case "red":
-          pipeManager.childPipe.red = obj;
+          pipeManager.childPipe.red = childPipe;
           color = "green";
           creater.pipeColor = "green";
           break;
         case "green":
-          pipeManager.childPipe.green = obj;
+          pipeManager.childPipe.green = childPipe;
           color = "blue";
           creater.pipeColor = "blue";
           break;
@@ -3826,11 +3853,76 @@ var EditBox = Class.create(Box,{
       pipeManager.pipeInk = new PipeInk(color);
       GAME.currentScene.addChild(pipeManager.pipeInk);
 
-    }else{
+      return childPipe;
+  },
+  putGoal: function putGoal(){
+    //goalは一個しか置けない用にするA
+    if(creater.goalFlg){
+      return;
+    }
+    var goal = new EditGoal();
+    creater.currentStage.push(goal);
+    //TODO 上書き機能
+    creater.stages[this.xId][this.yId] = goal.color;
+    creater.goalFlg = true;
+    return goal;
+  },
+  putStar: function putStar(){
+    //星を置く
+    //みっつまでしかおけない
+    if(creater.starMany >= 3){
+      this.threeStarFlg = true;
+      return;
+    }
+    var star = new EditStar();
+    creater.currentStage.push(star);
+    creater.stages[this.xId][this.yId] = "star";
+    creater.starMany++;
+    return star;
+  },
+  ontouchstart: function(e){
+    //スタートがすでに置かれていたら
+    this.startEvent = e;
+    this.moved = false;
+    this._element.className = 'box touched';
+
+    var penColor = creater.penColor;
+    var obj = null;
+
+    //TODO ここもメソッドかしたい
+    //上書きを禁止
+    if(creater.stages[this.xId][this.yId] != null){
+    }
+    if(penColor == "start"){
+      obj = this.putStart();
+    }else if(penColor == "slanter" ){
+      obj = this.putSlanter();
+    }else if(penColor == "diffusioner"){
+      obj = this.putDiffusioner();
+    }else if(penColor == "parentPipe"){
+      obj = this.putParentPipe();
+    }else if(penColor == "childPipe"){
+      obj = this.putChildPipe();
+    }else if(penColor == "goal"){
+      obj = this.putGoal();
+    }else if(penColor == "star"){
+      obj = this.putStar();
+    }
+    else{
+      //赤、緑、青、紫、オレンジ
       obj = new EditBlock(penColor);
       creater.currentStage.push(obj);
       //TODO 上書き機能
-      creater.stages[this.xId][this.yId] = obj.color;
+      //creater.stages[this.xId][this.yId] = obj.color;
+    }
+    if(this.pipeErrorFlg){
+      //フラグはputParentPipeで制御してるからここに書く
+      return;
+    }else if(this.startPutedFlg){
+      //start置かれてたら
+      return;
+    }else if(this.threeStarFlg){
+      return;
     }
     obj.x = this.x;
     obj.y = this.y;
@@ -3886,6 +3978,8 @@ var Creater =  function(color){
   //スタート地点を置いたフラグこれがないと実行出来ないようにする
   this.putStartFlg = false;
   this.startObj = null;
+  this.goalFlg = null;
+  this.starMany = 0;
 
   //これで実行のcurrentStage管理
   this.currentStage = new Array(10);
@@ -3914,6 +4008,18 @@ var TestPlayButton = Class.create(ExLabel,{
   },
   ontouchstart: function(){
     //実行
+    //パイプがちゃんと親と子供そろっているか確認
+    for (pipeColor in pipeManager.pipeStatus){
+      if(pipeManager.pipeStatus[pipeColor] == "parentPut"){
+        //アラートでもならそうか
+        return;
+      }
+    }
+
+    //startが置いてあるかどうか
+    if(creater.startObj == null){
+      return;
+    }
     creater.startObj.run(); 
   },
   setClassName: function(className){
@@ -4506,5 +4612,80 @@ var ChildPipeInk = Class.create(Sprite,{
   ontouchstart: function(){
     creater.penColor = "childPipe";
     creater.pipeColor = this.color;
+  }
+});
+
+var EditGoal = Class.create(Goal,{
+  initialize: function(){
+    Goal.call(this,BOX_SIZE,BOX_SIZE);
+
+    this._element = document.createElement('div');
+    this._element.className = 'goal';
+    this.scaleX = 0.8;
+    this.scaleY = 0.8;
+    this.distance = 1;
+
+    this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).loop();
+  },
+  run: function(){
+
+    this.parentNode.removeChild(this.parentNode.retryLabel);
+
+    playSound(GAME.assets['sound/goal.mp3'].clone());
+
+    var that = this;
+
+    this.tl.clear().scaleTo(30,30,30);
+    //TODO stageからもけす
+    that.parentNode.removeChild(that);
+    creater.goalFlg = false;
+  }
+});
+
+var GoalInk = Class.create(Sprite,{
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.className = 'goal';
+
+  },
+  ontouchstart: function(){
+    creater.penColor = "goal";
+  }
+});
+
+var StarInk = Class.create(Sprite,{
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this.image = WHITE_STAR;
+  },
+  ontouchstart: function(){
+    creater.penColor = "star";
+  }
+});
+
+var EditStar = Class.create(Sprite,{
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+
+    //星を描く
+    this._element = document.createElement('div');
+    this.image = WHITE_STAR;
+    this.hited = false;
+  },
+  run: function(){
+    var that = this;
+    this.hited = true;
+    this.tl.scaleTo(0.5,0.5,7).scaleTo(1,1,2).then(function(){
+      that.tl.clear();
+      that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
+    });
+    this.image = YELLOW_STAR;
+    playSound(GAME.assets['sound/star.mp3'].clone());
   }
 });
