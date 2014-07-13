@@ -1055,7 +1055,11 @@ var LANGUAGE = {
     pipeDirectionUpper:"上に発射",
     pipeDirectionLefter:"左に発射",
     pipeDirectionRighter:"右に発射",
-    pipeDirectionDowner:"下に発射"
+    pipeDirectionDowner:"下に発射",
+    postStartNoneError:"スタートが置かれていないステージは投稿できません",
+    postGoalNoneError:"ゴールが置かれていないステージは投稿できません",
+    postPipeError:"ワープオブジェクトは対となる出口が設定されていないと投稿できません",
+    postStarManyError: "星が３つ置いてないステージは投稿できません"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -1095,7 +1099,11 @@ var LANGUAGE = {
     pipeDirectionUpper:"turn up shoot",
     pipeDirectionLefter:"turn left shoot",
     pipeDirectionRighter:"turn right shoot",
-    pipeDirectionDowner:"turn down shoot"
+    pipeDirectionDowner:"turn down shoot",
+    postStartNoneError:"You should put Start Object!",
+    postGoalNoneError:"You should put Goal Object!",
+    postPipeError:"Please check Warp Object's exit",
+    postStarManyError: "You should put three Stars!"
   }
 }
 
@@ -2252,19 +2260,34 @@ function createStageEditScene(){
   redInk.y = 670;
   stageEditScene.addChild(redInk);
 
+  var greenInk = new BlockInk('green');
+  greenInk.x = 170;
+  greenInk.y = 670;
+  stageEditScene.addChild(greenInk);
+
+  var orangeInk = new BlockInk('orange');
+  orangeInk.x = 250;
+  orangeInk.y = 670;
+  stageEditScene.addChild(orangeInk);
+
+  var purpleInk = new BlockInk('purple');
+  purpleInk.x = 330;
+  purpleInk.y = 670;
+  stageEditScene.addChild(purpleInk);
+
   var startInk = new BlockInk('start');
   startInk.x = 170;
-  startInk.y = 670;
+  startInk.y = 750;
   stageEditScene.addChild(startInk);
 
   var slanterInk = new SlanterInk('green');
   slanterInk.x = 250;
-  slanterInk.y = 670;
+  slanterInk.y = 750;
   stageEditScene.addChild(slanterInk);
 
   var diffusionerInk = new DiffusionerInk();
   diffusionerInk.x = 330;
-  diffusionerInk.y = 670;
+  diffusionerInk.y = 750;
   stageEditScene.addChild(diffusionerInk);
 
   var pipeInk = new PipeInk('blue');
@@ -2289,11 +2312,8 @@ function createStageEditScene(){
   pipeColorButton.y = 750;
   stageEditScene.addChild(pipeColorButton);
 
-  //送信ボタン
-  var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);
-  sendButton.on('touchend',function(){
-    makeJSON(creater.stages);
-  });
+  //送信ボタン クラス化
+  var sendButton = new SendButton(LANGUAGE[COUNTRYCODE].post);
   sendButton.x = 510;
   sendButton.y = 700;
   stageEditScene.addChild(sendButton);
@@ -3767,6 +3787,7 @@ var EditBox = Class.create(Box,{
       creater.startObj = start;
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "start";
+      creater.startPos = {x: this.xId, y:this.yId};
       return start;
   },
   putSlanter: function putSlanter(){
@@ -3791,19 +3812,12 @@ var EditBox = Class.create(Box,{
     if(pipeErrorFlg){
       return;
     }
-//    for (pipeColor in pipeManager.pipeStatus){
-//      if(pipeColor == color){
-//        if(pipeManager.pipeStatus[pipeColor] == "parentPut" || pipeManager.pipeStatus[pipeColor] == "childPut" ){
-//          //アラートでもならそうか
-//          this.pipeErrorFlg = true;
-//          return;
-//        }
-//      }
-//    }
     var parentPipe = new EditPipe(color);
 
     creater.currentStage.push(parentPipe);
-    creater.stages[this.xId][this.yId] = "pipe";
+    creater.stages[this.xId][this.yId] = {name:"pipe",color:"blue"};
+    pipeManager.pipeEntity[color].parent.x = this.xId;
+    pipeManager.pipeEntity[color].parent.y = this.yId;
     pipeManager.pipeStatus[color] = "parentPut";
     creater.penColor = "childPipe";
 
@@ -3818,10 +3832,16 @@ var EditBox = Class.create(Box,{
       var color = creater.pipeColor;
       var childPipe = new EditChildPipe(color);
 
-      //createrに登録
-      creater.stages[this.xId][this.yId] = "pipeOut";
+      //createrに登録 正直pipeマネージャーで管理しているのでクリエイターに登録しなくてよい
+//      creater.stages[this.xId][this.yId] = "pipeOut";
+      //自分にもxId yIdtouroku
+      childPipe.xId = this.xId;
+      childPipe.yId = this.yId;
+
       //pipemanagerに登録
-      pipeManager.pipeStatus[color] = "childPut";
+      pipeManager.pipeStatus[color] = "noneDirection";
+      pipeManager.pipeEntity[color].child.x = this.xId;
+      pipeManager.pipeEntity[color].child.y = this.yId;
       pipeManager.childPipe[color] = void 0;
       //なんでこここれでアクセスできんのやろ
       //console.log(pipeManager.childPipe[color]);
@@ -3863,7 +3883,7 @@ var EditBox = Class.create(Box,{
     var goal = new EditGoal();
     creater.currentStage.push(goal);
     //TODO 上書き機能
-    creater.stages[this.xId][this.yId] = goal.color;
+    creater.stages[this.xId][this.yId] = "goal";
     creater.goalFlg = true;
     return goal;
   },
@@ -3920,7 +3940,7 @@ var EditBox = Class.create(Box,{
       obj = new EditBlock(penColor);
       creater.currentStage.push(obj);
       //TODO 上書き機能
-      //creater.stages[this.xId][this.yId] = obj.color;
+      creater.stages[this.xId][this.yId] = obj.color;
     }
 
     obj.x = this.x;
@@ -3957,6 +3977,12 @@ var BlockInk = Class.create(Block,{
     this._element.className = color;
 
     this.color = color;
+
+    if(this.color === 'orange'){
+      this.image = ORANGE;
+    } else if(this.color === 'purple'){
+      this.image = PURPLE;
+    }
   },
   ontouchstart: function(){
     creater.penColor = this.color;
@@ -3980,15 +4006,53 @@ var Creater =  function(color){
   this.putStartFlg = false;
   this.goalFlg = null;
   this.starMany = 0;
+  this.startPos = {};
 
   //これで実行のcurrentStage管理
   this.currentStage = new Array(10);
 }
 
 function makeJSON(stages){
-  console.log(stages);
   var json = JSON.stringify(stages);
   console.log(json);
+
+  //実際にステージで使われる配列
+  var objJSONArray = [];
+  //startをはじめに登録する
+  var startObjJSON = {x:creater.startPos.x,y:creater.startPos.y,name: "start"};
+  objJSONArray[0] = startObjJSON;
+
+  var objJSON = {};
+  //パイプ用一時データ
+  var pipeParentTmpObj = {};
+  var pipeChildTmpObj = {};
+
+  for (var xNum = 0 ; xNum < 10 ; xNum++){
+    for (var yNum = 0 ; yNum < 10 ; yNum++){
+      //xId,yidの場所に何もなかったら無視する
+      if(stages[xNum][yNum]){
+        //スタートだった場合は最初に登録してあるので無視する
+        if(stages[xNum][yNum] != "start"){
+          if( stages[xNum][yNum].name == "pipe"){
+            //親パイプだった場合に子パイプも整形する
+            var thePipeEntity = pipeManager.pipeEntity;
+            var theColor = stages[xNum][yNum].color;
+            pipeParentTmpObj = { x:thePipeEntity[theColor].parent.x, y:thePipeEntity[theColor].parent.y , color:theColor };
+            pipeChildTmpObj = { x:thePipeEntity[theColor].child.x , y:thePipeEntity[theColor].child.y, direction:thePipeEntity[theColor].child.direction };
+            //defineで使える形に直す
+            var pipeJSON = { x:pipeParentTmpObj.x, y:pipeParentTmpObj.y, name:'pipe', color:theColor, pipeStatus: { x:pipeChildTmpObj.x, y:pipeChildTmpObj.y, direction:pipeChildTmpObj.direction } };
+            objJSONArray.push(pipeJSON);
+          }else{
+            objJSON = { x:xNum, y:yNum, name:stages[xNum][yNum] };
+            objJSONArray.push(objJSON);
+          }
+        }
+      }
+    }
+  }
+
+  console.log(JSON.stringify(objJSONArray));
+ 
 }
 
 function doPost(action){
@@ -4473,6 +4537,8 @@ var EditChildPipe = Class.create(Sprite,{
     this.color = color;
     this.direction = "right";
     this.directionArrow = { up: null, right: null, left: null, down:null };
+    this.xId = -1;
+    this.yId = -1;
 
     // Beam用ステータス
     this.beamStatus = {
@@ -4543,26 +4609,64 @@ var PipeManager =  function(){
    */
   //nothing == 親も子も置いてない
   //parentPut == 親置いたけど子供置いてない
+  //noneDirection == 子供置いたけど方向設定されていない
   //childPut == 親も子供も置いた
   //それ以外はエラー
   this.pipeStatus = { "blue": "nothing", "red": "nothing", "green": "nothing" };
 
   //画面に表示されるパイプのインクオブジェクト
-  this.pipeInk = null
+  this.pipeInk = null;
+
+  //各色の親と子供xId,yIdを登録して関連づけJSON整形に役立てる
+  this.pipeEntity = {
+    blue:{
+      parent:{
+        x:null,y:null
+      },
+      child:{
+        x:null,y:null,direction:null
+      }
+    },
+    red:{
+      parent:{
+        x:null,y:null
+      },
+      child:{
+        x:null,y:null,direction:null
+      }
+    },
+    green:{
+      parent:{
+        x:null,y:null
+      },
+      child:{
+        x:null,y:null,direction:null
+      }
+    }
+  }
 
   //各子供パイプのオブジェクトをマネージャーに持たせて参照させる
   this.childPipe = { "blue": null, "red": null ,"green": null };
 
+  //指定した色がエラー起きてるかどうか
   this.getPipeErrorFlg = function getPipeErrorFlg(color){
     for (pipeColor in this.pipeStatus){
       if(pipeColor == color){
-        if(this.pipeStatus[pipeColor] == "parentPut" || this.pipeStatus[pipeColor] == "childPut" ){
-          //アラートでもならそうか
+        if(this.pipeStatus[pipeColor] == "parentPut" || this.pipeStatus[pipeColor] == "noneDirection" ){
           return true;
         }
       }
     }
+    return false;
+  };
 
+  //どっかであり得ないパターンがあるかどうか
+  this.getPipeAnyError = function getPipeErrorFlg(){
+    for (pipeColor in this.pipeStatus){
+      if(this.pipeStatus[pipeColor] == "parentPut" || this.pipeStatus[pipeColor] == "noneDirection" ){
+        return true;
+      }
+    }
     return false;
   };
 }
@@ -4599,6 +4703,11 @@ var PipeDirectionArrow = Class.create(ExLabel,{
     }
     theChildPipe.direction = this.direction;
     theChildPipe._element.className = 'pipeOut ' + this.direction;
+    //CreatertのstagesにDhirection追加 (JSON用)
+    creater.stages[theChildPipe.xId][theChildPipe.yId] = { name:"pipeOut", direction:this.direction.toString() };
+    pipeManager.pipeStatus[this.color] = "childPut";
+    pipeManager.pipeEntity[this.color].child.direction = this.direction.toString();
+
     //direction設定したらけし
     GAME.currentScene.removeChild(theChildPipe.directionArrow.up);
     GAME.currentScene.removeChild(theChildPipe.directionArrow.left);
@@ -4700,5 +4809,42 @@ var EditStar = Class.create(Sprite,{
     });
     this.image = YELLOW_STAR;
     playSound(GAME.assets['sound/star.mp3'].clone());
+  }
+});
+
+var SendButton = Class.create(Sprite,{
+  initialize: function(text,w,h){
+    var width = w || 640;
+    var height = h || 64;
+    Sprite.call(this,width,height);
+
+    this._element = document.createElement('div');
+    this._element.innerHTML = text;
+  },
+  setClassName: function(className){
+    this._element.className = className;
+  },
+  ontouchend: function sendJSON(){
+    //スタートがないとだめ
+    if(creater.startObj == null){
+      alert(LANGUAGE[COUNTRYCODE].postStartNoneError);
+      return;
+    }else if(creater.goalFlg == null){
+      //ゴールがないとだめ
+      alert(LANGUAGE[COUNTRYCODE].postGoalNoneError);
+      return;
+    }else if(creater.starMany < 3){
+      //星みっつ置いてないといけない
+      alert(LANGUAGE[COUNTRYCODE].postStarManyError);
+      return;
+    }
+ 
+    if(pipeManager.getPipeAnyError()){
+      //パイプであり得ない状況があるかどうか
+      alert(LANGUAGE[COUNTRYCODE].postPipeError);
+      return;
+    }
+ 
+    makeJSON(creater.stages);
   }
 });

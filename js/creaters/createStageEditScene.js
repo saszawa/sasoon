@@ -49,19 +49,34 @@ function createStageEditScene(){
   redInk.y = 670;
   stageEditScene.addChild(redInk);
 
+  var greenInk = new BlockInk('green');
+  greenInk.x = 170;
+  greenInk.y = 670;
+  stageEditScene.addChild(greenInk);
+
+  var orangeInk = new BlockInk('orange');
+  orangeInk.x = 250;
+  orangeInk.y = 670;
+  stageEditScene.addChild(orangeInk);
+
+  var purpleInk = new BlockInk('purple');
+  purpleInk.x = 330;
+  purpleInk.y = 670;
+  stageEditScene.addChild(purpleInk);
+
   var startInk = new BlockInk('start');
   startInk.x = 170;
-  startInk.y = 670;
+  startInk.y = 750;
   stageEditScene.addChild(startInk);
 
   var slanterInk = new SlanterInk('green');
   slanterInk.x = 250;
-  slanterInk.y = 670;
+  slanterInk.y = 750;
   stageEditScene.addChild(slanterInk);
 
   var diffusionerInk = new DiffusionerInk();
   diffusionerInk.x = 330;
-  diffusionerInk.y = 670;
+  diffusionerInk.y = 750;
   stageEditScene.addChild(diffusionerInk);
 
   var pipeInk = new PipeInk('blue');
@@ -86,11 +101,8 @@ function createStageEditScene(){
   pipeColorButton.y = 750;
   stageEditScene.addChild(pipeColorButton);
 
-  //送信ボタン
-  var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);
-  sendButton.on('touchend',function(){
-    makeJSON(creater.stages);
-  });
+  //送信ボタン クラス化
+  var sendButton = new SendButton(LANGUAGE[COUNTRYCODE].post);
   sendButton.x = 510;
   sendButton.y = 700;
   stageEditScene.addChild(sendButton);

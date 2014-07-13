@@ -7,6 +7,12 @@ var BlockInk = Class.create(Block,{
     this._element.className = color;
 
     this.color = color;
+
+    if(this.color === 'orange'){
+      this.image = ORANGE;
+    } else if(this.color === 'purple'){
+      this.image = PURPLE;
+    }
   },
   ontouchstart: function(){
     creater.penColor = this.color;

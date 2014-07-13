@@ -62,7 +62,8 @@ module.exports = function(grunt) {
           'js/stageedit/EditGoal.js',
           'js/stageedit/GoalInk.js',
           'js/stageedit/StarInk.js',
-          'js/stageedit/EditStar.js'
+          'js/stageedit/EditStar.js',
+          'js/stageedit/SendButton.js'
         ],
         dest: 'js/game.js'
       }

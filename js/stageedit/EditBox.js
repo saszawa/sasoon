@@ -26,6 +26,7 @@ var EditBox = Class.create(Box,{
       creater.startObj = start;
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "start";
+      creater.startPos = {x: this.xId, y:this.yId};
       return start;
   },
   putSlanter: function putSlanter(){
@@ -50,19 +51,12 @@ var EditBox = Class.create(Box,{
     if(pipeErrorFlg){
       return;
     }
-//    for (pipeColor in pipeManager.pipeStatus){
-//      if(pipeColor == color){
-//        if(pipeManager.pipeStatus[pipeColor] == "parentPut" || pipeManager.pipeStatus[pipeColor] == "childPut" ){
-//          //アラートでもならそうか
-//          this.pipeErrorFlg = true;
-//          return;
-//        }
-//      }
-//    }
     var parentPipe = new EditPipe(color);
 
     creater.currentStage.push(parentPipe);
-    creater.stages[this.xId][this.yId] = "pipe";
+    creater.stages[this.xId][this.yId] = {name:"pipe",color:"blue"};
+    pipeManager.pipeEntity[color].parent.x = this.xId;
+    pipeManager.pipeEntity[color].parent.y = this.yId;
     pipeManager.pipeStatus[color] = "parentPut";
     creater.penColor = "childPipe";
 
@@ -77,10 +71,16 @@ var EditBox = Class.create(Box,{
       var color = creater.pipeColor;
       var childPipe = new EditChildPipe(color);
 
-      //createrに登録
-      creater.stages[this.xId][this.yId] = "pipeOut";
+      //createrに登録 正直pipeマネージャーで管理しているのでクリエイターに登録しなくてよい
+//      creater.stages[this.xId][this.yId] = "pipeOut";
+      //自分にもxId yIdtouroku
+      childPipe.xId = this.xId;
+      childPipe.yId = this.yId;
+
       //pipemanagerに登録
-      pipeManager.pipeStatus[color] = "childPut";
+      pipeManager.pipeStatus[color] = "noneDirection";
+      pipeManager.pipeEntity[color].child.x = this.xId;
+      pipeManager.pipeEntity[color].child.y = this.yId;
       pipeManager.childPipe[color] = void 0;
       //なんでこここれでアクセスできんのやろ
       //console.log(pipeManager.childPipe[color]);
@@ -122,7 +122,7 @@ var EditBox = Class.create(Box,{
     var goal = new EditGoal();
     creater.currentStage.push(goal);
     //TODO 上書き機能
-    creater.stages[this.xId][this.yId] = goal.color;
+    creater.stages[this.xId][this.yId] = "goal";
     creater.goalFlg = true;
     return goal;
   },
@@ -179,7 +179,7 @@ var EditBox = Class.create(Box,{
       obj = new EditBlock(penColor);
       creater.currentStage.push(obj);
       //TODO 上書き機能
-      //creater.stages[this.xId][this.yId] = obj.color;
+      creater.stages[this.xId][this.yId] = obj.color;
     }
 
     obj.x = this.x;

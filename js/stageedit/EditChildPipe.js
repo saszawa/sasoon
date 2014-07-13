@@ -8,6 +8,8 @@ var EditChildPipe = Class.create(Sprite,{
     this.color = color;
     this.direction = "right";
     this.directionArrow = { up: null, right: null, left: null, down:null };
+    this.xId = -1;
+    this.yId = -1;
 
     // Beam用ステータス
     this.beamStatus = {

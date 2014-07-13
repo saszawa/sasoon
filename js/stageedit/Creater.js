@@ -15,6 +15,7 @@ var Creater =  function(color){
   this.putStartFlg = false;
   this.goalFlg = null;
   this.starMany = 0;
+  this.startPos = {};
 
   //これで実行のcurrentStage管理
   this.currentStage = new Array(10);
