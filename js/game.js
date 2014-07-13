@@ -1049,7 +1049,7 @@ var LANGUAGE = {
     backToTop:"TOPへ戻る",
     volumeOption:"音量",
     stageEdit:"ステージを作る",
-    post:"投稿する",
+    post:"投稿",
     testplay:"試す",
     pipeColorButton:"色を変える",
     pipeDirectionUpper:"上に発射",
@@ -2141,35 +2141,35 @@ function createSelectScene(){
 
     var row = 1.5;
     var column = 0
-			for(var i = 0,x=0,y=1.5 ;i < STAGES.length ;i++){
+    for(var i = 0,x=0,y=1.5 ;i < STAGES.length ;i++){
 
-				var star = 0;
-				var isLock = true;
-				var className = 'stageBox lock';
-				if(userData.length > i){
-					star = userData[i];
-					className ='stageBox';
-					isLock = false;
-				}else if(userData.length === i){
-					className ='stageBox nextStage';
-					isLock = false;
-				}
+      var star = 0;
+      var isLock = true;
+      var className = 'stageBox lock';
+      if(userData.length > i){
+        star = userData[i];
+        className ='stageBox';
+        isLock = false;
+      }else if(userData.length === i){
+        className ='stageBox nextStage';
+        isLock = false;
+      }
 
-				var stageBox = new StageBox(i,star,isLock);
-				stageBox._element.className = className;
-				stageBox.x = BOX_SIZE/4+x*BOX_SIZE*2.5;
-				stageBox.y = y*BOX_SIZE*1.25;
-				stageGroup.addChild(stageBox);
-				stageBoxes.push(stageBox);
+      var stageBox = new StageBox(i,star,isLock);
+      stageBox._element.className = className;
+      stageBox.x = BOX_SIZE/4+x*BOX_SIZE*2.5;
+      stageBox.y = y*BOX_SIZE*1.25;
+      stageGroup.addChild(stageBox);
+      stageBoxes.push(stageBox);
 
-				x++;
-				if(x===4){x = 0;}
-				if(i%4 === 3){y += 2;}
+      x++;
+      if(x===4){x = 0;}
+      if(i%4 === 3){y += 2;}
 
-				column = x;
-				row = y;
+      column = x;
+      row = y;
 
-			}
+    }
 
     var selectLabel = new ExLabel('STAGE SELECT',640,110);
     selectLabel.setClassName('stageSelectText');
@@ -2307,21 +2307,24 @@ function createStageEditScene(){
   starInk.y = 750;
   stageEditScene.addChild(starInk);
 
-  var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
-  pipeColorButton.x = 410;
-  pipeColorButton.y = 750;
-  stageEditScene.addChild(pipeColorButton);
+  //TODO 後ほど実装
+//  var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
+//  pipeColorButton.x = 410;
+//  pipeColorButton.y = 750;
+//  stageEditScene.addChild(pipeColorButton);
 
   //送信ボタン クラス化
-  var sendButton = new SendButton(LANGUAGE[COUNTRYCODE].post);
-  sendButton.x = 510;
+  var sendButton = new SendButton(LANGUAGE[COUNTRYCODE].post,54,64);
+  sendButton.x = 495;
   sendButton.y = 700;
+  sendButton.setClassName('edit_button');
   stageEditScene.addChild(sendButton);
 
   //動きを確かめるボタン
   var testPlayButton = new TestPlayButton(LANGUAGE[COUNTRYCODE].testplay);
-  testPlayButton.x = 600;
+  testPlayButton.x = 567;
   testPlayButton.y = 700;
+  testPlayButton.setClassName('edit_button');
   stageEditScene.addChild(testPlayButton);
 
 //  stageEditScene.addChild(optionMenuButton);
@@ -2330,29 +2333,29 @@ function createStageEditScene(){
 }
 
 var StageGroup = Class.create(Group,{
-	initialize: function(){
-		Group.call(this);
-		this._element = document.createElement('div');
-	},
-	onaddedtoscene: function(){
-		var that = this;
+  initialize: function(){
+    Group.call(this);
+    this._element = document.createElement('div');
+  },
+  onaddedtoscene: function(){
+    var that = this;
 
     var backToTop = createBacktoTopLabel();
-		backToTop.on('touchend',function(){
+    backToTop.on('touchend',function(){
 
-			// 子ノードを削除して遷移
-			that.parentNode.backToTop();
-			var sceneChild = that.parentNode.childNodes.length;
-			for(var i = 0 ; i < sceneChild;i++){
-				that.parentNode.removeChild(that.childNodes[sceneChild-i-1]);
-			}
-		});
+      // 子ノードを削除して遷移
+      that.parentNode.backToTop();
+      var sceneChild = that.parentNode.childNodes.length;
+      for(var i = 0 ; i < sceneChild;i++){
+        that.parentNode.removeChild(that.childNodes[sceneChild-i-1]);
+      }
+    });
 
-		this.parentNode.addChild(backToTop);
+    this.parentNode.addChild(backToTop);
 
-		var playerStar = createPlayerStatus(userData);
-		this.parentNode.addChild(playerStar);
-	}
+    var playerStar = createPlayerStatus(userData);
+    this.parentNode.addChild(playerStar);
+  }
 });
 
 var StageBox = Class.create(Sprite,{

@@ -96,21 +96,24 @@ function createStageEditScene(){
   starInk.y = 750;
   stageEditScene.addChild(starInk);
 
-  var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
-  pipeColorButton.x = 410;
-  pipeColorButton.y = 750;
-  stageEditScene.addChild(pipeColorButton);
+  //TODO 後ほど実装
+//  var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
+//  pipeColorButton.x = 410;
+//  pipeColorButton.y = 750;
+//  stageEditScene.addChild(pipeColorButton);
 
   //送信ボタン クラス化
-  var sendButton = new SendButton(LANGUAGE[COUNTRYCODE].post);
-  sendButton.x = 510;
+  var sendButton = new SendButton(LANGUAGE[COUNTRYCODE].post,54,64);
+  sendButton.x = 495;
   sendButton.y = 700;
+  sendButton.setClassName('edit_button');
   stageEditScene.addChild(sendButton);
 
   //動きを確かめるボタン
   var testPlayButton = new TestPlayButton(LANGUAGE[COUNTRYCODE].testplay);
-  testPlayButton.x = 600;
+  testPlayButton.x = 567;
   testPlayButton.y = 700;
+  testPlayButton.setClassName('edit_button');
   stageEditScene.addChild(testPlayButton);
 
 //  stageEditScene.addChild(optionMenuButton);

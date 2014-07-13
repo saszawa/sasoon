@@ -33,35 +33,35 @@ function createSelectScene(){
 
     var row = 1.5;
     var column = 0
-			for(var i = 0,x=0,y=1.5 ;i < STAGES.length ;i++){
+    for(var i = 0,x=0,y=1.5 ;i < STAGES.length ;i++){
 
-				var star = 0;
-				var isLock = true;
-				var className = 'stageBox lock';
-				if(userData.length > i){
-					star = userData[i];
-					className ='stageBox';
-					isLock = false;
-				}else if(userData.length === i){
-					className ='stageBox nextStage';
-					isLock = false;
-				}
+      var star = 0;
+      var isLock = true;
+      var className = 'stageBox lock';
+      if(userData.length > i){
+        star = userData[i];
+        className ='stageBox';
+        isLock = false;
+      }else if(userData.length === i){
+        className ='stageBox nextStage';
+        isLock = false;
+      }
 
-				var stageBox = new StageBox(i,star,isLock);
-				stageBox._element.className = className;
-				stageBox.x = BOX_SIZE/4+x*BOX_SIZE*2.5;
-				stageBox.y = y*BOX_SIZE*1.25;
-				stageGroup.addChild(stageBox);
-				stageBoxes.push(stageBox);
+      var stageBox = new StageBox(i,star,isLock);
+      stageBox._element.className = className;
+      stageBox.x = BOX_SIZE/4+x*BOX_SIZE*2.5;
+      stageBox.y = y*BOX_SIZE*1.25;
+      stageGroup.addChild(stageBox);
+      stageBoxes.push(stageBox);
 
-				x++;
-				if(x===4){x = 0;}
-				if(i%4 === 3){y += 2;}
+      x++;
+      if(x===4){x = 0;}
+      if(i%4 === 3){y += 2;}
 
-				column = x;
-				row = y;
+      column = x;
+      row = y;
 
-			}
+    }
 
     var selectLabel = new ExLabel('STAGE SELECT',640,110);
     selectLabel.setClassName('stageSelectText');

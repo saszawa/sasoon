@@ -461,3 +461,14 @@ div.pointerArrow:after {
 div.edit_underline {
   border-bottom: solid 1px #ddd;
 }
+
+/* line 446, ../scss/gameStyle.scss */
+div.edit_button {
+  text-align: center;
+  font-size: 15px;
+  line-height: 54px;
+  background: rgba(236, 240, 241, 0.8);
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: solid 5px rgba(56, 181, 254, 0.5);
+}

@@ -31,7 +31,7 @@ var LANGUAGE = {
     backToTop:"TOPへ戻る",
     volumeOption:"音量",
     stageEdit:"ステージを作る",
-    post:"投稿する",
+    post:"投稿",
     testplay:"試す",
     pipeColorButton:"色を変える",
     pipeDirectionUpper:"上に発射",
