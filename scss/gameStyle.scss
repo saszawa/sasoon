@@ -114,6 +114,15 @@ div.tutorial{
   background: rgba($col-white,0.9);
   z-index:9997 !important;
 }
+div.stageEdit{
+  font-size: 40px;
+  line-height: 60px;
+  text-align: center;
+  border-radius: 10px;
+  color: $col-green;
+  background: rgba($col-white,0.9);
+  z-index:9997 !important;
+}
 div.optionLayer{
   z-index: 9999;
   font-size: 64px;
@@ -443,3 +452,12 @@ div.edit_underline{
   border-bottom: solid 1px #ddd;
 }
 
+div.edit_button{
+  text-align: center;
+  font-size: 15px;
+  line-height: 54px;
+  background: rgba($col-white,0.8);
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: solid 5px rgba($col-blue,0.5);
+}

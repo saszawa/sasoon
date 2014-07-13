@@ -15,6 +15,7 @@ function createTitleScene(){
     titleScene.addChild(gameStartLabel);
     titleScene.addChild(tutorialLabel);
     titleScene.addChild(optionMenuButton);
+    titleScene.addChild(stageEditLabel);
   });
 
   var titleBackAnim = new TitleBackAnim();
@@ -70,7 +71,6 @@ function createTitleScene(){
   stageEditLabel.on('touchend',function(){
     GAME.replaceScene(stageEditScene);
   });
-  titleScene.addChild(stageEditLabel);
 
   var optionMenuButton = createOptionMenuButton();
   var optionMenu = createOptionMenu();

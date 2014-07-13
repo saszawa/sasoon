@@ -31,13 +31,17 @@ var LANGUAGE = {
     backToTop:"TOPへ戻る",
     volumeOption:"音量",
     stageEdit:"ステージを作る",
-    post:"投稿する",
+    post:"投稿",
     testplay:"試す",
     pipeColorButton:"色を変える",
     pipeDirectionUpper:"上に発射",
     pipeDirectionLefter:"左に発射",
     pipeDirectionRighter:"右に発射",
-    pipeDirectionDowner:"下に発射"
+    pipeDirectionDowner:"下に発射",
+    postStartNoneError:"スタートが置かれていないステージは投稿できません",
+    postGoalNoneError:"ゴールが置かれていないステージは投稿できません",
+    postPipeError:"ワープオブジェクトは対となる出口が設定されていないと投稿できません",
+    postStarManyError: "星が３つ置いてないステージは投稿できません"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -77,6 +81,10 @@ var LANGUAGE = {
     pipeDirectionUpper:"turn up shoot",
     pipeDirectionLefter:"turn left shoot",
     pipeDirectionRighter:"turn right shoot",
-    pipeDirectionDowner:"turn down shoot"
+    pipeDirectionDowner:"turn down shoot",
+    postStartNoneError:"You should put Start Object!",
+    postGoalNoneError:"You should put Goal Object!",
+    postPipeError:"Please check Warp Object's exit",
+    postStarManyError: "You should put three Stars!"
   }
 }

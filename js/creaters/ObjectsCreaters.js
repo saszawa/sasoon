@@ -624,10 +624,10 @@ function createSurfaces(){
 }
 //タイトルのステージ選択ラベル
 function createStageEditLabel(){
-  var stageEditLabel = new ExLabel(LANGUAGE[COUNTRYCODE].stageEdit);
-  stageEditLabel.setClassName('stageEditLabel');
-  stageEditLabel.x = 90;
-  stageEditLabel.y = 560;
+  var stageEditLabel = new ExLabel(LANGUAGE[COUNTRYCODE].stageEdit,320,60);
+  stageEditLabel.setClassName("stageEdit");
+  stageEditLabel.x = 160;
+  stageEditLabel.y = 520;
 
   return stageEditLabel;
 }
