@@ -8,6 +8,10 @@ var EditDiffusioner = Class.create(Diffusioner,{
     // 倍の早さ
     var movePx = MOVE_PX*2;
 
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
     this.beamStatus = {
       top:      {moveX: 0        ,moveY: -movePx},
       topRight: {moveX: movePx   ,moveY: -movePx},

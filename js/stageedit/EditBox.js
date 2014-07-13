@@ -14,6 +14,7 @@ var EditBox = Class.create(Box,{
     //idを降ってステージ作成に活かす
     this.xId = xNumber;
     this.yId = yNumber;
+    this.startObjFlg = false;
   },
   putStart: function putStart(){
       //スタートは一個しか置けない用にする
@@ -23,6 +24,9 @@ var EditBox = Class.create(Box,{
       var start = new EditStart();
       //クリエイターがみんなから見えるので色々持たす
       creater.putStartFlg = true;
+      //nonecollisionstagesに追加しないように判定用
+      this.startObjFlg = true;
+      creater.startObj = void 0;
       creater.startObj = start;
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "start";
@@ -85,6 +89,7 @@ var EditBox = Class.create(Box,{
       //なんでこここれでアクセスできんのやろ
       //console.log(pipeManager.childPipe[color]);
 
+      //色を変える
       //こことか循環リストまわした方が気持ちいいんだけど打ち止めさせたいからいいか
       switch(color)
       {
@@ -184,6 +189,14 @@ var EditBox = Class.create(Box,{
 
     obj.x = this.x;
     obj.y = this.y;
+    //戻すようにxId,yIdを持たせる
+    obj.xId = this.xId;
+    obj.yId = this.yId;
+    //戻す用
+    //startはcreater.startobjにまかす
+    if(!this.startObjFlg){
+      creater.noneCollisionStages.push(obj);
+    }
     this.parentNode.addChild(obj);
   },
   ontouchmove: function(e){

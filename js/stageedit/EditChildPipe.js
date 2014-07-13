@@ -8,8 +8,10 @@ var EditChildPipe = Class.create(Sprite,{
     this.color = color;
     this.direction = "right";
     this.directionArrow = { up: null, right: null, left: null, down:null };
+
     this.xId = -1;
     this.yId = -1;
+    this.restoreFlg = false;
 
     // Beam用ステータス
     this.beamStatus = {
@@ -32,29 +34,32 @@ var EditChildPipe = Class.create(Sprite,{
     };
   },
   onaddedtoscene: function(){
-    //矢印を出現させ方向を決める
-    this.directionArrow.up = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionUpper,this.color);
-    this.directionArrow.up.x = this.x;
-    this.directionArrow.up.y = this.y - 15;
-    this.directionArrow.up.direction = "up";
-    GAME.currentScene.addChild(this.directionArrow.up);
+    //戻すボタンで作られた時をのぞく
+    if(!this.restoreFlg){
+      //矢印を出現させ方向を決める
+      this.directionArrow.up = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionUpper,this.color);
+      this.directionArrow.up.x = this.x;
+      this.directionArrow.up.y = this.y - 15;
+      this.directionArrow.up.direction = "up";
+      GAME.currentScene.addChild(this.directionArrow.up);
 
-    this.directionArrow.left = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionLefter,this.color);
-    this.directionArrow.left.x = this.x - 40;
-    this.directionArrow.left.y = this.y + 20;
-    this.directionArrow.left.direction = "left";
-    GAME.currentScene.addChild(this.directionArrow.left);
+      this.directionArrow.left = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionLefter,this.color);
+      this.directionArrow.left.x = this.x - 40;
+      this.directionArrow.left.y = this.y + 20;
+      this.directionArrow.left.direction = "left";
+      GAME.currentScene.addChild(this.directionArrow.left);
 
-    this.directionArrow.right = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionRighter,this.color);
-    this.directionArrow.right.x = this.x + 60;
-    this.directionArrow.right.y = this.y + 20;
-    this.directionArrow.right.direction = "right";
-    GAME.currentScene.addChild(this.directionArrow.right);
+      this.directionArrow.right = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionRighter,this.color);
+      this.directionArrow.right.x = this.x + 60;
+      this.directionArrow.right.y = this.y + 20;
+      this.directionArrow.right.direction = "right";
+      GAME.currentScene.addChild(this.directionArrow.right);
 
-    this.directionArrow.down = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionDowner,this.color);
-    this.directionArrow.down.x = this.x;
-    this.directionArrow.down.y = this.y + 60;
-    this.directionArrow.down.direction = "down";
-    GAME.currentScene.addChild(this.directionArrow.down);
+      this.directionArrow.down = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionDowner,this.color);
+      this.directionArrow.down.x = this.x;
+      this.directionArrow.down.y = this.y + 60;
+      this.directionArrow.down.direction = "down";
+      GAME.currentScene.addChild(this.directionArrow.down);
+    }
   }
 });

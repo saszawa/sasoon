@@ -7,6 +7,10 @@ var EditStart = Class.create(Start,{
     this._element.className = 'start';
     this.backgroundColor = COLORS.white;
 
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
     // Beam用ステータス
     this.beamStatus = {
       top:{
@@ -54,6 +58,8 @@ var EditStart = Class.create(Start,{
 
     //出したら消滅
     GAME.currentScene.removeChild(this);
-    creater.startObj = null;
+    //戻すようにとっておく
+    //creater.startObj = null;
+    creater.putStartFlg = false;
   }
 });

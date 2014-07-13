@@ -116,6 +116,7 @@ function createStageEditScene(){
   testPlayButton.setClassName('edit_button');
   stageEditScene.addChild(testPlayButton);
 
+  //戻すボタン
   var restoreButton = new RestoreButton(LANGUAGE[COUNTRYCODE].restore);
   restoreButton.x = 410;
   restoreButton.y = 750;

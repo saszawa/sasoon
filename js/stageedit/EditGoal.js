@@ -8,17 +8,19 @@ var EditGoal = Class.create(Goal,{
     this.scaleY = 0.8;
     this.distance = 1;
 
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
     this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).loop();
   },
   run: function(){
-
-    this.parentNode.removeChild(this.parentNode.retryLabel);
 
     playSound(GAME.assets['sound/goal.mp3'].clone());
 
     var that = this;
 
-    this.tl.clear().scaleTo(30,30,30);
+    this.tl.clear();
     //TODO stageからもけす
     that.parentNode.removeChild(that);
     creater.goalFlg = false;

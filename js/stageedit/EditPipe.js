@@ -6,9 +6,11 @@ var EditPipe = Class.create(Sprite,{
     this._element = document.createElement('div');
     this._element.className = 'pipe';
     this.image = PIPE_COLORS[color].pipe;
-    //パイプステータスは後でつける
-    //this.pipeStatus = pipeStatus;
     this.color = color;
+
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
 
     // Beam用ステータス
     this.beamStatus = {
