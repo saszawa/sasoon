@@ -4,6 +4,8 @@ sasoon
 http://touchbloomy.com
 左記URLのブラウザゲーム　TouchBloomy　のソースコードのリポジトリです。
 
+対応ブラウザ: GoogleChrome, Safari
+
 このリポジトリに関するお問い合わせは
 吉村　智志
 satoshi.yoshimura.so@gmail.com
