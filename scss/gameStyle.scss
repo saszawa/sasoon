@@ -114,6 +114,15 @@ div.tutorial{
   background: rgba($col-white,0.9);
   z-index:9997 !important;
 }
+div.stageEdit{
+  font-size: 40px;
+  line-height: 60px;
+  text-align: center;
+  border-radius: 10px;
+  color: $col-green;
+  background: rgba($col-white,0.9);
+  z-index:9997 !important;
+}
 div.optionLayer{
   z-index: 9999;
   font-size: 64px;

@@ -1864,10 +1864,10 @@ function createSurfaces(){
 }
 //タイトルのステージ選択ラベル
 function createStageEditLabel(){
-  var stageEditLabel = new ExLabel(LANGUAGE[COUNTRYCODE].stageEdit);
-  stageEditLabel.setClassName('stageEditLabel');
-  stageEditLabel.x = 90;
-  stageEditLabel.y = 560;
+  var stageEditLabel = new ExLabel(LANGUAGE[COUNTRYCODE].stageEdit,320,60);
+  stageEditLabel.setClassName("stageEdit");
+  stageEditLabel.x = 160;
+  stageEditLabel.y = 520;
 
   return stageEditLabel;
 }
@@ -2023,6 +2023,7 @@ function createTitleScene(){
     titleScene.addChild(gameStartLabel);
     titleScene.addChild(tutorialLabel);
     titleScene.addChild(optionMenuButton);
+    titleScene.addChild(stageEditLabel);
   });
 
   var titleBackAnim = new TitleBackAnim();
@@ -2078,7 +2079,6 @@ function createTitleScene(){
   stageEditLabel.on('touchend',function(){
     GAME.replaceScene(stageEditScene);
   });
-  titleScene.addChild(stageEditLabel);
 
   var optionMenuButton = createOptionMenuButton();
   var optionMenu = createOptionMenu();
