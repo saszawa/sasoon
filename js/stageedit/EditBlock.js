@@ -8,6 +8,10 @@ var EditBlock = Class.create(Block,{
 
     this.color = color;
 
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
     if(this.color === 'orange'){
       this.image = ORANGE;
     } else if(this.color === 'purple'){
@@ -82,6 +86,6 @@ var EditBlock = Class.create(Block,{
         break;
     }
     //	出したら消滅
-    GAME.currentScene.removeChild(this);1
+    GAME.currentScene.removeChild(this);
   }
 });

@@ -6,6 +6,10 @@ var EditSlanter = Class.create(Slanter,{
     this.image = SLANTER;
     this.rotation = 45;
 
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
     this.beamStatus = {
       topRight: {moveX: MOVE_PX  ,moveY: -MOVE_PX},
       rightDown:{moveX: MOVE_PX  ,moveY: MOVE_PX },

@@ -1059,7 +1059,8 @@ var LANGUAGE = {
     postStartNoneError:"スタートが置かれていないステージは投稿できません",
     postGoalNoneError:"ゴールが置かれていないステージは投稿できません",
     postPipeError:"ワープオブジェクトは対となる出口が設定されていないと投稿できません",
-    postStarManyError: "星が３つ置いてないステージは投稿できません"
+    postStarManyError: "星が３つ置いてないステージは投稿できません",
+    restore:"戻す"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -1103,7 +1104,8 @@ var LANGUAGE = {
     postStartNoneError:"You should put Start Object!",
     postGoalNoneError:"You should put Goal Object!",
     postPipeError:"Please check Warp Object's exit",
-    postStarManyError: "You should put three Stars!"
+    postStarManyError: "You should put three Stars!",
+    restore:"Restore"
   }
 }
 
@@ -2326,6 +2328,13 @@ function createStageEditScene(){
   testPlayButton.y = 700;
   testPlayButton.setClassName('edit_button');
   stageEditScene.addChild(testPlayButton);
+
+  //戻すボタン
+  var restoreButton = new RestoreButton(LANGUAGE[COUNTRYCODE].restore);
+  restoreButton.x = 410;
+  restoreButton.y = 750;
+  restoreButton.setClassName('edit_button');
+  stageEditScene.addChild(restoreButton);
 
 //  stageEditScene.addChild(optionMenuButton);
 
@@ -3778,6 +3787,7 @@ var EditBox = Class.create(Box,{
     //idを降ってステージ作成に活かす
     this.xId = xNumber;
     this.yId = yNumber;
+    this.startObjFlg = false;
   },
   putStart: function putStart(){
       //スタートは一個しか置けない用にする
@@ -3787,6 +3797,9 @@ var EditBox = Class.create(Box,{
       var start = new EditStart();
       //クリエイターがみんなから見えるので色々持たす
       creater.putStartFlg = true;
+      //nonecollisionstagesに追加しないように判定用
+      this.startObjFlg = true;
+      creater.startObj = void 0;
       creater.startObj = start;
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "start";
@@ -3849,6 +3862,7 @@ var EditBox = Class.create(Box,{
       //なんでこここれでアクセスできんのやろ
       //console.log(pipeManager.childPipe[color]);
 
+      //色を変える
       //こことか循環リストまわした方が気持ちいいんだけど打ち止めさせたいからいいか
       switch(color)
       {
@@ -3948,6 +3962,14 @@ var EditBox = Class.create(Box,{
 
     obj.x = this.x;
     obj.y = this.y;
+    //戻すようにxId,yIdを持たせる
+    obj.xId = this.xId;
+    obj.yId = this.yId;
+    //戻す用
+    //startはcreater.startobjにまかす
+    if(!this.startObjFlg){
+      creater.noneCollisionStages.push(obj);
+    }
     this.parentNode.addChild(obj);
   },
   ontouchmove: function(e){
@@ -3999,20 +4021,24 @@ var Creater =  function(color){
   this.stages = new Array(10);
   var that = this;
   //ステージ生成の元
-  //TODO ここをdefineのstage配列に整形できるように定義し直す
   for(var x = 0; x < 10; x++){
     that.stages[x] = new Array(10);
   }
+   
   //スタート地点を置いたフラグこれがないと実行出来ないようにする
   this.putStartFlg = false;
   this.startObj = null;
+  this.copyStartObj = null;
   this.putStartFlg = false;
   this.goalFlg = null;
   this.starMany = 0;
   this.startPos = {};
 
   //これで実行のcurrentStage管理
-  this.currentStage = new Array(10);
+  this.currentStage = new Array();
+  //実行前に戻す為の配列
+  this.noneCollisionStages = Array();
+  this.copyStage = null;
 }
 
 function makeJSON(stages){
@@ -4084,10 +4110,13 @@ var TestPlayButton = Class.create(ExLabel,{
     }
 
     //startが置いてあるかどうか
-    if(creater.startObj == null){
+    if(!creater.putStartFlg){
       return;
     }
-    creater.startObj.run(); 
+    //まずはとっておく
+    creater.copyStage = void 0;
+    creater.copyStage = creater.currentStage.concat();
+    creater.startObj.run();
   },
   setClassName: function(className){
     this._element.className = className;
@@ -4102,6 +4131,10 @@ var EditStart = Class.create(Start,{
     this._element = document.createElement('div');
     this._element.className = 'start';
     this.backgroundColor = COLORS.white;
+
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
 
     // Beam用ステータス
     this.beamStatus = {
@@ -4150,7 +4183,9 @@ var EditStart = Class.create(Start,{
 
     //出したら消滅
     GAME.currentScene.removeChild(this);
-    creater.startObj = null;
+    //戻すようにとっておく
+    //creater.startObj = null;
+    creater.putStartFlg = false;
   }
 });
 
@@ -4220,6 +4255,10 @@ var EditBlock = Class.create(Block,{
     this._element.className = color;
 
     this.color = color;
+
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
 
     if(this.color === 'orange'){
       this.image = ORANGE;
@@ -4295,7 +4334,7 @@ var EditBlock = Class.create(Block,{
         break;
     }
     //	出したら消滅
-    GAME.currentScene.removeChild(this);1
+    GAME.currentScene.removeChild(this);
   }
 });
 
@@ -4306,6 +4345,10 @@ var EditSlanter = Class.create(Slanter,{
     this._element.className = 'slanter';
     this.image = SLANTER;
     this.rotation = 45;
+
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
 
     this.beamStatus = {
       topRight: {moveX: MOVE_PX  ,moveY: -MOVE_PX},
@@ -4388,6 +4431,10 @@ var EditDiffusioner = Class.create(Diffusioner,{
     // 倍の早さ
     var movePx = MOVE_PX*2;
 
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
     this.beamStatus = {
       top:      {moveX: 0        ,moveY: -movePx},
       topRight: {moveX: movePx   ,moveY: -movePx},
@@ -4467,9 +4514,11 @@ var EditPipe = Class.create(Sprite,{
     this._element = document.createElement('div');
     this._element.className = 'pipe';
     this.image = PIPE_COLORS[color].pipe;
-    //パイプステータスは後でつける
-    //this.pipeStatus = pipeStatus;
     this.color = color;
+
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
 
     // Beam用ステータス
     this.beamStatus = {
@@ -4540,8 +4589,10 @@ var EditChildPipe = Class.create(Sprite,{
     this.color = color;
     this.direction = "right";
     this.directionArrow = { up: null, right: null, left: null, down:null };
+
     this.xId = -1;
     this.yId = -1;
+    this.restoreFlg = false;
 
     // Beam用ステータス
     this.beamStatus = {
@@ -4564,30 +4615,33 @@ var EditChildPipe = Class.create(Sprite,{
     };
   },
   onaddedtoscene: function(){
-    //矢印を出現させ方向を決める
-    this.directionArrow.up = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionUpper,this.color);
-    this.directionArrow.up.x = this.x;
-    this.directionArrow.up.y = this.y - 15;
-    this.directionArrow.up.direction = "up";
-    GAME.currentScene.addChild(this.directionArrow.up);
+    //戻すボタンで作られた時をのぞく
+    if(!this.restoreFlg){
+      //矢印を出現させ方向を決める
+      this.directionArrow.up = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionUpper,this.color);
+      this.directionArrow.up.x = this.x;
+      this.directionArrow.up.y = this.y - 15;
+      this.directionArrow.up.direction = "up";
+      GAME.currentScene.addChild(this.directionArrow.up);
 
-    this.directionArrow.left = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionLefter,this.color);
-    this.directionArrow.left.x = this.x - 40;
-    this.directionArrow.left.y = this.y + 20;
-    this.directionArrow.left.direction = "left";
-    GAME.currentScene.addChild(this.directionArrow.left);
+      this.directionArrow.left = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionLefter,this.color);
+      this.directionArrow.left.x = this.x - 40;
+      this.directionArrow.left.y = this.y + 20;
+      this.directionArrow.left.direction = "left";
+      GAME.currentScene.addChild(this.directionArrow.left);
 
-    this.directionArrow.right = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionRighter,this.color);
-    this.directionArrow.right.x = this.x + 60;
-    this.directionArrow.right.y = this.y + 20;
-    this.directionArrow.right.direction = "right";
-    GAME.currentScene.addChild(this.directionArrow.right);
+      this.directionArrow.right = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionRighter,this.color);
+      this.directionArrow.right.x = this.x + 60;
+      this.directionArrow.right.y = this.y + 20;
+      this.directionArrow.right.direction = "right";
+      GAME.currentScene.addChild(this.directionArrow.right);
 
-    this.directionArrow.down = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionDowner,this.color);
-    this.directionArrow.down.x = this.x;
-    this.directionArrow.down.y = this.y + 60;
-    this.directionArrow.down.direction = "down";
-    GAME.currentScene.addChild(this.directionArrow.down);
+      this.directionArrow.down = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionDowner,this.color);
+      this.directionArrow.down.x = this.x;
+      this.directionArrow.down.y = this.y + 60;
+      this.directionArrow.down.direction = "down";
+      GAME.currentScene.addChild(this.directionArrow.down);
+    }
   }
 });
 
@@ -4750,17 +4804,19 @@ var EditGoal = Class.create(Goal,{
     this.scaleY = 0.8;
     this.distance = 1;
 
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
     this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).loop();
   },
   run: function(){
-
-    this.parentNode.removeChild(this.parentNode.retryLabel);
 
     playSound(GAME.assets['sound/goal.mp3'].clone());
 
     var that = this;
 
-    this.tl.clear().scaleTo(30,30,30);
+    this.tl.clear();
     //TODO stageからもけす
     that.parentNode.removeChild(that);
     creater.goalFlg = false;
@@ -4802,6 +4858,11 @@ var EditStar = Class.create(Sprite,{
     this._element = document.createElement('div');
     this.image = WHITE_STAR;
     this.hited = false;
+
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
   },
   run: function(){
     var that = this;
@@ -4849,5 +4910,46 @@ var SendButton = Class.create(Sprite,{
     }
  
     makeJSON(creater.stages);
+  }
+});
+
+var RestoreButton = Class.create(ExLabel,{
+  initialize: function(text,w,h){
+    ExLabel.call(this,BOX_SIZE,BOX_SIZE);
+    var width = w || 640;
+    var height = h || 64;
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.innerHTML = text;
+  },
+  ontouchstart: function(){
+    var stageArray = creater.noneCollisionStages.concat();
+    console.log("stageArray");
+    console.log(stageArray);
+    //一度も実行されていないなら
+    if(stageArray == null){
+      return;
+    }
+    //元に戻す
+    GAME.currentScene.addChild(creater.startObj);
+    //これは戻すたびに実体が増える前に解放する
+    creater.currentStage = void 0;
+    creater.currentStage = creater.copyStage.concat();
+    
+    for(var i = 0; i < stageArray.length; i++){
+      //子パイプの方向決めオブジェクトを出さないようにする
+      //TODO ここクラス名使わずに判定したい
+      if(stageArray[i]._element.className.indexOf("pipeOut") != -1){
+        stageArray[i].restoreFlg = true;
+      }
+      GAME.currentScene.addChild(stageArray[i]);
+    }
+    
+    //スタート出来るようにする 
+    creater.putStartFlg = true;
+  },
+  setClassName: function(className){
+    this._element.className = className;
   }
 });

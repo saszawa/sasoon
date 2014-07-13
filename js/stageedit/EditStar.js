@@ -6,6 +6,11 @@ var EditStar = Class.create(Sprite,{
     this._element = document.createElement('div');
     this.image = WHITE_STAR;
     this.hited = false;
+
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
   },
   run: function(){
     var that = this;

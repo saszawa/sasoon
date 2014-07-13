@@ -19,10 +19,13 @@ var TestPlayButton = Class.create(ExLabel,{
     }
 
     //startが置いてあるかどうか
-    if(creater.startObj == null){
+    if(!creater.putStartFlg){
       return;
     }
-    creater.startObj.run(); 
+    //まずはとっておく
+    creater.copyStage = void 0;
+    creater.copyStage = creater.currentStage.concat();
+    creater.startObj.run();
   },
   setClassName: function(className){
     this._element.className = className;
