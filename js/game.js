@@ -1059,7 +1059,8 @@ var LANGUAGE = {
     postStartNoneError:"スタートが置かれていないステージは投稿できません",
     postGoalNoneError:"ゴールが置かれていないステージは投稿できません",
     postPipeError:"ワープオブジェクトは対となる出口が設定されていないと投稿できません",
-    postStarManyError: "星が３つ置いてないステージは投稿できません"
+    postStarManyError: "星が３つ置いてないステージは投稿できません",
+    restore:"戻す"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -1103,7 +1104,8 @@ var LANGUAGE = {
     postStartNoneError:"You should put Start Object!",
     postGoalNoneError:"You should put Goal Object!",
     postPipeError:"Please check Warp Object's exit",
-    postStarManyError: "You should put three Stars!"
+    postStarManyError: "You should put three Stars!",
+    restore:"Restore"
   }
 }
 
@@ -2326,6 +2328,12 @@ function createStageEditScene(){
   testPlayButton.y = 700;
   testPlayButton.setClassName('edit_button');
   stageEditScene.addChild(testPlayButton);
+
+  var restoreButton = new RestoreButton(LANGUAGE[COUNTRYCODE].restore);
+  restoreButton.x = 410;
+  restoreButton.y = 750;
+  restoreButton.setClassName('edit_button');
+  stageEditScene.addChild(restoreButton); 
 
 //  stageEditScene.addChild(optionMenuButton);
 
@@ -4849,5 +4857,24 @@ var SendButton = Class.create(Sprite,{
     }
  
     makeJSON(creater.stages);
+  }
+});
+
+var RestoreButton = Class.create(ExLabel,{
+  initialize: function(text,w,h){
+    ExLabel.call(this,BOX_SIZE,BOX_SIZE);
+    var width = w || 640;
+    var height = h || 64;
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.innerHTML = text;
+  },
+  ontouchstart: function(){
+    //startが置いてあるかどうか
+    console.log("asdasd");
+  },
+  setClassName: function(className){
+    this._element.className = className;
   }
 });

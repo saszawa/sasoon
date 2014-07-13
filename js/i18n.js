@@ -41,7 +41,8 @@ var LANGUAGE = {
     postStartNoneError:"スタートが置かれていないステージは投稿できません",
     postGoalNoneError:"ゴールが置かれていないステージは投稿できません",
     postPipeError:"ワープオブジェクトは対となる出口が設定されていないと投稿できません",
-    postStarManyError: "星が３つ置いてないステージは投稿できません"
+    postStarManyError: "星が３つ置いてないステージは投稿できません",
+    restore:"戻す"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -85,6 +86,7 @@ var LANGUAGE = {
     postStartNoneError:"You should put Start Object!",
     postGoalNoneError:"You should put Goal Object!",
     postPipeError:"Please check Warp Object's exit",
-    postStarManyError: "You should put three Stars!"
+    postStarManyError: "You should put three Stars!",
+    restore:"Restore"
   }
 }
