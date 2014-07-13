@@ -1,0 +1,14 @@
+<?php
+
+$db_name = 'TouchBloomy';
+$host_name = 'localhost';
+$dsn = "mysql:dbname={$db_name};host={$host_name}";
+$user = 'root';
+$password = '';
+
+try{
+  $pdo = new PDO($dsn, $user, $password);
+} catch (PDOException $e){
+  echo 'Connection failed:'.$e->getMessage();
+  die();
+}
