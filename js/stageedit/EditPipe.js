@@ -92,11 +92,6 @@ var EditPipe = Class.create(Sprite,{
     //消しゴム
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
-      
-      //戻れるようにコピーステージを作る
-      creater.copyStage = void 0;
-      creater.copyStage = [];
-      creater.copyStage = creater.currentStage.concat();
 
       //currentStageから消す
       for(var i = 0; i < currentStageLength; i++){

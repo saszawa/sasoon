@@ -54,8 +54,6 @@ var EditSlanter = Class.create(Slanter,{
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
       var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      creater.copyStage = void 0;
-      creater.copyStage = creater.currentStage.concat();
 
       GAME.currentScene.removeChild(this);
       //currentStageから消す

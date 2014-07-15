@@ -4299,15 +4299,13 @@ var EditStart = Class.create(Start,{
     //戻すようにとっておく
     //creater.startObj = null;
     creater.putStartFlg = false;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
     //currentScene
     //Stages
     //消しゴム
     if(creater.penColor == "eraser"){
-      creater.copyStage = void 0;
-      creater.copyStage = [];
-      creater.copyStage = creater.currentStage.concat();
       creater.putStartFlg = false;
 
       creater.stages[this.xId][this.yId] = null;
@@ -4475,8 +4473,9 @@ var EditBlock = Class.create(Block,{
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
       var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      creater.copyStage = void 0;
-      creater.copyStage = creater.currentStage.concat();
+      //これいじっちゃうと消すたびにこぴーが小さくなって見た目はあるのにデータがない感じになる
+//      creater.copyStage = void 0;
+//      creater.copyStage = creater.currentStage;
 
       //currentStageから消す
       for(var i = 0; i < currentStageLength; i++){
@@ -4551,8 +4550,6 @@ var EditSlanter = Class.create(Slanter,{
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
       var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      creater.copyStage = void 0;
-      creater.copyStage = creater.currentStage.concat();
 
       GAME.currentScene.removeChild(this);
       //currentStageから消す
@@ -4669,8 +4666,6 @@ var EditDiffusioner = Class.create(Diffusioner,{
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
       var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      creater.copyStage = void 0;
-      creater.copyStage = creater.currentStage.concat();
 
       //currentStageから消す
       for(var i = 0; i < currentStageLength; i++){
@@ -4816,11 +4811,6 @@ var EditPipe = Class.create(Sprite,{
     //消しゴム
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
-      
-      //戻れるようにコピーステージを作る
-      creater.copyStage = void 0;
-      creater.copyStage = [];
-      creater.copyStage = creater.currentStage.concat();
 
       //currentStageから消す
       for(var i = 0; i < currentStageLength; i++){
@@ -5179,8 +5169,6 @@ var EditGoal = Class.create(Goal,{
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
       var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      creater.copyStage = void 0;
-      creater.copyStage = creater.currentStage.concat();
 
       //currentStageから消す
       for(var i = 0; i < currentStageLength; i++){
@@ -5262,8 +5250,6 @@ var EditStar = Class.create(Sprite,{
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
       var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      creater.copyStage = void 0;
-      creater.copyStage = creater.currentStage.concat();
 
       //currentStageから消す
       for(var i = 0; i < currentStageLength; i++){
@@ -5331,7 +5317,6 @@ var RestoreButton = Class.create(ExLabel,{
     this._element.innerHTML = text;
   },
   ontouchstart: function(){
-    
     var stageArray = creater.noneCollisionStages.concat();
     //一度も実行さor消去されていないなら
     if(stageArray == null){
@@ -5343,6 +5328,7 @@ var RestoreButton = Class.create(ExLabel,{
       //スタート出来るようにする 
       creater.putStartFlg = true;
     }
+
     //これは戻すたびに実体が増える前に解放する
     creater.currentStage = void 0;
     creater.currentStage = creater.copyStage.concat();
@@ -5350,7 +5336,6 @@ var RestoreButton = Class.create(ExLabel,{
     var stageArrayLength = stageArray.length;
     for(var i = 0; i < stageArrayLength; i++){
       //戻す時に既に戻そうとする場所にオブジェクトがあったら
-      debugger
       if(boxManager.boxArray[stageArray[i].xId][stageArray[i].yId].putedObjFlg){
         continue;
       }
@@ -5438,6 +5423,9 @@ var EraserInk = Class.create(ExLabel,{
   },
   ontouchstart: function(){
     creater.penColor = "eraser";
+    //消すときはインク選ぶの前提
+    creater.copyStage = void 0;
+    creater.copyStage = creater.currentStage.concat();
   }
 });
 

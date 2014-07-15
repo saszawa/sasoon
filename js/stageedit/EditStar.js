@@ -33,8 +33,6 @@ var EditStar = Class.create(Sprite,{
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
       var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      creater.copyStage = void 0;
-      creater.copyStage = creater.currentStage.concat();
 
       //currentStageから消す
       for(var i = 0; i < currentStageLength; i++){
