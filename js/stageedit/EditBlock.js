@@ -100,8 +100,9 @@ var EditBlock = Class.create(Block,{
     if(creater.penColor == "eraser"){
       var currentStageLength = creater.currentStage.length;
       var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      creater.copyStage = void 0;
-      creater.copyStage = creater.currentStage.concat();
+      //これいじっちゃうと消すたびにこぴーが小さくなって見た目はあるのにデータがない感じになる
+//      creater.copyStage = void 0;
+//      creater.copyStage = creater.currentStage;
 
       //currentStageから消す
       for(var i = 0; i < currentStageLength; i++){

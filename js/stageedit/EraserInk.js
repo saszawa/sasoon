@@ -10,5 +10,8 @@ var EraserInk = Class.create(ExLabel,{
   },
   ontouchstart: function(){
     creater.penColor = "eraser";
+    //消すときはインク選ぶの前提
+    creater.copyStage = void 0;
+    creater.copyStage = creater.currentStage.concat();
   }
 });

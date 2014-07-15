@@ -61,15 +61,13 @@ var EditStart = Class.create(Start,{
     //戻すようにとっておく
     //creater.startObj = null;
     creater.putStartFlg = false;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
     //currentScene
     //Stages
     //消しゴム
     if(creater.penColor == "eraser"){
-      creater.copyStage = void 0;
-      creater.copyStage = [];
-      creater.copyStage = creater.currentStage.concat();
       creater.putStartFlg = false;
 
       creater.stages[this.xId][this.yId] = null;

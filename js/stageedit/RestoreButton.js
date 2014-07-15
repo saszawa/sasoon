@@ -9,7 +9,6 @@ var RestoreButton = Class.create(ExLabel,{
     this._element.innerHTML = text;
   },
   ontouchstart: function(){
-    
     var stageArray = creater.noneCollisionStages.concat();
     //一度も実行さor消去されていないなら
     if(stageArray == null){
@@ -21,6 +20,7 @@ var RestoreButton = Class.create(ExLabel,{
       //スタート出来るようにする 
       creater.putStartFlg = true;
     }
+
     //これは戻すたびに実体が増える前に解放する
     creater.currentStage = void 0;
     creater.currentStage = creater.copyStage.concat();
@@ -28,7 +28,6 @@ var RestoreButton = Class.create(ExLabel,{
     var stageArrayLength = stageArray.length;
     for(var i = 0; i < stageArrayLength; i++){
       //戻す時に既に戻そうとする場所にオブジェクトがあったら
-      debugger
       if(boxManager.boxArray[stageArray[i].xId][stageArray[i].yId].putedObjFlg){
         continue;
       }
