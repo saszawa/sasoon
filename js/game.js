@@ -1010,6 +1010,7 @@ var VOLUME = 1.0;
 
 var creater;
 var pipeManager;
+var boxManager;
 
 var userData;
 var stageBoxes = [];
@@ -1060,7 +1061,11 @@ var LANGUAGE = {
     postGoalNoneError:"ゴールが置かれていないステージは投稿できません",
     postPipeError:"ワープオブジェクトは対となる出口が設定されていないと投稿できません",
     postStarManyError: "星が３つ置いてないステージは投稿できません",
-    restore:"戻す"
+    restore:"戻す",
+    eraser:"消しゴム",
+    enterPipeError: "ワープオブジェクトは対となる出口が設定されていないと投稿できません",
+    enterStartError: "スタートが置かれていないステージは実行できません",
+    sameColorParentError: "既に置いてある色のワープオブジェクトは置く事が出来ません"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -1105,7 +1110,11 @@ var LANGUAGE = {
     postGoalNoneError:"You should put Goal Object!",
     postPipeError:"Please check Warp Object's exit",
     postStarManyError: "You should put three Stars!",
-    restore:"Restore"
+    restore:"Restore",
+    eraser:"Eraser",
+    enterPipeError: "Please check Warp Object's exit",
+    enterStartError: "You should put Start Object!",
+    sameColorParentError: "Cannot put same color Warp Object!"
   }
 }
 
@@ -2214,6 +2223,7 @@ function createSelectScene(){
 function createStageEditScene(){
   var stageEditScene = new Scene();
 
+  boxManager = new BoxManager();
   // ステージの初期化
   for(var i = 0; i < currentStage.length;i++){
     this.removeChild(currentStage[i]);
@@ -2227,6 +2237,7 @@ function createStageEditScene(){
       box.x = x*BOX_SIZE;
       box.y = y*BOX_SIZE;
       stageEditScene.addChild(box);
+      boxManager.boxArray[x][y] = box;
     }
   }
 
@@ -2318,14 +2329,14 @@ function createStageEditScene(){
   //送信ボタン クラス化
   var sendButton = new SendButton(LANGUAGE[COUNTRYCODE].post,54,64);
   sendButton.x = 495;
-  sendButton.y = 700;
+  sendButton.y = 670;
   sendButton.setClassName('edit_button');
   stageEditScene.addChild(sendButton);
 
   //動きを確かめるボタン
   var testPlayButton = new TestPlayButton(LANGUAGE[COUNTRYCODE].testplay);
   testPlayButton.x = 567;
-  testPlayButton.y = 700;
+  testPlayButton.y = 670;
   testPlayButton.setClassName('edit_button');
   stageEditScene.addChild(testPlayButton);
 
@@ -2335,6 +2346,14 @@ function createStageEditScene(){
   restoreButton.y = 750;
   restoreButton.setClassName('edit_button');
   stageEditScene.addChild(restoreButton);
+
+  //消しゴムインクA
+  var eraserInk = new EraserInk(LANGUAGE[COUNTRYCODE].eraser);
+  eraserInk.x = 490;
+  eraserInk.y = 750;
+  eraserInk.width = 80;
+  eraserInk.setClassName('edit_button');
+  stageEditScene.addChild(eraserInk);
 
 //  stageEditScene.addChild(optionMenuButton);
 
@@ -3788,6 +3807,9 @@ var EditBox = Class.create(Box,{
     this.xId = xNumber;
     this.yId = yNumber;
     this.startObjFlg = false;
+    //自分の上にオブジェクトが置かれているかどうか
+    this.putedObjFlg = false;
+    this.pipeNextAlreadyFlg = false;
   },
   putStart: function putStart(){
       //スタートは一個しか置けない用にする
@@ -3799,9 +3821,9 @@ var EditBox = Class.create(Box,{
       creater.putStartFlg = true;
       //nonecollisionstagesに追加しないように判定用
       this.startObjFlg = true;
+
       creater.startObj = void 0;
       creater.startObj = start;
-      //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "start";
       creater.startPos = {x: this.xId, y:this.yId};
       return start;
@@ -3809,14 +3831,12 @@ var EditBox = Class.create(Box,{
   putSlanter: function putSlanter(){
       var slanter = new EditSlanter(this.xId,this.yId);
       creater.currentStage.push(slanter);
-      //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "slanter";
       return slanter;
   },
   putDiffusioner: function putDiffusioner(){
       var diffusioner  = new EditDiffusioner();
       creater.currentStage.push(diffusioner);
-      //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "diffusioner";
       return diffusioner;
   },
@@ -3824,10 +3844,6 @@ var EditBox = Class.create(Box,{
     //親パイプのとき
     //既に同色が置いてある場合
     var color = creater.pipeColor;
-    var pipeErrorFlg = pipeManager.getPipeErrorFlg();
-    if(pipeErrorFlg){
-      return;
-    }
     var parentPipe = new EditPipe(color);
 
     creater.currentStage.push(parentPipe);
@@ -3843,14 +3859,59 @@ var EditBox = Class.create(Box,{
     GAME.currentScene.addChild(pipeManager.pipeInk);
     return parentPipe;
   },
+  //現状だと既にchildput場合にしか使わないかも
+  itaratePipeInk: function itaratePipeInk(color){
+      var chengeColor = null;
+      switch(color)
+      {
+        //青以外
+        case "blue":
+          chengeColor = "red";
+          break;
+        case "red":
+          chengeColor = "green";
+          break;
+        case "green":
+          chengeColor = "blue";
+          break;
+      }
+      GAME.currentScene.removeChild(pipeManager.pipeInk);
+      creater.pipeColor = chengeColor;
+      pipeManager.pipeInk = void 0;
+      pipeManager.pipeInk = new PipeInk(chengeColor);
+      GAME.currentScene.addChild(pipeManager.pipeInk);
+  },
+  //pipe用、速度の為にpipeManagerに書かなかった
+  getNextColor: function getNextColor(color){
+    var nextColor = null;
+    var colorArray = ["blue","red","green"];
+    var colorArrayLength = colorArray.length;
+    for(var i = 0; i < colorArrayLength; i++){
+      if( color == colorArray[i]){
+         //要素超えないように
+         if(i + 1 > colorArrayLength){
+           return; 
+         }
+         return colorArray[i + 1];
+      }
+    }
+    alert("pipe Color Error. color is not exist");
+  },
   putChildPipe: function putChildPipe(){
       //子パイプの時
       var color = creater.pipeColor;
       var childPipe = new EditChildPipe(color);
 
+      var nextColor = this.getNextColor(color);
+      //消しゴムの実装により次の色が既にある可能性がある
+      if( pipeManager.pipeStatus[nextColor] == "childPut" ){
+        //インクを次の色にする
+        this.pipeNextAlreadyFlg = true;
+      }
+
       //createrに登録 正直pipeマネージャーで管理しているのでクリエイターに登録しなくてよい
 //      creater.stages[this.xId][this.yId] = "pipeOut";
-      //自分にもxId yIdtouroku
+      //自分にもxId yId登録
       childPipe.xId = this.xId;
       childPipe.yId = this.yId;
 
@@ -3862,8 +3923,9 @@ var EditBox = Class.create(Box,{
       //なんでこここれでアクセスできんのやろ
       //console.log(pipeManager.childPipe[color]);
 
+      //色をまわす為の配列を使ってやったほうがスマートかもしれんが読みにくい
+//      var colorArray = ["blue","red","green"];
       //色を変える
-      //こことか循環リストまわした方が気持ちいいんだけど打ち止めさせたいからいいか
       switch(color)
       {
         case "blue":
@@ -3885,10 +3947,51 @@ var EditBox = Class.create(Box,{
 
       creater.penColor = "parentPipe";
 
-      GAME.currentScene.removeChild(pipeManager.pipeInk);
-      pipeManager.pipeInk = void 0;
-      pipeManager.pipeInk = new PipeInk(color);
-      GAME.currentScene.addChild(pipeManager.pipeInk);
+      //消しゴムの存在により、確定で子供のつぎに次の色の親がくる訳じゃなくなった。
+      //なので、pipeEntityを確認してインクを変える
+      //条件　
+      //　次色の親が残ってる場合
+      //　次色が二つともない場合　＝＞　今まで通り
+      //　次色が二つともある場合　＝＞　さらにつぎの色へ
+      //二つともある場合
+      if(pipeManager.pipeEntity[color].child.x != null){
+        switch(color)
+        {
+          //青以外
+          case "blue":
+            color = "green";
+            creater.pipeColor = "green";
+          break;
+          case "red":
+            color = "blue";
+            creater.pipeColor = "blue";
+          break;
+          case "green":
+            color = "red";
+            creater.pipeColor = "red";
+          break;
+        }
+      }
+      //TODO 次色の親だけが残っている場合
+ //     if(pipeManager.pipeEntity[color].child.x == null && pipeManager.pipeEntity[color].parent.x != null){
+
+ //     }
+      if(this.pipeNextAlreadyFlg){
+        this.itaratePipeInk(nextColor);
+      }else{
+        GAME.currentScene.removeChild(pipeManager.pipeInk);
+        pipeManager.pipeInk = void 0;
+        pipeManager.pipeInk = new PipeInk(color);
+        GAME.currentScene.addChild(pipeManager.pipeInk);
+      }
+      //使ってない色のインクにかえるこれ合ったら上のいらん可能性たかい
+      var unUsedColor = pipeManager.getUnusedColor();
+      if(unUsedColor){
+        GAME.currentScene.removeChild(pipeManager.pipeInk);
+        pipeManager.pipeInk = void 0 
+        pipeManager.pipeInk = new PipeInk(unUsedColor);
+        GAME.currentScene.addChild(pipeManager.pipeInk);
+      } 
 
       return childPipe;
   },
@@ -3913,7 +4016,11 @@ var EditBox = Class.create(Box,{
     return star;
   },
   ontouchstart: function(e){
-    //スタートがすでに置かれていたら
+    //消しゴムインクだった場合何もしない
+    if(this.putedObjFlg){
+      //上書き防止
+      return;
+    }
     this.startEvent = e;
     this.moved = false;
     this._element.className = 'box touched';
@@ -3922,10 +4029,10 @@ var EditBox = Class.create(Box,{
     var obj = null;
 
     //TODO ここもメソッドかしたい
-    //上書きを禁止
-//  if(creater.stages[this.xId][this.yId] != null){
-//   }
-    if(penColor == "start"){
+    if(penColor == "eraser"){
+      return; 
+    }
+    else if(penColor == "start"){
       if(creater.putStartFlg){
         return;
       }
@@ -3936,8 +4043,11 @@ var EditBox = Class.create(Box,{
     }else if(penColor == "diffusioner"){
       obj = this.putDiffusioner();
     }else if(penColor == "parentPipe"){
-      var pipeErrorFlg = pipeManager.getPipeErrorFlg(creater.pipeColor);
-      if(pipeErrorFlg){
+      //既に同色の親が置いてあったら置けない
+      var parentPutedFlg = pipeManager.getPipeParentPutedFlg(creater.pipeColor);
+      if(parentPutedFlg){
+        alert(LANGUAGE[COUNTRYCODE].sameColorParentError);
+        creater.pipeColor = null;
         return;
       }
       obj = this.putParentPipe();
@@ -3955,7 +4065,8 @@ var EditBox = Class.create(Box,{
     else{
       //赤、緑、青、紫、オレンジ
       obj = new EditBlock(penColor);
-      creater.currentStage.push(obj);
+      this.putedObj = obj;
+      creater.currentStage.push(this.putedObj);
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = obj.color;
     }
@@ -3971,6 +4082,7 @@ var EditBox = Class.create(Box,{
       creater.noneCollisionStages.push(obj);
     }
     this.parentNode.addChild(obj);
+    this.putedObjFlg = true;
   },
   ontouchmove: function(e){
     if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
@@ -4024,7 +4136,7 @@ var Creater =  function(color){
   for(var x = 0; x < 10; x++){
     that.stages[x] = new Array(10);
   }
-   
+
   //スタート地点を置いたフラグこれがないと実行出来ないようにする
   this.putStartFlg = false;
   this.startObj = null;
@@ -4037,8 +4149,8 @@ var Creater =  function(color){
   //これで実行のcurrentStage管理
   this.currentStage = new Array();
   //実行前に戻す為の配列
-  this.noneCollisionStages = Array();
-  this.copyStage = null;
+  this.noneCollisionStages = new Array();
+  this.copyStage = [];
 }
 
 function makeJSON(stages){
@@ -4103,14 +4215,15 @@ var TestPlayButton = Class.create(ExLabel,{
     //実行
     //パイプがちゃんと親と子供そろっているか確認
     for (pipeColor in pipeManager.pipeStatus){
-      if(pipeManager.pipeStatus[pipeColor] == "parentPut"){
-        //アラートでもならそうか
+      if(pipeManager.pipeStatus[pipeColor] == "parentPut" || pipeManager.pipeStatus[pipeColor] == "noneDirection"){
+        alert(LANGUAGE[COUNTRYCODE].enterPipeError);
         return;
       }
     }
 
     //startが置いてあるかどうか
     if(!creater.putStartFlg){
+      alert(LANGUAGE[COUNTRYCODE].enterStartError);
       return;
     }
     //まずはとっておく
@@ -4186,6 +4299,21 @@ var EditStart = Class.create(Start,{
     //戻すようにとっておく
     //creater.startObj = null;
     creater.putStartFlg = false;
+  },
+  ontouchstart: function(){
+    //currentScene
+    //Stages
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      creater.copyStage = void 0;
+      creater.copyStage = [];
+      creater.copyStage = creater.currentStage.concat();
+      creater.putStartFlg = false;
+
+      creater.stages[this.xId][this.yId] = null;
+      GAME.currentScene.removeChild(this);
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    }
   }
 });
 
@@ -4333,8 +4461,46 @@ var EditBlock = Class.create(Block,{
         playSound(GAME.assets['sound/white.mp3'].clone());
         break;
     }
+
     //	出したら消滅
     GAME.currentScene.removeChild(this);
+    creater.stages[this.xId][this.yId] = null;
+    //currentStageから削除したら戻せない
+    var curStageLength = creater.currentStage.length;
+    for(var i = 0; i < curStageLength; i++){
+      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
+      {
+        creater.currentStage.splice(i,1);
+        break;
+      }
+    }
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+  },
+  ontouchstart: function(){
+    //currentStage
+    //currentScene
+    //Stages
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      var currentStageLength = creater.currentStage.length;
+      var noneCollisionStagesLength = creater.noneCollisionStages.length;
+      creater.copyStage = void 0;
+      creater.copyStage = creater.currentStage.concat();
+
+      //currentStageから消す
+      for(var i = 0; i < currentStageLength; i++){
+        //自分を消す
+        //xId,yIdでやってるけど、ループまわさずやりたい
+        //グローバルにアクセスしまくってる現状
+        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
+          creater.currentStage.splice(i,1);
+          break;
+        }
+      }
+      creater.stages[this.xId][this.yId] = null;
+      GAME.currentScene.removeChild(this);
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    }
   }
 });
 
@@ -4382,7 +4548,43 @@ var EditSlanter = Class.create(Slanter,{
 
     playSound(GAME.assets['sound/slanter.mp3'].clone());
     //	出したら消滅
+    creater.stages[this.xId][this.yId] = null;
+    //currentStageから削除
+    var curStageLength = creater.currentStage.length;
+    for(var i = 0; i < curStageLength; i++){
+      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
+      {
+        creater.currentStage.splice(i,1);
+        break;
+      }
+    }
     GAME.currentScene.removeChild(this);
+  },
+  ontouchstart: function(){
+    //currentStage
+    //currentScene
+    //Stages
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      var currentStageLength = creater.currentStage.length;
+      var noneCollisionStagesLength = creater.noneCollisionStages.length;
+      creater.copyStage = void 0;
+      creater.copyStage = creater.currentStage.concat();
+
+      GAME.currentScene.removeChild(this);
+      //currentStageから消す
+      for(var i = 0; i < currentStageLength; i++){
+        //自分を消す
+        //xId,yIdでやってるけど、ループまわさずやりたい
+        //グローバルにアクセスしまくってる現状
+        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
+          creater.currentStage.splice(i,1);
+          break;
+        }
+      }
+      creater.stages[this.xId][this.yId] = null;
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    }
   }
 });
 
@@ -4472,6 +4674,46 @@ var EditDiffusioner = Class.create(Diffusioner,{
     playSound(GAME.assets['sound/diffusioner.mp3'].clone());
     //	出したら消滅
     GAME.currentScene.removeChild(this);
+
+    creater.stages[this.xId][this.yId] = null;
+    //currentStageから削除
+    var curStageLength = creater.currentStage.length;
+    for(var i = 0; i < curStageLength; i++){
+      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
+      {
+        creater.currentStage.splice(i,1);
+        break;
+      }
+    }
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+  },
+  ontouchstart: function(){
+    //currentStage
+    //currentScene
+    //noneCollisionStages
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      var currentStageLength = creater.currentStage.length;
+      var noneCollisionStagesLength = creater.noneCollisionStages.length;
+      creater.copyStage = void 0;
+      creater.copyStage = creater.currentStage.concat();
+
+      //currentStageから消す
+      for(var i = 0; i < currentStageLength; i++){
+        //自分を消す
+        //xId,yIdでやってるけど、ループまわさずやりたい
+        //グローバルにアクセスしまくってる現状
+        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
+          creater.currentStage.splice(i,1);
+          break;
+        }
+      }
+
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+      //JSON用配列も消す
+      creater.stages[this.xId][this.yId] = null;
+      GAME.currentScene.removeChild(this);
+    }
   }
 });
 
@@ -4552,12 +4794,19 @@ var EditPipe = Class.create(Sprite,{
     {
       case "blue":
         var theChildPipe = pipeManager.childPipe.blue;
+        //パイプステータスを変更
+        pipeManager.pipeStatus.blue = "nothing";
+        pipeManager.initPipeEntityColor("blue");
         break;
       case "red":
         var theChildPipe = pipeManager.childPipe.red;
+        pipeManager.pipeStatus.red = "nothing";
+        pipeManager.initPipeEntityColor("red");
         break;
       case "green":
         var theChildPipe = pipeManager.childPipe.green;
+        pipeManager.pipeStatus.green = "nothing";
+        pipeManager.initPipeEntityColor("green");
         break;
     }
     arc.x = theChildPipe.x-128;
@@ -4573,9 +4822,85 @@ var EditPipe = Class.create(Sprite,{
     }
     GAME.currentScene.addChild(new EditBeam(this.beamStatus[theChildPipe.direction],beamInit));
     playSound(GAME.assets['sound/pipe.mp3'].clone());
+
     //	出したら消滅
+    //子供も削除
     GAME.currentScene.removeChild(theChildPipe);
+    creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
+    //
+    var curStageLength = creater.currentStage.length;
+    creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
+    boxManager.boxArray[theChildPipe.xId][theChildPipe.yId].putedObjFlg = false;
+    //子供はcurrentstageにはいってないので意味ない
+//    for(var i = 0; i < curStageLength; i++){
+//      if(creater.currentStage[i].xId == theChildPipe.xId && creater.currentStage[i].yId == theChildPipe.yId ) 
+//      {
+//        creater.currentStage.splice(i,1);
+//        break;
+//      }
+//    }
+
     GAME.currentScene.removeChild(this);
+    creater.stages[this.xId][this.yId] = null;
+    //currentStageから削除
+    for(var i = 0; i < curStageLength; i++){
+      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
+      {
+        creater.currentStage.splice(i,1);
+        break;
+      }
+    }
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+  },
+  ontouchstart: function(){
+    //currentStage
+    //currentScene
+    //stages
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      var currentStageLength = creater.currentStage.length;
+      
+      //戻れるようにコピーステージを作る
+      creater.copyStage = void 0;
+      creater.copyStage = [];
+      creater.copyStage = creater.currentStage.concat();
+
+      //currentStageから消す
+      for(var i = 0; i < currentStageLength; i++){
+        //自分を消す
+        //xId,yIdでやってるけど、ループまわさずやりたい
+        //グローバルにアクセスしまくってる現状
+        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
+          creater.currentStage.splice(i,1);
+          break;
+        }
+      }
+
+      //pipeStatusいじらな
+      var color = this.color;
+      creater.stages[this.xId][this.yId] = null;
+      pipeManager.pipeEntity[color].parent.x = null;
+      pipeManager.pipeEntity[color].parent.y = null;
+      pipeManager.pipeStatus[color] = "nothing";
+      //親を消したら子供も同時に消す
+      if(pipeManager.childPipe[color] != null){
+        GAME.currentScene.removeChild(pipeManager.childPipe[color]);
+        boxManager.boxArray[pipeManager.childPipe[color].xId][pipeManager.childPipe[color].yId].putedObjFlg = false;
+        creater.stages[pipeManager.childPipe[color].xId][pipeManager.childPipe[color].yId] = null;
+        pipeManager.pipeEntity[color].child.x = null;
+        pipeManager.pipeEntity[color].child.y = null;
+        pipeManager.pipeEntity[color].child.direction = null;
+        pipeManager.childPipe[color] = null;
+      }
+
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+      //インクを親に戻す
+      GAME.currentScene.removeChild(this);
+      GAME.currentScene.removeChild(pipeManager.pipeInk);
+      pipeManager.pipeInk = void 0;
+      pipeManager.pipeInk = new PipeInk(color);
+      GAME.currentScene.addChild(pipeManager.pipeInk);
+    }
   }
 });
 
@@ -4618,29 +4943,61 @@ var EditChildPipe = Class.create(Sprite,{
     //戻すボタンで作られた時をのぞく
     if(!this.restoreFlg){
       //矢印を出現させ方向を決める
-      this.directionArrow.up = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionUpper,this.color);
-      this.directionArrow.up.x = this.x;
-      this.directionArrow.up.y = this.y - 15;
+      //LANGUAGE[COUNTRYCODE].pipeDirectionUpper
+      //LANGUAGE[COUNTRYCODE].pipeDirectionLefter
+      //LANGUAGE[COUNTRYCODE].pipeDirectionRighter
+      //LANGUAGE[COUNTRYCODE].pipeDirectionDowner
+      this.directionArrow.up = new PipeDirectionArrow("",this.color);
+      this.directionArrow.up.x = this.x + 20;
+      this.directionArrow.up.y = this.y - 30 ;
       this.directionArrow.up.direction = "up";
+      this.directionArrow.up.setClassName("icon-arrow-up edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.up);
 
-      this.directionArrow.left = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionLefter,this.color);
-      this.directionArrow.left.x = this.x - 40;
-      this.directionArrow.left.y = this.y + 20;
+      this.directionArrow.left = new PipeDirectionArrow("",this.color);
+      this.directionArrow.left.x = this.x - 26;
+      this.directionArrow.left.y = this.y + 15;
       this.directionArrow.left.direction = "left";
+      this.directionArrow.left.setClassName("icon-arrow-left edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.left);
 
-      this.directionArrow.right = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionRighter,this.color);
-      this.directionArrow.right.x = this.x + 60;
-      this.directionArrow.right.y = this.y + 20;
+      this.directionArrow.right = new PipeDirectionArrow("",this.color);
+      this.directionArrow.right.x = this.x + 65;
+      this.directionArrow.right.y = this.y + 15;
       this.directionArrow.right.direction = "right";
+      this.directionArrow.right.setClassName("icon-arrow-right edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.right);
 
-      this.directionArrow.down = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionDowner,this.color);
-      this.directionArrow.down.x = this.x;
+      this.directionArrow.down = new PipeDirectionArrow("",this.color);
+      this.directionArrow.down.x = this.x + 20;
       this.directionArrow.down.y = this.y + 60;
       this.directionArrow.down.direction = "down";
+      this.directionArrow.down.setClassName("icon-arrow-down edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.down);
+    }
+  },
+  ontouchstart: function(){
+    //currentScene
+    //Stages
+    //pipeStatus
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      var color = this.color;
+      creater.stages[this.xId][this.yId] = null;
+      //これ
+      pipeManager.pipeEntity[color].child.x = null;
+      pipeManager.pipeEntity[color].child.y = null;
+      pipeManager.pipeEntity[color].child.direction = null;
+      pipeManager.pipeStatus[color] = "parentPut";
+      pipeManager.childPipe[color] = null;
+
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+      //インクを子に戻す
+      GAME.currentScene.removeChild(pipeManager.pipeInk);
+      pipeManager.pipeInk = void 0;
+      pipeManager.pipeInk = new ChildPipeInk(this.color);
+      GAME.currentScene.removeChild(this);
+      GAME.currentScene.addChild(pipeManager.pipeInk);
     }
   }
 });
@@ -4700,7 +5057,30 @@ var PipeManager =  function(){
         x:null,y:null,direction:null
       }
     }
-  }
+  };
+
+  //指定したpipeEntityの中身を親と子供ともに全部nullにする
+  this.initPipeEntityColor = function initPipeEntityColor(color){
+    this.pipeEntity[color].parent.x = null;
+    this.pipeEntity[color].parent.y = null;
+    this.pipeEntity[color].child.y = null;
+    this.pipeEntity[color].child.x = null;
+    this.pipeEntity[color].direction = null;
+    return;
+  };
+
+  //pipeStatusを見て、今使っていない色を返してくれる関数
+  this.getUnusedColor = function getUnusedColor(){
+    //pipeStatusまわす
+    var colorArray = ["blue","red","green"];
+    var colorArrayLength = colorArray.length;
+    for(var i = 0; i < colorArrayLength; i++ ){
+      if(this.pipeStatus[colorArray[i]] == "nothing" ){
+        return colorArray[i];
+      }
+    }
+    return false;
+  };
 
   //各子供パイプのオブジェクトをマネージャーに持たせて参照させる
   this.childPipe = { "blue": null, "red": null ,"green": null };
@@ -4710,6 +5090,18 @@ var PipeManager =  function(){
     for (pipeColor in this.pipeStatus){
       if(pipeColor == color){
         if(this.pipeStatus[pipeColor] == "parentPut" || this.pipeStatus[pipeColor] == "noneDirection" ){
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  //指定した色の親が置かれているかどうか
+  this.getPipeParentPutedFlg = function getPipeParentPutedFlg(color){
+    for (pipeColor in this.pipeStatus){
+      if(pipeColor == color){
+        if(this.pipeStatus[pipeColor] == "parentPut" || this.pipeStatus[pipeColor] == "noneDirection" || this.pipeStatus[pipeColor] == "childPut" ){
           return true;
         }
       }
@@ -4814,12 +5206,49 @@ var EditGoal = Class.create(Goal,{
 
     playSound(GAME.assets['sound/goal.mp3'].clone());
 
-    var that = this;
-
     this.tl.clear();
-    //TODO stageからもけす
-    that.parentNode.removeChild(that);
+
+    GAME.currentScene.removeChild(this);
+
+    creater.stages[this.xId][this.yId] = null;
+    //currentStageから削除
+    var curStageLength = creater.currentStage.length;
+    for(var i = 0; i < curStageLength; i++){
+      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
+      {
+        creater.currentStage.splice(i,1);
+        break;
+      }
+    }
     creater.goalFlg = false;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+  },
+  ontouchstart: function(){
+    //currentStage
+    //currentScene
+    //Stages
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      var currentStageLength = creater.currentStage.length;
+      var noneCollisionStagesLength = creater.noneCollisionStages.length;
+      creater.copyStage = void 0;
+      creater.copyStage = creater.currentStage.concat();
+
+      //currentStageから消す
+      for(var i = 0; i < currentStageLength; i++){
+        //自分を消す
+        //xId,yIdでやってるけど、ループまわさずやりたい
+        //グローバルにアクセスしまくってる現状
+        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
+          creater.currentStage.splice(i,1);
+          break;
+        }
+      }
+
+      creater.stages[this.xId][this.yId] = null;
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+      GAME.currentScene.removeChild(this);
+    }
   }
 });
 
@@ -4873,6 +5302,46 @@ var EditStar = Class.create(Sprite,{
     });
     this.image = YELLOW_STAR;
     playSound(GAME.assets['sound/star.mp3'].clone());
+
+    GAME.currentScene.removeChild(this);
+    creater.stages[this.xId][this.yId] = null;
+    //currentStageから削除
+    var curStageLength = creater.currentStage.length;
+    for(var i = 0; i < curStageLength; i++){
+      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
+      {
+        creater.currentStage.splice(i,1);
+        break;
+      }
+    }
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+  },
+  ontouchstart: function(){
+    //currentStage
+    //currentScene
+    //Stages
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      var currentStageLength = creater.currentStage.length;
+      var noneCollisionStagesLength = creater.noneCollisionStages.length;
+      creater.copyStage = void 0;
+      creater.copyStage = creater.currentStage.concat();
+
+      //currentStageから消す
+      for(var i = 0; i < currentStageLength; i++){
+        //自分を消す
+        //xId,yIdでやってるけど、ループまわさずやりたい
+        //グローバルにアクセスしまくってる現状
+        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
+          creater.currentStage.splice(i,1);
+          break;
+        }
+      }
+
+      creater.stages[this.xId][this.yId] = null;
+      GAME.currentScene.removeChild(this);
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    }
   }
 });
 
@@ -4924,32 +5393,119 @@ var RestoreButton = Class.create(ExLabel,{
     this._element.innerHTML = text;
   },
   ontouchstart: function(){
+    
     var stageArray = creater.noneCollisionStages.concat();
-    console.log("stageArray");
-    console.log(stageArray);
-    //一度も実行されていないなら
+    //一度も実行さor消去されていないなら
     if(stageArray == null){
       return;
     }
-    //元に戻す
-    GAME.currentScene.addChild(creater.startObj);
+    //スタートがあれば元に戻す
+    if(creater.startObj != null){
+      GAME.currentScene.addChild(creater.startObj);
+      //スタート出来るようにする 
+      creater.putStartFlg = true;
+    }
     //これは戻すたびに実体が増える前に解放する
     creater.currentStage = void 0;
     creater.currentStage = creater.copyStage.concat();
-    
-    for(var i = 0; i < stageArray.length; i++){
-      //子パイプの方向決めオブジェクトを出さないようにする
+
+    var stageArrayLength = stageArray.length;
+    for(var i = 0; i < stageArrayLength; i++){
+      //戻す時に既に戻そうとする場所にオブジェクトがあったら
+      debugger
+      if(boxManager.boxArray[stageArray[i].xId][stageArray[i].yId].putedObjFlg){
+        continue;
+      }
+
       //TODO ここクラス名使わずに判定したい
+      //親パイプのパイプマネージャー整理
+      if(stageArray[i]._element.className == "pipe"){
+        var parentPipeColor = stageArray[i].color;
+        //実行したり消したりした後に戻すと同色が２個以上出来る可能性があるから条件で防ぐ
+        if(pipeManager.pipeStatus[parentPipeColor] == "childPut" || pipeManager.pipeStatus[parentPipeColor] == "parentPut" || pipeManager.pipeStatus[parentPipeColor] == "noneDirection"){
+          continue;
+        }
+
+        pipeManager.pipeEntity[parentPipeColor].parent.x = stageArray[i].xId;
+        pipeManager.pipeEntity[parentPipeColor].parent.y = stageArray[i].yId;
+        //stagearrayの順番は確定じゃないから子供が先に復活する場合もアル
+        if(pipeManager.pipeStatus != "childPut"){
+          pipeManager.pipeStatus[parentPipeColor] = "parentPut";
+        }
+
+      }
+      //子パイプの方向決めオブジェクトを出さないようにする
       if(stageArray[i]._element.className.indexOf("pipeOut") != -1){
         stageArray[i].restoreFlg = true;
+        //パイプマネージャーの不整合を直す
+        var childPipeColor = stageArray[i].color;
+        if(pipeManager.pipeStatus[childPipeColor] != "parentPut"){
+          continue;
+        }
+        pipeManager.pipeEntity[childPipeColor].child.x = stageArray[i].xId;
+        pipeManager.pipeEntity[childPipeColor].child.y = stageArray[i].yId;
+        pipeManager.pipeEntity[childPipeColor].child.direction = stageArray[i].direction;
+        //childpipeに登録
+        pipeManager.childPipe[childPipeColor] = stageArray[i];
+        pipeManager.pipeStatus[childPipeColor] = "childPut";
       }
+      this.addCreatersStages(stageArray[i]);
       GAME.currentScene.addChild(stageArray[i]);
     }
-    
-    //スタート出来るようにする 
-    creater.putStartFlg = true;
+    //pipeInkを使ってない色のインクにかえる
+    //全部使ってたらそのまま
+    var unUsedColor = pipeManager.getUnusedColor();
+    if(unUsedColor){
+      GAME.currentScene.removeChild(pipeManager.pipeInk);
+      pipeManager.pipeInk = void 0 
+      pipeManager.pipeInk = new PipeInk(unUsedColor);
+      GAME.currentScene.addChild(pipeManager.pipeInk);
+    } 
   },
   setClassName: function(className){
     this._element.className = className;
+  },
+  addCreatersStages: function addCreatersStages(obj){
+    var objName = obj._element.className;
+    if(objName == "start"){
+      creater.stages[obj.xId][obj.yId] = "start";
+    }else if(objName == "slanter"){
+      creater.stages[obj.xId][obj.yId] = "slanter";
+    }else if(objName == "diffusioner"){
+      creater.stages[obj.xId][obj.yId] = "diffusioner";
+    }else if(objName == "goal"){
+      creater.stages[obj.xId][obj.yId] = "goal";
+    }else if(objName == "star"){
+      creater.stages[obj.xId][obj.yId] = "star";
+    }else if(objName == "pipe"){
+      creater.stages[obj.xId][obj.yId] = { "name": "pipe", "color": obj.color.toString() };
+    }else if( objName.indexOf("pipeOut") != -1 ){
+      creater.stages[obj.xId][obj.yId] = { "name": "pipeOut", "direction": obj.direction.toString() };
+    }
+    else{
+      creater.stages[obj.xId][obj.yId] = obj.color;
+    }
   }
 });
+
+var EraserInk = Class.create(ExLabel,{
+  initialize: function(text,w,h){
+    ExLabel.call(this,BOX_SIZE,BOX_SIZE);
+    var width = w || 640;
+    var height = h || 64;
+
+    // DOMモード
+    this._element = document.createElement('div');
+    this._element.innerHTML = text;
+  },
+  ontouchstart: function(){
+    creater.penColor = "eraser";
+  }
+});
+
+var BoxManager = function(){
+  this.boxArray = new Array(10);
+  for (var i = 0; i < 10; i++){
+    this.boxArray[i] = new Array(10);
+  }
+}

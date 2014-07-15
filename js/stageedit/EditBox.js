@@ -15,6 +15,9 @@ var EditBox = Class.create(Box,{
     this.xId = xNumber;
     this.yId = yNumber;
     this.startObjFlg = false;
+    //自分の上にオブジェクトが置かれているかどうか
+    this.putedObjFlg = false;
+    this.pipeNextAlreadyFlg = false;
   },
   putStart: function putStart(){
       //スタートは一個しか置けない用にする
@@ -26,9 +29,9 @@ var EditBox = Class.create(Box,{
       creater.putStartFlg = true;
       //nonecollisionstagesに追加しないように判定用
       this.startObjFlg = true;
+
       creater.startObj = void 0;
       creater.startObj = start;
-      //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "start";
       creater.startPos = {x: this.xId, y:this.yId};
       return start;
@@ -36,14 +39,12 @@ var EditBox = Class.create(Box,{
   putSlanter: function putSlanter(){
       var slanter = new EditSlanter(this.xId,this.yId);
       creater.currentStage.push(slanter);
-      //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "slanter";
       return slanter;
   },
   putDiffusioner: function putDiffusioner(){
       var diffusioner  = new EditDiffusioner();
       creater.currentStage.push(diffusioner);
-      //TODO 上書き機能
       creater.stages[this.xId][this.yId] = "diffusioner";
       return diffusioner;
   },
@@ -51,10 +52,6 @@ var EditBox = Class.create(Box,{
     //親パイプのとき
     //既に同色が置いてある場合
     var color = creater.pipeColor;
-    var pipeErrorFlg = pipeManager.getPipeErrorFlg();
-    if(pipeErrorFlg){
-      return;
-    }
     var parentPipe = new EditPipe(color);
 
     creater.currentStage.push(parentPipe);
@@ -70,14 +67,59 @@ var EditBox = Class.create(Box,{
     GAME.currentScene.addChild(pipeManager.pipeInk);
     return parentPipe;
   },
+  //現状だと既にchildput場合にしか使わないかも
+  itaratePipeInk: function itaratePipeInk(color){
+      var chengeColor = null;
+      switch(color)
+      {
+        //青以外
+        case "blue":
+          chengeColor = "red";
+          break;
+        case "red":
+          chengeColor = "green";
+          break;
+        case "green":
+          chengeColor = "blue";
+          break;
+      }
+      GAME.currentScene.removeChild(pipeManager.pipeInk);
+      creater.pipeColor = chengeColor;
+      pipeManager.pipeInk = void 0;
+      pipeManager.pipeInk = new PipeInk(chengeColor);
+      GAME.currentScene.addChild(pipeManager.pipeInk);
+  },
+  //pipe用、速度の為にpipeManagerに書かなかった
+  getNextColor: function getNextColor(color){
+    var nextColor = null;
+    var colorArray = ["blue","red","green"];
+    var colorArrayLength = colorArray.length;
+    for(var i = 0; i < colorArrayLength; i++){
+      if( color == colorArray[i]){
+         //要素超えないように
+         if(i + 1 > colorArrayLength){
+           return; 
+         }
+         return colorArray[i + 1];
+      }
+    }
+    alert("pipe Color Error. color is not exist");
+  },
   putChildPipe: function putChildPipe(){
       //子パイプの時
       var color = creater.pipeColor;
       var childPipe = new EditChildPipe(color);
 
+      var nextColor = this.getNextColor(color);
+      //消しゴムの実装により次の色が既にある可能性がある
+      if( pipeManager.pipeStatus[nextColor] == "childPut" ){
+        //インクを次の色にする
+        this.pipeNextAlreadyFlg = true;
+      }
+
       //createrに登録 正直pipeマネージャーで管理しているのでクリエイターに登録しなくてよい
 //      creater.stages[this.xId][this.yId] = "pipeOut";
-      //自分にもxId yIdtouroku
+      //自分にもxId yId登録
       childPipe.xId = this.xId;
       childPipe.yId = this.yId;
 
@@ -89,8 +131,9 @@ var EditBox = Class.create(Box,{
       //なんでこここれでアクセスできんのやろ
       //console.log(pipeManager.childPipe[color]);
 
+      //色をまわす為の配列を使ってやったほうがスマートかもしれんが読みにくい
+//      var colorArray = ["blue","red","green"];
       //色を変える
-      //こことか循環リストまわした方が気持ちいいんだけど打ち止めさせたいからいいか
       switch(color)
       {
         case "blue":
@@ -112,10 +155,51 @@ var EditBox = Class.create(Box,{
 
       creater.penColor = "parentPipe";
 
-      GAME.currentScene.removeChild(pipeManager.pipeInk);
-      pipeManager.pipeInk = void 0;
-      pipeManager.pipeInk = new PipeInk(color);
-      GAME.currentScene.addChild(pipeManager.pipeInk);
+      //消しゴムの存在により、確定で子供のつぎに次の色の親がくる訳じゃなくなった。
+      //なので、pipeEntityを確認してインクを変える
+      //条件　
+      //　次色の親が残ってる場合
+      //　次色が二つともない場合　＝＞　今まで通り
+      //　次色が二つともある場合　＝＞　さらにつぎの色へ
+      //二つともある場合
+      if(pipeManager.pipeEntity[color].child.x != null){
+        switch(color)
+        {
+          //青以外
+          case "blue":
+            color = "green";
+            creater.pipeColor = "green";
+          break;
+          case "red":
+            color = "blue";
+            creater.pipeColor = "blue";
+          break;
+          case "green":
+            color = "red";
+            creater.pipeColor = "red";
+          break;
+        }
+      }
+      //TODO 次色の親だけが残っている場合
+ //     if(pipeManager.pipeEntity[color].child.x == null && pipeManager.pipeEntity[color].parent.x != null){
+
+ //     }
+      if(this.pipeNextAlreadyFlg){
+        this.itaratePipeInk(nextColor);
+      }else{
+        GAME.currentScene.removeChild(pipeManager.pipeInk);
+        pipeManager.pipeInk = void 0;
+        pipeManager.pipeInk = new PipeInk(color);
+        GAME.currentScene.addChild(pipeManager.pipeInk);
+      }
+      //使ってない色のインクにかえるこれ合ったら上のいらん可能性たかい
+      var unUsedColor = pipeManager.getUnusedColor();
+      if(unUsedColor){
+        GAME.currentScene.removeChild(pipeManager.pipeInk);
+        pipeManager.pipeInk = void 0 
+        pipeManager.pipeInk = new PipeInk(unUsedColor);
+        GAME.currentScene.addChild(pipeManager.pipeInk);
+      } 
 
       return childPipe;
   },
@@ -140,7 +224,11 @@ var EditBox = Class.create(Box,{
     return star;
   },
   ontouchstart: function(e){
-    //スタートがすでに置かれていたら
+    //消しゴムインクだった場合何もしない
+    if(this.putedObjFlg){
+      //上書き防止
+      return;
+    }
     this.startEvent = e;
     this.moved = false;
     this._element.className = 'box touched';
@@ -149,10 +237,10 @@ var EditBox = Class.create(Box,{
     var obj = null;
 
     //TODO ここもメソッドかしたい
-    //上書きを禁止
-//  if(creater.stages[this.xId][this.yId] != null){
-//   }
-    if(penColor == "start"){
+    if(penColor == "eraser"){
+      return; 
+    }
+    else if(penColor == "start"){
       if(creater.putStartFlg){
         return;
       }
@@ -163,8 +251,11 @@ var EditBox = Class.create(Box,{
     }else if(penColor == "diffusioner"){
       obj = this.putDiffusioner();
     }else if(penColor == "parentPipe"){
-      var pipeErrorFlg = pipeManager.getPipeErrorFlg(creater.pipeColor);
-      if(pipeErrorFlg){
+      //既に同色の親が置いてあったら置けない
+      var parentPutedFlg = pipeManager.getPipeParentPutedFlg(creater.pipeColor);
+      if(parentPutedFlg){
+        alert(LANGUAGE[COUNTRYCODE].sameColorParentError);
+        creater.pipeColor = null;
         return;
       }
       obj = this.putParentPipe();
@@ -182,7 +273,8 @@ var EditBox = Class.create(Box,{
     else{
       //赤、緑、青、紫、オレンジ
       obj = new EditBlock(penColor);
-      creater.currentStage.push(obj);
+      this.putedObj = obj;
+      creater.currentStage.push(this.putedObj);
       //TODO 上書き機能
       creater.stages[this.xId][this.yId] = obj.color;
     }
@@ -198,6 +290,7 @@ var EditBox = Class.create(Box,{
       creater.noneCollisionStages.push(obj);
     }
     this.parentNode.addChild(obj);
+    this.putedObjFlg = true;
   },
   ontouchmove: function(e){
     if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){

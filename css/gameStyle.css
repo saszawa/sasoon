@@ -483,3 +483,9 @@ div.edit_button {
   border-radius: 5px;
   border: solid 5px rgba(56, 181, 254, 0.5);
 }
+
+/* line 465, ../scss/gameStyle.scss */
+div.edit_direction_arrow {
+  font-size: 24px;
+  color: #f4d03f;
+}

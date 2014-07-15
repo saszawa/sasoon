@@ -1,6 +1,7 @@
 function createStageEditScene(){
   var stageEditScene = new Scene();
 
+  boxManager = new BoxManager();
   // ステージの初期化
   for(var i = 0; i < currentStage.length;i++){
     this.removeChild(currentStage[i]);
@@ -14,6 +15,7 @@ function createStageEditScene(){
       box.x = x*BOX_SIZE;
       box.y = y*BOX_SIZE;
       stageEditScene.addChild(box);
+      boxManager.boxArray[x][y] = box;
     }
   }
 
@@ -105,14 +107,14 @@ function createStageEditScene(){
   //送信ボタン クラス化
   var sendButton = new SendButton(LANGUAGE[COUNTRYCODE].post,54,64);
   sendButton.x = 495;
-  sendButton.y = 700;
+  sendButton.y = 670;
   sendButton.setClassName('edit_button');
   stageEditScene.addChild(sendButton);
 
   //動きを確かめるボタン
   var testPlayButton = new TestPlayButton(LANGUAGE[COUNTRYCODE].testplay);
   testPlayButton.x = 567;
-  testPlayButton.y = 700;
+  testPlayButton.y = 670;
   testPlayButton.setClassName('edit_button');
   stageEditScene.addChild(testPlayButton);
 
@@ -122,6 +124,14 @@ function createStageEditScene(){
   restoreButton.y = 750;
   restoreButton.setClassName('edit_button');
   stageEditScene.addChild(restoreButton);
+
+  //消しゴムインクA
+  var eraserInk = new EraserInk(LANGUAGE[COUNTRYCODE].eraser);
+  eraserInk.x = 490;
+  eraserInk.y = 750;
+  eraserInk.width = 80;
+  eraserInk.setClassName('edit_button');
+  stageEditScene.addChild(eraserInk);
 
 //  stageEditScene.addChild(optionMenuButton);
 
