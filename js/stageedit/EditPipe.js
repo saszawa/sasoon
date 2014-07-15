@@ -78,28 +78,11 @@ var EditPipe = Class.create(Sprite,{
     GAME.currentScene.removeChild(theChildPipe);
     creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
     //
-    var curStageLength = creater.currentStage.length;
     creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
     boxManager.boxArray[theChildPipe.xId][theChildPipe.yId].putedObjFlg = false;
-    //子供はcurrentstageにはいってないので意味ない
-//    for(var i = 0; i < curStageLength; i++){
-//      if(creater.currentStage[i].xId == theChildPipe.xId && creater.currentStage[i].yId == theChildPipe.yId ) 
-//      {
-//        creater.currentStage.splice(i,1);
-//        break;
-//      }
-//    }
 
     GAME.currentScene.removeChild(this);
     creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除
-    for(var i = 0; i < curStageLength; i++){
-      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
-      {
-        creater.currentStage.splice(i,1);
-        break;
-      }
-    }
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){

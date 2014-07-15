@@ -43,16 +43,8 @@ var EditSlanter = Class.create(Slanter,{
     playSound(GAME.assets['sound/slanter.mp3'].clone());
     //	出したら消滅
     creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除
-    var curStageLength = creater.currentStage.length;
-    for(var i = 0; i < curStageLength; i++){
-      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
-      {
-        creater.currentStage.splice(i,1);
-        break;
-      }
-    }
     GAME.currentScene.removeChild(this);
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
     //currentStage
