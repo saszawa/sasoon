@@ -2,7 +2,7 @@
 
 $db_name = 'TouchBloomy';
 $host_name = 'localhost';
-$dsn = "mysql:dbname={$db_name};host={$host_name}";
+$dsn = "mysql:dbname={$db_name};host={$host_name};charset=utf8;";
 $user = 'root';
 $password = '';
 

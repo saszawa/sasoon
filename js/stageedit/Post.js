@@ -9,12 +9,12 @@ function doPost(stageString,userName){
       if(xmlHttp.responseText === 'SUCCESS'){
 
       } else if(xmlHttp.responseText === 'FAILED'){
-        
+
       }
     }
   }
 
-  xmlHttp.open("POST", "php/stageRegist.php");
+  xmlHttp.open("POST", "php/stage/regist.php");
   xmlHttp.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
   xmlHttp.send(postData);
 
