@@ -4346,8 +4346,7 @@ var EditBeam = Class.create(Beam,{
     var distance = BOX_HALF+12;
     for(var i = 0; i < gimmicks; i++){
       if(!creater.currentStage[i]){
-      } else
-      if(this.within(creater.currentStage[i], distance) && creater.currentStage[i] !== this.parentBlock){
+      } else if(this.within(creater.currentStage[i], distance) && creater.currentStage[i] !== this.parentBlock){
         // 発射！
         creater.currentStage[i].run();
 
@@ -4465,15 +4464,7 @@ var EditBlock = Class.create(Block,{
     //	出したら消滅
     GAME.currentScene.removeChild(this);
     creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除したら戻せない
-    var curStageLength = creater.currentStage.length;
-    for(var i = 0; i < curStageLength; i++){
-      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
-      {
-        creater.currentStage.splice(i,1);
-        break;
-      }
-    }
+    //currentStageから削除びーむが消してくれる
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
@@ -4549,16 +4540,8 @@ var EditSlanter = Class.create(Slanter,{
     playSound(GAME.assets['sound/slanter.mp3'].clone());
     //	出したら消滅
     creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除
-    var curStageLength = creater.currentStage.length;
-    for(var i = 0; i < curStageLength; i++){
-      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
-      {
-        creater.currentStage.splice(i,1);
-        break;
-      }
-    }
     GAME.currentScene.removeChild(this);
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
     //currentStage
@@ -4676,15 +4659,6 @@ var EditDiffusioner = Class.create(Diffusioner,{
     GAME.currentScene.removeChild(this);
 
     creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除
-    var curStageLength = creater.currentStage.length;
-    for(var i = 0; i < curStageLength; i++){
-      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
-      {
-        creater.currentStage.splice(i,1);
-        break;
-      }
-    }
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
@@ -4828,28 +4802,11 @@ var EditPipe = Class.create(Sprite,{
     GAME.currentScene.removeChild(theChildPipe);
     creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
     //
-    var curStageLength = creater.currentStage.length;
     creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
     boxManager.boxArray[theChildPipe.xId][theChildPipe.yId].putedObjFlg = false;
-    //子供はcurrentstageにはいってないので意味ない
-//    for(var i = 0; i < curStageLength; i++){
-//      if(creater.currentStage[i].xId == theChildPipe.xId && creater.currentStage[i].yId == theChildPipe.yId ) 
-//      {
-//        creater.currentStage.splice(i,1);
-//        break;
-//      }
-//    }
 
     GAME.currentScene.removeChild(this);
     creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除
-    for(var i = 0; i < curStageLength; i++){
-      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
-      {
-        creater.currentStage.splice(i,1);
-        break;
-      }
-    }
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
@@ -5211,15 +5168,6 @@ var EditGoal = Class.create(Goal,{
     GAME.currentScene.removeChild(this);
 
     creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除
-    var curStageLength = creater.currentStage.length;
-    for(var i = 0; i < curStageLength; i++){
-      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
-      {
-        creater.currentStage.splice(i,1);
-        break;
-      }
-    }
     creater.goalFlg = false;
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
@@ -5305,15 +5253,6 @@ var EditStar = Class.create(Sprite,{
 
     GAME.currentScene.removeChild(this);
     creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除
-    var curStageLength = creater.currentStage.length;
-    for(var i = 0; i < curStageLength; i++){
-      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
-      {
-        creater.currentStage.splice(i,1);
-        break;
-      }
-    }
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){

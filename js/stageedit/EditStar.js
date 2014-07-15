@@ -24,15 +24,6 @@ var EditStar = Class.create(Sprite,{
 
     GAME.currentScene.removeChild(this);
     creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除
-    var curStageLength = creater.currentStage.length;
-    for(var i = 0; i < curStageLength; i++){
-      if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId ) 
-      {
-        creater.currentStage.splice(i,1);
-        break;
-      }
-    }
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
