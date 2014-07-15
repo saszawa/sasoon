@@ -22,7 +22,6 @@ var EditStar = Class.create(Sprite,{
     this.image = YELLOW_STAR;
     playSound(GAME.assets['sound/star.mp3'].clone());
 
-    GAME.currentScene.removeChild(this);
     creater.stages[this.xId][this.yId] = null;
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
