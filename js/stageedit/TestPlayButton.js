@@ -12,14 +12,15 @@ var TestPlayButton = Class.create(ExLabel,{
     //実行
     //パイプがちゃんと親と子供そろっているか確認
     for (pipeColor in pipeManager.pipeStatus){
-      if(pipeManager.pipeStatus[pipeColor] == "parentPut"){
-        //アラートでもならそうか
+      if(pipeManager.pipeStatus[pipeColor] == "parentPut" || pipeManager.pipeStatus[pipeColor] == "noneDirection"){
+        alert(LANGUAGE[COUNTRYCODE].enterPipeError);
         return;
       }
     }
 
     //startが置いてあるかどうか
     if(!creater.putStartFlg){
+      alert(LANGUAGE[COUNTRYCODE].enterStartError);
       return;
     }
     //まずはとっておく

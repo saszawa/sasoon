@@ -39,7 +39,30 @@ var PipeManager =  function(){
         x:null,y:null,direction:null
       }
     }
-  }
+  };
+
+  //指定したpipeEntityの中身を親と子供ともに全部nullにする
+  this.initPipeEntityColor = function initPipeEntityColor(color){
+    this.pipeEntity[color].parent.x = null;
+    this.pipeEntity[color].parent.y = null;
+    this.pipeEntity[color].child.y = null;
+    this.pipeEntity[color].child.x = null;
+    this.pipeEntity[color].direction = null;
+    return;
+  };
+
+  //pipeStatusを見て、今使っていない色を返してくれる関数
+  this.getUnusedColor = function getUnusedColor(){
+    //pipeStatusまわす
+    var colorArray = ["blue","red","green"];
+    var colorArrayLength = colorArray.length;
+    for(var i = 0; i < colorArrayLength; i++ ){
+      if(this.pipeStatus[colorArray[i]] == "nothing" ){
+        return colorArray[i];
+      }
+    }
+    return false;
+  };
 
   //各子供パイプのオブジェクトをマネージャーに持たせて参照させる
   this.childPipe = { "blue": null, "red": null ,"green": null };
@@ -49,6 +72,18 @@ var PipeManager =  function(){
     for (pipeColor in this.pipeStatus){
       if(pipeColor == color){
         if(this.pipeStatus[pipeColor] == "parentPut" || this.pipeStatus[pipeColor] == "noneDirection" ){
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  //指定した色の親が置かれているかどうか
+  this.getPipeParentPutedFlg = function getPipeParentPutedFlg(color){
+    for (pipeColor in this.pipeStatus){
+      if(pipeColor == color){
+        if(this.pipeStatus[pipeColor] == "parentPut" || this.pipeStatus[pipeColor] == "noneDirection" || this.pipeStatus[pipeColor] == "childPut" ){
           return true;
         }
       }

@@ -37,29 +37,61 @@ var EditChildPipe = Class.create(Sprite,{
     //戻すボタンで作られた時をのぞく
     if(!this.restoreFlg){
       //矢印を出現させ方向を決める
-      this.directionArrow.up = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionUpper,this.color);
-      this.directionArrow.up.x = this.x;
-      this.directionArrow.up.y = this.y - 15;
+      //LANGUAGE[COUNTRYCODE].pipeDirectionUpper
+      //LANGUAGE[COUNTRYCODE].pipeDirectionLefter
+      //LANGUAGE[COUNTRYCODE].pipeDirectionRighter
+      //LANGUAGE[COUNTRYCODE].pipeDirectionDowner
+      this.directionArrow.up = new PipeDirectionArrow("",this.color);
+      this.directionArrow.up.x = this.x + 20;
+      this.directionArrow.up.y = this.y - 30 ;
       this.directionArrow.up.direction = "up";
+      this.directionArrow.up.setClassName("icon-arrow-up edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.up);
 
-      this.directionArrow.left = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionLefter,this.color);
-      this.directionArrow.left.x = this.x - 40;
-      this.directionArrow.left.y = this.y + 20;
+      this.directionArrow.left = new PipeDirectionArrow("",this.color);
+      this.directionArrow.left.x = this.x - 26;
+      this.directionArrow.left.y = this.y + 15;
       this.directionArrow.left.direction = "left";
+      this.directionArrow.left.setClassName("icon-arrow-left edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.left);
 
-      this.directionArrow.right = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionRighter,this.color);
-      this.directionArrow.right.x = this.x + 60;
-      this.directionArrow.right.y = this.y + 20;
+      this.directionArrow.right = new PipeDirectionArrow("",this.color);
+      this.directionArrow.right.x = this.x + 65;
+      this.directionArrow.right.y = this.y + 15;
       this.directionArrow.right.direction = "right";
+      this.directionArrow.right.setClassName("icon-arrow-right edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.right);
 
-      this.directionArrow.down = new PipeDirectionArrow(LANGUAGE[COUNTRYCODE].pipeDirectionDowner,this.color);
-      this.directionArrow.down.x = this.x;
+      this.directionArrow.down = new PipeDirectionArrow("",this.color);
+      this.directionArrow.down.x = this.x + 20;
       this.directionArrow.down.y = this.y + 60;
       this.directionArrow.down.direction = "down";
+      this.directionArrow.down.setClassName("icon-arrow-down edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.down);
+    }
+  },
+  ontouchstart: function(){
+    //currentScene
+    //Stages
+    //pipeStatus
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      var color = this.color;
+      creater.stages[this.xId][this.yId] = null;
+      //これ
+      pipeManager.pipeEntity[color].child.x = null;
+      pipeManager.pipeEntity[color].child.y = null;
+      pipeManager.pipeEntity[color].child.direction = null;
+      pipeManager.pipeStatus[color] = "parentPut";
+      pipeManager.childPipe[color] = null;
+
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+      //インクを子に戻す
+      GAME.currentScene.removeChild(pipeManager.pipeInk);
+      pipeManager.pipeInk = void 0;
+      pipeManager.pipeInk = new ChildPipeInk(this.color);
+      GAME.currentScene.removeChild(this);
+      GAME.currentScene.addChild(pipeManager.pipeInk);
     }
   }
 });

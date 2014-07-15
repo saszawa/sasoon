@@ -42,7 +42,11 @@ var LANGUAGE = {
     postGoalNoneError:"ゴールが置かれていないステージは投稿できません",
     postPipeError:"ワープオブジェクトは対となる出口が設定されていないと投稿できません",
     postStarManyError: "星が３つ置いてないステージは投稿できません",
-    restore:"戻す"
+    restore:"戻す",
+    eraser:"消しゴム",
+    enterPipeError: "ワープオブジェクトは対となる出口が設定されていないと投稿できません",
+    enterStartError: "スタートが置かれていないステージは実行できません",
+    sameColorParentError: "既に置いてある色のワープオブジェクトは置く事が出来ません"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -87,6 +91,10 @@ var LANGUAGE = {
     postGoalNoneError:"You should put Goal Object!",
     postPipeError:"Please check Warp Object's exit",
     postStarManyError: "You should put three Stars!",
-    restore:"Restore"
+    restore:"Restore",
+    eraser:"Eraser",
+    enterPipeError: "Please check Warp Object's exit",
+    enterStartError: "You should put Start Object!",
+    sameColorParentError: "Cannot put same color Warp Object!"
   }
 }
