@@ -1010,6 +1010,7 @@ var VOLUME = 1.0;
 
 var creater;
 var pipeManager;
+var boxManager;
 
 var userData;
 var stageBoxes = [];

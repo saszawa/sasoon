@@ -1,6 +1,7 @@
 function createStageEditScene(){
   var stageEditScene = new Scene();
 
+  boxManager = new BoxManager();
   // ステージの初期化
   for(var i = 0; i < currentStage.length;i++){
     this.removeChild(currentStage[i]);
@@ -14,6 +15,7 @@ function createStageEditScene(){
       box.x = x*BOX_SIZE;
       box.y = y*BOX_SIZE;
       stageEditScene.addChild(box);
+      boxManager.boxArray[x][y] = box;
     }
   }
 
@@ -27,6 +29,7 @@ function createStageEditScene(){
   createSurfaces();
 
   //パレット開閉スイッチ
+  //インクを開閉式メニューに置く場合
 //  var optionMenuButton = new Sprite(BOX_SIZE,BOX_SIZE);
 //  optionMenuButton._element = document.createElement('div');
 //  optionMenuButton._element.className = 'optionMenuButton';
@@ -48,19 +51,34 @@ function createStageEditScene(){
   redInk.y = 670;
   stageEditScene.addChild(redInk);
 
+  var greenInk = new BlockInk('green');
+  greenInk.x = 170;
+  greenInk.y = 670;
+  stageEditScene.addChild(greenInk);
+
+  var orangeInk = new BlockInk('orange');
+  orangeInk.x = 250;
+  orangeInk.y = 670;
+  stageEditScene.addChild(orangeInk);
+
+  var purpleInk = new BlockInk('purple');
+  purpleInk.x = 330;
+  purpleInk.y = 670;
+  stageEditScene.addChild(purpleInk);
+
   var startInk = new BlockInk('start');
   startInk.x = 170;
-  startInk.y = 670;
+  startInk.y = 750;
   stageEditScene.addChild(startInk);
 
   var slanterInk = new SlanterInk('green');
   slanterInk.x = 250;
-  slanterInk.y = 670;
+  slanterInk.y = 750;
   stageEditScene.addChild(slanterInk);
 
   var diffusionerInk = new DiffusionerInk();
   diffusionerInk.x = 330;
-  diffusionerInk.y = 670;
+  diffusionerInk.y = 750;
   stageEditScene.addChild(diffusionerInk);
 
   var pipeInk = new PipeInk('blue');
@@ -70,25 +88,50 @@ function createStageEditScene(){
   pipeManager.pipeInk = pipeInk;
   stageEditScene.addChild(pipeInk);
 
-  var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
-  pipeColorButton.x = 410;
-  pipeColorButton.y = 750;
-  stageEditScene.addChild(pipeColorButton);
+  var goalInk = new GoalInk();
+  goalInk.x = 10;
+  goalInk.y = 750;
+  stageEditScene.addChild(goalInk);
 
-  //送信ボタン
-  var sendButton = new ExLabel(LANGUAGE[COUNTRYCODE].post);
-  sendButton.on('touchend',function(){
-    makeJSON(creater.stages);
-  });
-  sendButton.x = 510;
-  sendButton.y = 700;
+  var starInk = new StarInk();
+  starInk.x = 90;
+  starInk.y = 750;
+  stageEditScene.addChild(starInk);
+
+  //TODO 後ほど実装
+//  var pipeColorButton = new PipeColorButton(LANGUAGE[COUNTRYCODE].pipeColorButton);
+//  pipeColorButton.x = 410;
+//  pipeColorButton.y = 750;
+//  stageEditScene.addChild(pipeColorButton);
+
+  //送信ボタン クラス化
+  var sendButton = new SendButton(LANGUAGE[COUNTRYCODE].post,54,64);
+  sendButton.x = 495;
+  sendButton.y = 670;
+  sendButton.setClassName('edit_button');
   stageEditScene.addChild(sendButton);
 
   //動きを確かめるボタン
   var testPlayButton = new TestPlayButton(LANGUAGE[COUNTRYCODE].testplay);
-  testPlayButton.x = 600;
-  testPlayButton.y = 700;
+  testPlayButton.x = 567;
+  testPlayButton.y = 670;
+  testPlayButton.setClassName('edit_button');
   stageEditScene.addChild(testPlayButton);
+
+  //戻すボタン
+  var restoreButton = new RestoreButton(LANGUAGE[COUNTRYCODE].restore);
+  restoreButton.x = 410;
+  restoreButton.y = 750;
+  restoreButton.setClassName('edit_button');
+  stageEditScene.addChild(restoreButton);
+
+  //消しゴムインクA
+  var eraserInk = new EraserInk(LANGUAGE[COUNTRYCODE].eraser);
+  eraserInk.x = 490;
+  eraserInk.y = 750;
+  eraserInk.width = 80;
+  eraserInk.setClassName('edit_button');
+  stageEditScene.addChild(eraserInk);
 
 //  stageEditScene.addChild(optionMenuButton);
 

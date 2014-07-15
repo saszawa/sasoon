@@ -27,8 +27,7 @@ var EditBeam = Class.create(Beam,{
     var distance = BOX_HALF+12;
     for(var i = 0; i < gimmicks; i++){
       if(!creater.currentStage[i]){
-      } else
-      if(this.within(creater.currentStage[i], distance) && creater.currentStage[i] !== this.parentBlock){
+      } else if(this.within(creater.currentStage[i], distance) && creater.currentStage[i] !== this.parentBlock){
         // 発射！
         creater.currentStage[i].run();
 

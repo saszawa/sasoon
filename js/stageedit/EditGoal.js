@@ -1,49 +1,29 @@
-var EditSlanter = Class.create(Slanter,{
+var EditGoal = Class.create(Goal,{
   initialize: function(){
-    Slanter.call(this,BOX_SIZE,BOX_SIZE);
+    Goal.call(this,BOX_SIZE,BOX_SIZE);
+
     this._element = document.createElement('div');
-    this._element.className = 'slanter';
-    this.image = SLANTER;
-    this.rotation = 45;
+    this._element.className = 'goal';
+    this.scaleX = 0.8;
+    this.scaleY = 0.8;
+    this.distance = 1;
 
     //戻す用にxId,yId
     this.xId = -1;
     this.yId = -1;
 
-    this.beamStatus = {
-      topRight: {moveX: MOVE_PX  ,moveY: -MOVE_PX},
-      rightDown:{moveX: MOVE_PX  ,moveY: MOVE_PX },
-      downLeft: {moveX: -MOVE_PX ,moveY: MOVE_PX },
-      leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
-    };
-
-    this.color = "green";
-
+    this.tl.scaleTo(0.6,0.6,30,CUBIC_EASEIN).scaleTo(0.8,0.8,30,CUBIC_EASEOUT).loop();
   },
   run: function(){
 
-    var arc = new HitArc(this.color);
-    arc.x = this.x-128;
-    arc.y = this.y-128;
-    GAME.currentScene.addChild(arc);
+    playSound(GAME.assets['sound/goal.mp3'].clone());
 
-    var i = 0;
-    for(var beam in this.beamStatus){
-      // 初期設定的な
-      var beamInit = {
-        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-        parentBlock:this,
-        beamLength: 2
-      }
-      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
-      i++;
-    }
+    this.tl.clear();
 
-    playSound(GAME.assets['sound/slanter.mp3'].clone());
-    //	出したら消滅
-    creater.stages[this.xId][this.yId] = null;
     GAME.currentScene.removeChild(this);
+
+    creater.stages[this.xId][this.yId] = null;
+    creater.goalFlg = false;
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
@@ -55,7 +35,6 @@ var EditSlanter = Class.create(Slanter,{
       var currentStageLength = creater.currentStage.length;
       var noneCollisionStagesLength = creater.noneCollisionStages.length;
 
-      GAME.currentScene.removeChild(this);
       //currentStageから消す
       for(var i = 0; i < currentStageLength; i++){
         //自分を消す
@@ -66,8 +45,10 @@ var EditSlanter = Class.create(Slanter,{
           break;
         }
       }
+
       creater.stages[this.xId][this.yId] = null;
       boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+      GAME.currentScene.removeChild(this);
     }
   }
 });

@@ -7,6 +7,10 @@ var EditStart = Class.create(Start,{
     this._element.className = 'start';
     this.backgroundColor = COLORS.white;
 
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+
     // Beam用ステータス
     this.beamStatus = {
       top:{
@@ -54,6 +58,21 @@ var EditStart = Class.create(Start,{
 
     //出したら消滅
     GAME.currentScene.removeChild(this);
-    creater.startObj = null;
+    //戻すようにとっておく
+    //creater.startObj = null;
+    creater.putStartFlg = false;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+  },
+  ontouchstart: function(){
+    //currentScene
+    //Stages
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      creater.putStartFlg = false;
+
+      creater.stages[this.xId][this.yId] = null;
+      GAME.currentScene.removeChild(this);
+      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    }
   }
 });

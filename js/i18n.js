@@ -31,13 +31,22 @@ var LANGUAGE = {
     backToTop:"TOPへ戻る",
     volumeOption:"音量",
     stageEdit:"ステージを作る",
-    post:"投稿する",
+    post:"投稿",
     testplay:"試す",
     pipeColorButton:"色を変える",
     pipeDirectionUpper:"上に発射",
     pipeDirectionLefter:"左に発射",
     pipeDirectionRighter:"右に発射",
-    pipeDirectionDowner:"下に発射"
+    pipeDirectionDowner:"下に発射",
+    postStartNoneError:"スタートが置かれていないステージは投稿できません",
+    postGoalNoneError:"ゴールが置かれていないステージは投稿できません",
+    postPipeError:"ワープオブジェクトは対となる出口が設定されていないと投稿できません",
+    postStarManyError: "星が３つ置いてないステージは投稿できません",
+    restore:"戻す",
+    eraser:"消しゴム",
+    enterPipeError: "ワープオブジェクトは対となる出口が設定されていないと投稿できません",
+    enterStartError: "スタートが置かれていないステージは実行できません",
+    sameColorParentError: "既に置いてある色のワープオブジェクトは置く事が出来ません"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -77,6 +86,15 @@ var LANGUAGE = {
     pipeDirectionUpper:"turn up shoot",
     pipeDirectionLefter:"turn left shoot",
     pipeDirectionRighter:"turn right shoot",
-    pipeDirectionDowner:"turn down shoot"
+    pipeDirectionDowner:"turn down shoot",
+    postStartNoneError:"You should put Start Object!",
+    postGoalNoneError:"You should put Goal Object!",
+    postPipeError:"Please check Warp Object's exit",
+    postStarManyError: "You should put three Stars!",
+    restore:"Restore",
+    eraser:"Eraser",
+    enterPipeError: "Please check Warp Object's exit",
+    enterStartError: "You should put Start Object!",
+    sameColorParentError: "Cannot put same color Warp Object!"
   }
 }

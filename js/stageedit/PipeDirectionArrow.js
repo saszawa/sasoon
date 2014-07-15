@@ -30,6 +30,11 @@ var PipeDirectionArrow = Class.create(ExLabel,{
     }
     theChildPipe.direction = this.direction;
     theChildPipe._element.className = 'pipeOut ' + this.direction;
+    //CreatertのstagesにDhirection追加 (JSON用)
+    creater.stages[theChildPipe.xId][theChildPipe.yId] = { name:"pipeOut", direction:this.direction.toString() };
+    pipeManager.pipeStatus[this.color] = "childPut";
+    pipeManager.pipeEntity[this.color].child.direction = this.direction.toString();
+
     //direction設定したらけし
     GAME.currentScene.removeChild(theChildPipe.directionArrow.up);
     GAME.currentScene.removeChild(theChildPipe.directionArrow.left);
