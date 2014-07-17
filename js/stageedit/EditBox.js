@@ -196,9 +196,6 @@ var EditBox = Class.create(Box,{
   putStar: function putStar(){
     //星を置く
     var star = new EditStar();
-    creater.currentStage.push(star);
-    creater.stages[this.xId][this.yId] = "star";
-    creater.starMany++;
     return star;
   },
   ontouchstart: function(e){
@@ -251,24 +248,14 @@ var EditBox = Class.create(Box,{
     else{
       //赤、緑、青、紫、オレンジ
       obj = new EditBlock(penColor);
-  //    this.putedObj = obj;
-//      creater.currentStage.push(this.putedObj);
-      //TODO 上書き機能
- //     creater.stages[this.xId][this.yId] = obj.color;
     }
 
     obj.x = this.x;
     obj.y = this.y;
-    //戻すようにxId,yIdを持たせる
+    //管理用ID
     obj.xId = this.xId;
     obj.yId = this.yId;
-    //戻す用
-    //startはcreater.startobjにまかす
-    if(!this.startObjFlg){
-//      creater.noneCollisionStages.push(obj);
-    }
     this.parentNode.addChild(obj);
-//    this.putedObjFlg = true;
   },
   ontouchmove: function(e){
     if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
