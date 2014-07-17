@@ -24,8 +24,6 @@ var TestPlayButton = Class.create(ExLabel,{
       return;
     }
     //まずはとっておく
-    creater.copyStage = void 0;
-    creater.copyStage = creater.currentStage.concat();
     creater.startObj.run();
   },
   setClassName: function(className){

@@ -1,6 +1,6 @@
-var EditPipe = Class.create(Sprite,{
+var EditPipe = Class.create(EditObj,{
   initialize: function(color){
-    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    EditObj.call(this,BOX_SIZE,BOX_SIZE);
 
     // DOMモード
     this._element = document.createElement('div');
@@ -32,102 +32,99 @@ var EditPipe = Class.create(Sprite,{
       }
     };
   },
-  /**
-  * Block.run()
-  */
-  run: function(){
-    var theChildPipe = null;
+  bloomArc: function bloomArc(theChildPipe){
     var arc = new HitArc(this.color);
-
-    //自分の子供から演出を出す
-    switch(this.color)
-    {
-      case "blue":
-        var theChildPipe = pipeManager.childPipe.blue;
-        //パイプステータスを変更
-        pipeManager.pipeStatus.blue = "nothing";
-        pipeManager.initPipeEntityColor("blue");
-        break;
-      case "red":
-        var theChildPipe = pipeManager.childPipe.red;
-        pipeManager.pipeStatus.red = "nothing";
-        pipeManager.initPipeEntityColor("red");
-        break;
-      case "green":
-        var theChildPipe = pipeManager.childPipe.green;
-        pipeManager.pipeStatus.green = "nothing";
-        pipeManager.initPipeEntityColor("green");
-        break;
-    }
     arc.x = theChildPipe.x-128;
     arc.y = theChildPipe.y-128;
     GAME.currentScene.addChild(arc);
+  },
+  getChildPipe: function getChildPipe(){
+    var theChildPipe = null;
+    switch(this.color)
+    {
+      case "blue":
+        theChildPipe = pipeManager.childPipe.blue;
+        break;
+      case "red":
+        theChildPipe = pipeManager.childPipe.red;
+        break;
+      case "green":
+        theChildPipe = pipeManager.childPipe.green;
+        break;
+    }
+    return theChildPipe;
+  },
+  initPipeStatusEtc: function initPipeStatusEtc(){
 
+    //パイプステータスを変更
+    pipeManager.pipeStatus[this.color] = "nothing";
+    pipeManager.initPipeEntityColor(this.color);
+
+  },
+  beamFire: function beamFire(thisChildPipe){
     var beamInit = {
-      x: theChildPipe.x+BOX_SIZE/2-BEAM_SIZE/2,
-      y: theChildPipe.y+BOX_SIZE/2-BEAM_SIZE/2,
+      x: thisChildPipe.x+BOX_SIZE/2-BEAM_SIZE/2,
+      y: thisChildPipe.y+BOX_SIZE/2-BEAM_SIZE/2,
       color: 'white',
-      parentBlock:theChildPipe,
+      parentBlock:thisChildPipe,
       beamLength:BEAM_LENGTH
     }
-    GAME.currentScene.addChild(new EditBeam(this.beamStatus[theChildPipe.direction],beamInit));
+    GAME.currentScene.addChild(new EditBeam(this.beamStatus[thisChildPipe.direction],beamInit));
+  },
+  run: function(){
+    var thisChildPipe = this.getChildPipe();
+    //自分の子供から演出を出す
+    this.bloomArc(thisChildPipe);
+    this.initPipeStatusEtc();
+    this.beamFire(thisChildPipe);
     playSound(GAME.assets['sound/pipe.mp3'].clone());
 
     //	出したら消滅
     //子供も削除
-    GAME.currentScene.removeChild(theChildPipe);
-    creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
-    //
-    creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
-    boxManager.boxArray[theChildPipe.xId][theChildPipe.yId].putedObjFlg = false;
-
+    GAME.currentScene.removeChild(thisChildPipe);
     GAME.currentScene.removeChild(this);
-    creater.stages[this.xId][this.yId] = null;
-    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
-    //currentStage
-    //currentScene
-    //stages
     //消しゴム
     if(creater.penColor == "eraser"){
-      var currentStageLength = creater.currentStage.length;
-
-      //currentStageから消す
-      for(var i = 0; i < currentStageLength; i++){
-        //自分を消す
-        //xId,yIdでやってるけど、ループまわさずやりたい
-        //グローバルにアクセスしまくってる現状
-        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
-          creater.currentStage.splice(i,1);
-          break;
-        }
-      }
-
-      //pipeStatusいじらな
-      var color = this.color;
-      creater.stages[this.xId][this.yId] = null;
-      pipeManager.pipeEntity[color].parent.x = null;
-      pipeManager.pipeEntity[color].parent.y = null;
-      pipeManager.pipeStatus[color] = "nothing";
-      //親を消したら子供も同時に消す
-      if(pipeManager.childPipe[color] != null){
-        GAME.currentScene.removeChild(pipeManager.childPipe[color]);
-        boxManager.boxArray[pipeManager.childPipe[color].xId][pipeManager.childPipe[color].yId].putedObjFlg = false;
-        creater.stages[pipeManager.childPipe[color].xId][pipeManager.childPipe[color].yId] = null;
-        pipeManager.pipeEntity[color].child.x = null;
-        pipeManager.pipeEntity[color].child.y = null;
-        pipeManager.pipeEntity[color].child.direction = null;
-        pipeManager.childPipe[color] = null;
-      }
-
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
       //インクを親に戻す
       GAME.currentScene.removeChild(this);
-      GAME.currentScene.removeChild(pipeManager.pipeInk);
-      pipeManager.pipeInk = void 0;
-      pipeManager.pipeInk = new PipeInk(color);
-      GAME.currentScene.addChild(pipeManager.pipeInk);
     }
+  },
+  onremovedfromscene: function(){
+    creater.stages[this.xId][this.yId] = null;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    //消えたやつは戻せるようにこの配列に追加
+    creater.noneCollisionStages[this.xId][this.yId] = this;
+    creater.currentStage[this.xId][this.yId] = null;
+
+    pipeManager.pipeEntity[this.color].parent.x = null;
+    pipeManager.pipeEntity[this.color].parent.y = null;
+    pipeManager.pipeStatus[this.color] = "nothing";
+
+    //親を消したら子供も同時に消す
+    if(pipeManager.childPipe[this.color] != null){
+      GAME.currentScene.removeChild(pipeManager.childPipe[this.color]);
+    }
+
+    this.replacePipeInk();
+  },
+  replacePipeInk: function replacePipeInk(){
+    GAME.currentScene.removeChild(pipeManager.pipeInk);
+    pipeManager.pipeInk = void 0;
+    pipeManager.pipeInk = new PipeInk(this.color);
+    GAME.currentScene.addChild(pipeManager.pipeInk);
+  },
+  //追加されたときに追加フラグ
+  onaddedtoscene: function(){
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
+    pipeManager.pipeEntity[this.color].parent.x = this.xId;
+    pipeManager.pipeEntity[this.color].parent.y = this.yId;
+    pipeManager.pipeStatus[this.color] = "parentPut";
+    this.registJSON();
+    creater.currentStage[this.xId][this.yId] = this;
+  },
+  registJSON: function registJSON(){
+    creater.stages[this.xId][this.yId] = {name:"pipe",color:this.color};
   }
 });

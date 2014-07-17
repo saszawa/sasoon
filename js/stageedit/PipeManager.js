@@ -47,7 +47,7 @@ var PipeManager =  function(){
     this.pipeEntity[color].parent.y = null;
     this.pipeEntity[color].child.y = null;
     this.pipeEntity[color].child.x = null;
-    this.pipeEntity[color].direction = null;
+    this.pipeEntity[color].child.direction = null;
     return;
   };
 
@@ -100,4 +100,27 @@ var PipeManager =  function(){
     }
     return false;
   };
+
+  //pipeStatusを
+  //pipeEntityの状況に順応させる
+  this.adaptPipeStatus = function adaptPipeStatus()
+  {
+    var colorArray = ["blue","red","green"];
+    for(var i = 0; i < 3; i++){
+      //親があるとき
+      if(this.pipeEntity[colorArray[i]].parent.x != null){
+        //子供の方向設定終わっている
+        if(this.pipeEntity[colorArray[i]].child.direction != null ){
+          this.pipeStatus[colorArray[i]] = "childPut";
+        //子供はあるが方向設定してない
+        }else if( this.pipeEntity[colorArray[i]].child.x != null && this.pipeEntity[colorArray[i]].child.direction == null ){
+          this.pipeStatus[colorArray[i]] = "noneDirection";
+        }
+      //親がない
+      }else{
+        this.pipeStatus[colorArray[i]] = "nothing";
+      }
+    }
+    this.pipeEntity.blue.parent.x != null;
+  }
 }

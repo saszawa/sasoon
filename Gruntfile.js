@@ -39,6 +39,7 @@ module.exports = function(grunt) {
           'js/tutorial.js',
           'js/VolumeSlider.js',
           'js/Sound.js',
+          'js/stageedit/EditObj.js',
           'js/stageedit/EditBox.js',
           'js/stageedit/BlockInk.js',
           'js/stageedit/Creater.js',

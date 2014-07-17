@@ -18,9 +18,16 @@ var Creater =  function(color){
   this.starMany = 0;
   this.startPos = {};
 
-  //これで実行のcurrentStage管理
-  this.currentStage = new Array();
+  //これで実行のcurrentStage管理 当たり判定　管理しやすい用にxId yId
+  this.currentStage = new Array(10);
+  for( var i = 0; i < 10; i++){
+    this.currentStage[i] = new Array(10);
+  }
+
   //実行前に戻す為の配列
-  this.noneCollisionStages = new Array();
+  this.noneCollisionStages = new Array(10);
+  for( var i = 0; i < 10; i++){
+    this.noneCollisionStages[i] = new Array(10);
+  }
   this.copyStage = [];
 }

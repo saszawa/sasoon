@@ -21,51 +21,43 @@ var RestoreButton = Class.create(ExLabel,{
       creater.putStartFlg = true;
     }
 
-    //これは戻すたびに実体が増える前に解放する
-    creater.currentStage = void 0;
-    creater.currentStage = creater.copyStage.concat();
 
     var stageArrayLength = stageArray.length;
-    for(var i = 0; i < stageArrayLength; i++){
-      //戻す時に既に戻そうとする場所にオブジェクトがあったら
-      if(boxManager.boxArray[stageArray[i].xId][stageArray[i].yId].putedObjFlg){
-        continue;
-      }
 
-      //TODO ここクラス名使わずに判定したい
-      //親パイプのパイプマネージャー整理
-      if(stageArray[i]._element.className == "pipe"){
-        var parentPipeColor = stageArray[i].color;
-        //実行したり消したりした後に戻すと同色が２個以上出来る可能性があるから条件で防ぐ
-        if(pipeManager.pipeStatus[parentPipeColor] == "childPut" || pipeManager.pipeStatus[parentPipeColor] == "parentPut" || pipeManager.pipeStatus[parentPipeColor] == "noneDirection"){
+    for(var x = 0; x < 10; x++){
+      for(var y = 0; y < 10; y++){
+        //戻す時に既に戻そうとする場所にオブジェクトがあったら
+        if(boxManager.boxArray[x][y].putedObjFlg){
           continue;
         }
-
-        pipeManager.pipeEntity[parentPipeColor].parent.x = stageArray[i].xId;
-        pipeManager.pipeEntity[parentPipeColor].parent.y = stageArray[i].yId;
-        //stagearrayの順番は確定じゃないから子供が先に復活する場合もアル
-        if(pipeManager.pipeStatus != "childPut"){
-          pipeManager.pipeStatus[parentPipeColor] = "parentPut";
+        if(stageArray[x][y]){
+          //パイプだった場合
+          if(stageArray[x][y]._element.className == "pipe"){
+            var parentPipeColor = stageArray[x][y].color;
+            //実行したり消したりした後に戻すと同色が２個以上出来る可能性があるから条件で防ぐ
+            if(pipeManager.pipeStatus[parentPipeColor] == "childPut" || pipeManager.pipeStatus[parentPipeColor] == "parentPut" || pipeManager.pipeStatus[parentPipeColor] == "noneDirection"){
+              continue;
+            }
+            //stagearrayの順番は確定じゃないから子供が先に復活する場合もアル
+            if(pipeManager.pipeStatus != "childPut"){
+              pipeManager.pipeStatus[parentPipeColor] = "parentPut";
+              var childPipeColor = stageArray[x][y].color;
+            }
+            this.addCreatersStages(stageArray[x][y])
+            GAME.currentScene.addChild(stageArray[x][y]);
+          }//小パイプダッタ場合
+          else if(stageArray[x][y]._element.className.indexOf("pipeOut") != -1){
+            //子パイプの方向決めオブジェクトを出さないようにする
+            stageArray[x][y].restoreFlg = true;
+            pipeManager.pipeStatus[childPipeColor] = "childPut";
+            this.addCreatersStages(stageArray[x][y])
+            GAME.currentScene.addChild(stageArray[x][y]);
+          }else {
+            this.addCreatersStages(stageArray[x][y])
+            GAME.currentScene.addChild(stageArray[x][y]);
+          }
         }
-
       }
-      //子パイプの方向決めオブジェクトを出さないようにする
-      if(stageArray[i]._element.className.indexOf("pipeOut") != -1){
-        stageArray[i].restoreFlg = true;
-        //パイプマネージャーの不整合を直す
-        var childPipeColor = stageArray[i].color;
-        if(pipeManager.pipeStatus[childPipeColor] != "parentPut"){
-          continue;
-        }
-        pipeManager.pipeEntity[childPipeColor].child.x = stageArray[i].xId;
-        pipeManager.pipeEntity[childPipeColor].child.y = stageArray[i].yId;
-        pipeManager.pipeEntity[childPipeColor].child.direction = stageArray[i].direction;
-        //childpipeに登録
-        pipeManager.childPipe[childPipeColor] = stageArray[i];
-        pipeManager.pipeStatus[childPipeColor] = "childPut";
-      }
-      this.addCreatersStages(stageArray[i]);
-      GAME.currentScene.addChild(stageArray[i]);
     }
     //pipeInkを使ってない色のインクにかえる
     //全部使ってたらそのまま
@@ -75,7 +67,8 @@ var RestoreButton = Class.create(ExLabel,{
       pipeManager.pipeInk = void 0 
       pipeManager.pipeInk = new PipeInk(unUsedColor);
       GAME.currentScene.addChild(pipeManager.pipeInk);
-    } 
+    }
+    pipeManager.adaptPipeStatus();
   },
   setClassName: function(className){
     this._element.className = className;

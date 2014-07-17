@@ -23,19 +23,18 @@ var EditBeam = Class.create(Beam,{
   onenterframe: function(){
     // 衝突検知
     // やっぱこうなるの・・・
-    var gimmicks = creater.currentStage.length;
+//    var gimmicks = creater.currentStage.length;
     var distance = BOX_HALF+12;
-    for(var i = 0; i < gimmicks; i++){
-      if(!creater.currentStage[i]){
-      } else if(this.within(creater.currentStage[i], distance) && creater.currentStage[i] !== this.parentBlock){
-        // 発射！
-        creater.currentStage[i].run();
 
-        // 当たったら消える
-        delete creater.currentStage[i];
-        creater.currentStage.splice(i,1);
-        GAME.currentScene.removeChild(this);
-        return;
+    //currentStage[10][10]
+    for(var x = 0; x < 10; x++){
+      for(var y = 0; y < 10; y++){
+        if(!creater.currentStage[x][y]){
+        }
+        else if(this.within(creater.currentStage[x][y], distance) && creater.currentStage[x][y] !== this.parentBlock){
+          creater.currentStage[x][y].run();
+          GAME.currentScene.removeChild(this);
+        }
       }
     }
 

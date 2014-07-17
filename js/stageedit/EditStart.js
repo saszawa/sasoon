@@ -59,20 +59,19 @@ var EditStart = Class.create(Start,{
     //出したら消滅
     GAME.currentScene.removeChild(this);
     //戻すようにとっておく
-    //creater.startObj = null;
+  },
+  onaddedtoscene: function(){
+    this.registJSON();
+    creater.putStartFlg = true;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
+    creater.startObj = this;
+  },
+  onremovedfromscene: function(){
     creater.putStartFlg = false;
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-  },
-  ontouchstart: function(){
-    //currentScene
-    //Stages
-    //消しゴム
-    if(creater.penColor == "eraser"){
-      creater.putStartFlg = false;
 
-      creater.stages[this.xId][this.yId] = null;
-      GAME.currentScene.removeChild(this);
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-    }
+  },
+  registJSON: function registJSON(){
+    creater.stages[this.xId][this.yId] = this.objName;
   }
 });
