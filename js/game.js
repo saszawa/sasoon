@@ -3790,6 +3790,73 @@ function playSound(sound){
   
 }
 
+var EditObj = Class.create(Sprite,{
+  initialize: function(){
+    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+
+    //戻す用にxId,yId
+    this.xId = -1;
+    this.yId = -1;
+    this.objName = null;
+  },
+  run: function(){
+
+    this.bloomArc();
+    this.beamFire();
+    this.playMySound();
+    //	出したら消滅
+    GAME.currentScene.removeChild(this);
+  },
+  ontouchstart: function(){
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      GAME.currentScene.removeChild(this);
+    }
+  },
+  //消えた時の処理をまとめる
+  onremovedfromscene: function(){
+    creater.stages[this.xId][this.yId] = null;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    //消えたやつは戻せるようにこの配列に追加
+    creater.noneCollisionStages[this.xId][this.yId] = this;
+    creater.currentStage[this.xId][this.yId] = null;
+  },
+  beamFire: function beamFire(){
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 1
+      }
+      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      i++;
+    }
+  },
+  bloomArc: function bloomArc(){
+    var arc = new HitArc(this.color);
+    arc.x = this.x-128;
+    arc.y = this.y-128;
+    GAME.currentScene.addChild(arc);
+  },
+  //追加されたときに追加フラグ
+  onaddedtoscene: function(){
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
+    this.registJSON();
+    creater.currentStage[this.xId][this.yId] = this;
+  },
+  playMySound: function playMySound(){
+    if(this.objName){
+      playSound(GAME.assets['sound/' + this.objName + '.mp3'].clone());
+    }
+  },
+  registJSON: function registJSON(){
+    creater.stages[this.xId][this.yId] = this.objName;
+  }
+});
+
 var EditBox = Class.create(Box,{
   initialize: function(xNumber,yNumber){
     //生成時にBoxの場所を引き数に持つ
@@ -3830,26 +3897,17 @@ var EditBox = Class.create(Box,{
   },
   putSlanter: function putSlanter(){
       var slanter = new EditSlanter(this.xId,this.yId);
-      creater.currentStage.push(slanter);
-      creater.stages[this.xId][this.yId] = "slanter";
       return slanter;
   },
   putDiffusioner: function putDiffusioner(){
       var diffusioner  = new EditDiffusioner();
-      creater.currentStage.push(diffusioner);
-      creater.stages[this.xId][this.yId] = "diffusioner";
       return diffusioner;
   },
   putParentPipe: function putParentPipe(){
     //親パイプのとき
-    //既に同色が置いてある場合
     var color = creater.pipeColor;
     var parentPipe = new EditPipe(color);
 
-    creater.currentStage.push(parentPipe);
-    creater.stages[this.xId][this.yId] = {name:"pipe",color:"blue"};
-    pipeManager.pipeEntity[color].parent.x = this.xId;
-    pipeManager.pipeEntity[color].parent.y = this.yId;
     pipeManager.pipeStatus[color] = "parentPut";
     creater.penColor = "childPipe";
 
@@ -3897,6 +3955,48 @@ var EditBox = Class.create(Box,{
     }
     alert("pipe Color Error. color is not exist");
   },
+  rotateCreaterPipeColor: function rotateCreaterPipeColor(color){
+    //消しゴムの存在により、確定で子供のつぎに次の色の親がくる訳じゃなくなった。
+    //なので、pipeEntityを確認してインクを変える
+    //条件　
+    //二つともある場合
+    var theColor = null;
+    if(pipeManager.pipeEntity[color].child.x != null){
+      switch(color)
+      {
+        //青以外
+        case "blue":
+          theColor = "green";
+          creater.pipeColor = "green";
+        break;
+        case "red":
+          theColor = "blue";
+          creater.pipeColor = "blue";
+        break;
+        case "green":
+          theColor = "red";
+          creater.pipeColor = "red";
+        break;
+      }
+    }else{
+      switch(color)
+      {
+        case "blue":
+          theColor = "red";
+          creater.pipeColor = "red";
+          break;
+        case "red":
+          theColor = "green";
+          creater.pipeColor = "green";
+          break;
+        case "green":;
+          theColor = "blue";
+          creater.pipeColor = "blue";
+          break;
+      }
+    }
+    return theColor;
+  },
   putChildPipe: function putChildPipe(){
       //子パイプの時
       var color = creater.pipeColor;
@@ -3909,91 +4009,36 @@ var EditBox = Class.create(Box,{
         this.pipeNextAlreadyFlg = true;
       }
 
-      //createrに登録 正直pipeマネージャーで管理しているのでクリエイターに登録しなくてよい
-//      creater.stages[this.xId][this.yId] = "pipeOut";
       //自分にもxId yId登録
       childPipe.xId = this.xId;
       childPipe.yId = this.yId;
 
       //pipemanagerに登録
       pipeManager.pipeStatus[color] = "noneDirection";
-      pipeManager.pipeEntity[color].child.x = this.xId;
-      pipeManager.pipeEntity[color].child.y = this.yId;
-      pipeManager.childPipe[color] = void 0;
-      //なんでこここれでアクセスできんのやろ
-      //console.log(pipeManager.childPipe[color]);
 
-      //色をまわす為の配列を使ってやったほうがスマートかもしれんが読みにくい
-//      var colorArray = ["blue","red","green"];
       //色を変える
-      switch(color)
-      {
-        case "blue":
-          pipeManager.childPipe.blue = childPipe;
-          color = "red";
-          creater.pipeColor = "red";
-          break;
-        case "red":
-          pipeManager.childPipe.red = childPipe;
-          color = "green";
-          creater.pipeColor = "green";
-          break;
-        case "green":
-          pipeManager.childPipe.green = childPipe;
-          color = "blue";
-          creater.pipeColor = "blue";
-          break;
-      }
+      color = this.rotateCreaterPipeColor(color);
 
       creater.penColor = "parentPipe";
 
-      //消しゴムの存在により、確定で子供のつぎに次の色の親がくる訳じゃなくなった。
-      //なので、pipeEntityを確認してインクを変える
-      //条件　
-      //　次色の親が残ってる場合
-      //　次色が二つともない場合　＝＞　今まで通り
-      //　次色が二つともある場合　＝＞　さらにつぎの色へ
-      //二つともある場合
-      if(pipeManager.pipeEntity[color].child.x != null){
-        switch(color)
-        {
-          //青以外
-          case "blue":
-            color = "green";
-            creater.pipeColor = "green";
-          break;
-          case "red":
-            color = "blue";
-            creater.pipeColor = "blue";
-          break;
-          case "green":
-            color = "red";
-            creater.pipeColor = "red";
-          break;
-        }
-      }
-      //TODO 次色の親だけが残っている場合
- //     if(pipeManager.pipeEntity[color].child.x == null && pipeManager.pipeEntity[color].parent.x != null){
-
- //     }
       if(this.pipeNextAlreadyFlg){
         this.itaratePipeInk(nextColor);
       }else{
-        GAME.currentScene.removeChild(pipeManager.pipeInk);
-        pipeManager.pipeInk = void 0;
-        pipeManager.pipeInk = new PipeInk(color);
-        GAME.currentScene.addChild(pipeManager.pipeInk);
+        this.replacePipeInk(color);
       }
       //使ってない色のインクにかえるこれ合ったら上のいらん可能性たかい
       var unUsedColor = pipeManager.getUnusedColor();
       if(unUsedColor){
-        GAME.currentScene.removeChild(pipeManager.pipeInk);
-        pipeManager.pipeInk = void 0 
-        pipeManager.pipeInk = new PipeInk(unUsedColor);
-        GAME.currentScene.addChild(pipeManager.pipeInk);
-      } 
+        this.replacePipeInk(unUsedColor);
+      }
 
       return childPipe;
+  },
+  replacePipeInk: function replacePipeInk(color){
+    GAME.currentScene.removeChild(pipeManager.pipeInk);
+    pipeManager.pipeInk = void 0;
+    pipeManager.pipeInk = new PipeInk(color);
+    GAME.currentScene.addChild(pipeManager.pipeInk);
   },
   putGoal: function putGoal(){
     //goalは一個しか置けない用にするA
@@ -4065,10 +4110,10 @@ var EditBox = Class.create(Box,{
     else{
       //赤、緑、青、紫、オレンジ
       obj = new EditBlock(penColor);
-      this.putedObj = obj;
-      creater.currentStage.push(this.putedObj);
+  //    this.putedObj = obj;
+//      creater.currentStage.push(this.putedObj);
       //TODO 上書き機能
-      creater.stages[this.xId][this.yId] = obj.color;
+ //     creater.stages[this.xId][this.yId] = obj.color;
     }
 
     obj.x = this.x;
@@ -4079,10 +4124,10 @@ var EditBox = Class.create(Box,{
     //戻す用
     //startはcreater.startobjにまかす
     if(!this.startObjFlg){
-      creater.noneCollisionStages.push(obj);
+//      creater.noneCollisionStages.push(obj);
     }
     this.parentNode.addChild(obj);
-    this.putedObjFlg = true;
+//    this.putedObjFlg = true;
   },
   ontouchmove: function(e){
     if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
@@ -4146,10 +4191,17 @@ var Creater =  function(color){
   this.starMany = 0;
   this.startPos = {};
 
-  //これで実行のcurrentStage管理
-  this.currentStage = new Array();
+  //これで実行のcurrentStage管理 当たり判定　管理しやすい用にxId yId
+  this.currentStage = new Array(10);
+  for( var i = 0; i < 10; i++){
+    this.currentStage[i] = new Array(10);
+  }
+
   //実行前に戻す為の配列
-  this.noneCollisionStages = new Array();
+  this.noneCollisionStages = new Array(10);
+  for( var i = 0; i < 10; i++){
+    this.noneCollisionStages[i] = new Array(10);
+  }
   this.copyStage = [];
 }
 
@@ -4227,8 +4279,6 @@ var TestPlayButton = Class.create(ExLabel,{
       return;
     }
     //まずはとっておく
-    creater.copyStage = void 0;
-    creater.copyStage = creater.currentStage.concat();
     creater.startObj.run();
   },
   setClassName: function(className){
@@ -4297,21 +4347,20 @@ var EditStart = Class.create(Start,{
     //出したら消滅
     GAME.currentScene.removeChild(this);
     //戻すようにとっておく
-    //creater.startObj = null;
+  },
+  onaddedtoscene: function(){
+    this.registJSON();
+    creater.putStartFlg = true;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
+    creater.startObj = this;
+  },
+  onremovedfromscene: function(){
     creater.putStartFlg = false;
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-  },
-  ontouchstart: function(){
-    //currentScene
-    //Stages
-    //消しゴム
-    if(creater.penColor == "eraser"){
-      creater.putStartFlg = false;
 
-      creater.stages[this.xId][this.yId] = null;
-      GAME.currentScene.removeChild(this);
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-    }
+  },
+  registJSON: function registJSON(){
+    creater.stages[this.xId][this.yId] = this.objName;
   }
 });
 
@@ -4340,19 +4389,19 @@ var EditBeam = Class.create(Beam,{
   onenterframe: function(){
     // 衝突検知
     // やっぱこうなるの・・・
-    var gimmicks = creater.currentStage.length;
+//    var gimmicks = creater.currentStage.length;
     var distance = BOX_HALF+12;
-    for(var i = 0; i < gimmicks; i++){
-      if(!creater.currentStage[i]){
-      } else if(this.within(creater.currentStage[i], distance) && creater.currentStage[i] !== this.parentBlock){
-        // 発射！
-        creater.currentStage[i].run();
 
-        // 当たったら消える
-        delete creater.currentStage[i];
-        creater.currentStage.splice(i,1);
-        GAME.currentScene.removeChild(this);
-        return;
+    //currentStage[10][10]
+    for(var x = 0; x < 10; x++){
+      for(var y = 0; y < 10; y++){
+        if(!creater.currentStage[x][y]){
+        }
+        else if(this.within(creater.currentStage[x][y], distance) && creater.currentStage[x][y] !== this.parentBlock){
+          creater.currentStage[x][y].run();
+          GAME.currentScene.removeChild(this);
+        }
+        
       }
     }
 
@@ -4371,15 +4420,16 @@ var EditBeam = Class.create(Beam,{
   }
 });
 
-var EditBlock = Class.create(Block,{
+var EditBlock = Class.create(EditObj,{
   initialize: function(color){
-    Block.call(this,BOX_SIZE,BOX_SIZE);
+    EditObj.call(this,BOX_SIZE,BOX_SIZE);
 
     // DOMモード
     this._element = document.createElement('div');
     this._element.className = color;
 
     this.color = color;
+    this.objName = this.color;
 
     //戻す用にxId,yId
     this.xId = -1;
@@ -4411,18 +4461,7 @@ var EditBlock = Class.create(Block,{
       }
     };
   },
-  /**
-   * Block.run()
-   * 	4方向にBeamを出します
-   */
-  run: function(){
-    if( 0 < effectLevel){
-      var arc = new HitArc(this.color);
-      arc.x = this.x-128;
-      arc.y = this.y-128;
-      GAME.currentScene.addChild(arc);
-    }
-
+  beamFire: function beamFire(){
     var i = 0;
     for(var beam in this.beamStatus){
       if(DIRECTIONS[this.color][i]){
@@ -4433,74 +4472,21 @@ var EditBlock = Class.create(Block,{
           parentBlock:this,
           beamLength:BEAM_LENGTH
         }
-        GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+        this.parentNode.addChild(new EditBeam(this.beamStatus[beam],beamInit));
       }
       i++;
-    }
-
-    switch (this.color){
-      case "blue":
-        playSound(GAME.assets['sound/blue.mp3'].clone());
-        break;
-      case "green":
-        playSound(GAME.assets['sound/green.mp3'].clone());
-        break;
-      case "red":
-        playSound(GAME.assets['sound/red.mp3'].clone());
-        break;
-      case "purple":
-        playSound(GAME.assets['sound/purple.mp3'].clone());
-        break;
-      case "orange":
-        playSound(GAME.assets['sound/orange.mp3'].clone());
-        break;
-      case "white":
-        playSound(GAME.assets['sound/white.mp3'].clone());
-        break;
-    }
-
-    //	出したら消滅
-    GAME.currentScene.removeChild(this);
-    creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除びーむが消してくれる
-    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-  },
-  ontouchstart: function(){
-    //currentStage
-    //currentScene
-    //Stages
-    //消しゴム
-    if(creater.penColor == "eraser"){
-      var currentStageLength = creater.currentStage.length;
-      var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      //これいじっちゃうと消すたびにこぴーが小さくなって見た目はあるのにデータがない感じになる
-//      creater.copyStage = void 0;
-//      creater.copyStage = creater.currentStage;
-
-      //currentStageから消す
-      for(var i = 0; i < currentStageLength; i++){
-        //自分を消す
-        //xId,yIdでやってるけど、ループまわさずやりたい
-        //グローバルにアクセスしまくってる現状
-        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
-          creater.currentStage.splice(i,1);
-          break;
-        }
-      }
-      creater.stages[this.xId][this.yId] = null;
-      GAME.currentScene.removeChild(this);
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
     }
   }
 });
 
-var EditSlanter = Class.create(Slanter,{
+var EditSlanter = Class.create(EditObj,{
   initialize: function(){
-    Slanter.call(this,BOX_SIZE,BOX_SIZE);
+    EditObj.call(this,BOX_SIZE,BOX_SIZE);
     this._element = document.createElement('div');
     this._element.className = 'slanter';
     this.image = SLANTER;
     this.rotation = 45;
+    this.objName = "slanter";
 
     //戻す用にxId,yId
     this.xId = -1;
@@ -4512,59 +4498,7 @@ var EditSlanter = Class.create(Slanter,{
       downLeft: {moveX: -MOVE_PX ,moveY: MOVE_PX },
       leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
     };
-
     this.color = "green";
-
-  },
-  run: function(){
-
-    var arc = new HitArc(this.color);
-    arc.x = this.x-128;
-    arc.y = this.y-128;
-    GAME.currentScene.addChild(arc);
-
-    var i = 0;
-    for(var beam in this.beamStatus){
-      // 初期設定的な
-      var beamInit = {
-        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-        parentBlock:this,
-        beamLength: 2
-      }
-      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
-      i++;
-    }
-
-    playSound(GAME.assets['sound/slanter.mp3'].clone());
-    //	出したら消滅
-    creater.stages[this.xId][this.yId] = null;
-    GAME.currentScene.removeChild(this);
-    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-  },
-  ontouchstart: function(){
-    //currentStage
-    //currentScene
-    //Stages
-    //消しゴム
-    if(creater.penColor == "eraser"){
-      var currentStageLength = creater.currentStage.length;
-      var noneCollisionStagesLength = creater.noneCollisionStages.length;
-
-      GAME.currentScene.removeChild(this);
-      //currentStageから消す
-      for(var i = 0; i < currentStageLength; i++){
-        //自分を消す
-        //xId,yIdでやってるけど、ループまわさずやりたい
-        //グローバルにアクセスしまくってる現状
-        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
-          creater.currentStage.splice(i,1);
-          break;
-        }
-      }
-      creater.stages[this.xId][this.yId] = null;
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-    }
   }
 });
 
@@ -4603,12 +4537,13 @@ var DiffusionerInk = Class.create(Diffusioner,{
   }
 });
 
-var EditDiffusioner = Class.create(Diffusioner,{
+var EditDiffusioner = Class.create(EditObj,{
   initialize: function(){
-    Diffusioner.call(this,BOX_SIZE,BOX_SIZE);
+    EditObj.call(this,BOX_SIZE,BOX_SIZE);
     this._element = document.createElement('div');
     this._element.className = 'diffusioner';
     this.image = DIFFUSIONER;
+    this.objName = "diffusioner";
 
     // 倍の早さ
     var movePx = MOVE_PX*2;
@@ -4630,59 +4565,6 @@ var EditDiffusioner = Class.create(Diffusioner,{
 
     this.color = "red";
 
-  },
-  run: function(){
-
-    var arc = new HitArc(this.color);
-    arc.x = this.x-128;
-    arc.y = this.y-128;
-    GAME.currentScene.addChild(arc);
-
-    var i = 0;
-    for(var beam in this.beamStatus){
-      // 初期設定的な
-      var beamInit = {
-        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
-        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
-        parentBlock:this,
-        beamLength: 1
-      }
-      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
-      i++;
-    }
-
-    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
-    //	出したら消滅
-    GAME.currentScene.removeChild(this);
-
-    creater.stages[this.xId][this.yId] = null;
-    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-  },
-  ontouchstart: function(){
-    //currentStage
-    //currentScene
-    //noneCollisionStages
-    //消しゴム
-    if(creater.penColor == "eraser"){
-      var currentStageLength = creater.currentStage.length;
-      var noneCollisionStagesLength = creater.noneCollisionStages.length;
-
-      //currentStageから消す
-      for(var i = 0; i < currentStageLength; i++){
-        //自分を消す
-        //xId,yIdでやってるけど、ループまわさずやりたい
-        //グローバルにアクセスしまくってる現状
-        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
-          creater.currentStage.splice(i,1);
-          break;
-        }
-      }
-
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-      //JSON用配列も消す
-      creater.stages[this.xId][this.yId] = null;
-      GAME.currentScene.removeChild(this);
-    }
   }
 });
 
@@ -4717,9 +4599,9 @@ var PipeInk = Class.create(Sprite,{
   }
 });
 
-var EditPipe = Class.create(Sprite,{
+var EditPipe = Class.create(EditObj,{
   initialize: function(color){
-    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    EditObj.call(this,BOX_SIZE,BOX_SIZE);
 
     // DOMモード
     this._element = document.createElement('div');
@@ -4751,103 +4633,100 @@ var EditPipe = Class.create(Sprite,{
       }
     };
   },
-  /**
-  * Block.run()
-  */
-  run: function(){
-    var theChildPipe = null;
+  bloomArc: function bloomArc(theChildPipe){
     var arc = new HitArc(this.color);
-
-    //自分の子供から演出を出す
-    switch(this.color)
-    {
-      case "blue":
-        var theChildPipe = pipeManager.childPipe.blue;
-        //パイプステータスを変更
-        pipeManager.pipeStatus.blue = "nothing";
-        pipeManager.initPipeEntityColor("blue");
-        break;
-      case "red":
-        var theChildPipe = pipeManager.childPipe.red;
-        pipeManager.pipeStatus.red = "nothing";
-        pipeManager.initPipeEntityColor("red");
-        break;
-      case "green":
-        var theChildPipe = pipeManager.childPipe.green;
-        pipeManager.pipeStatus.green = "nothing";
-        pipeManager.initPipeEntityColor("green");
-        break;
-    }
     arc.x = theChildPipe.x-128;
     arc.y = theChildPipe.y-128;
     GAME.currentScene.addChild(arc);
+  },
+  getChildPipe: function getChildPipe(){
+    var theChildPipe = null;
+    switch(this.color)
+    {
+      case "blue":
+        theChildPipe = pipeManager.childPipe.blue;
+        break;
+      case "red":
+        theChildPipe = pipeManager.childPipe.red;
+        break;
+      case "green":
+        theChildPipe = pipeManager.childPipe.green;
+        break;
+    }
+    return theChildPipe;
+  },
+  initPipeStatusEtc: function initPipeStatusEtc(){
 
+    //パイプステータスを変更
+    pipeManager.pipeStatus[this.color] = "nothing";
+    pipeManager.initPipeEntityColor(this.color);
+
+  },
+  beamFire: function beamFire(thisChildPipe){
     var beamInit = {
-      x: theChildPipe.x+BOX_SIZE/2-BEAM_SIZE/2,
-      y: theChildPipe.y+BOX_SIZE/2-BEAM_SIZE/2,
+      x: thisChildPipe.x+BOX_SIZE/2-BEAM_SIZE/2,
+      y: thisChildPipe.y+BOX_SIZE/2-BEAM_SIZE/2,
       color: 'white',
-      parentBlock:theChildPipe,
+      parentBlock:thisChildPipe,
       beamLength:BEAM_LENGTH
     }
-    GAME.currentScene.addChild(new EditBeam(this.beamStatus[theChildPipe.direction],beamInit));
+    GAME.currentScene.addChild(new EditBeam(this.beamStatus[thisChildPipe.direction],beamInit));
+  },
+  run: function(){
+    var thisChildPipe = this.getChildPipe();
+    //自分の子供から演出を出す
+    this.bloomArc(thisChildPipe);
+    this.initPipeStatusEtc();
+    this.beamFire(thisChildPipe);
     playSound(GAME.assets['sound/pipe.mp3'].clone());
 
     //	出したら消滅
     //子供も削除
-    GAME.currentScene.removeChild(theChildPipe);
-    creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
-    //
-    creater.stages[theChildPipe.xId][theChildPipe.yId] = null;
-    boxManager.boxArray[theChildPipe.xId][theChildPipe.yId].putedObjFlg = false;
-
+    GAME.currentScene.removeChild(thisChildPipe);
     GAME.currentScene.removeChild(this);
-    creater.stages[this.xId][this.yId] = null;
-    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
   ontouchstart: function(){
-    //currentStage
-    //currentScene
-    //stages
     //消しゴム
     if(creater.penColor == "eraser"){
-      var currentStageLength = creater.currentStage.length;
-
-      //currentStageから消す
-      for(var i = 0; i < currentStageLength; i++){
-        //自分を消す
-        //xId,yIdでやってるけど、ループまわさずやりたい
-        //グローバルにアクセスしまくってる現状
-        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
-          creater.currentStage.splice(i,1);
-          break;
-        }
-      }
-
-      //pipeStatusいじらな
-      var color = this.color;
-      creater.stages[this.xId][this.yId] = null;
-      pipeManager.pipeEntity[color].parent.x = null;
-      pipeManager.pipeEntity[color].parent.y = null;
-      pipeManager.pipeStatus[color] = "nothing";
-      //親を消したら子供も同時に消す
-      if(pipeManager.childPipe[color] != null){
-        GAME.currentScene.removeChild(pipeManager.childPipe[color]);
-        boxManager.boxArray[pipeManager.childPipe[color].xId][pipeManager.childPipe[color].yId].putedObjFlg = false;
-        creater.stages[pipeManager.childPipe[color].xId][pipeManager.childPipe[color].yId] = null;
-        pipeManager.pipeEntity[color].child.x = null;
-        pipeManager.pipeEntity[color].child.y = null;
-        pipeManager.pipeEntity[color].child.direction = null;
-        pipeManager.childPipe[color] = null;
-      }
-
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
       //インクを親に戻す
       GAME.currentScene.removeChild(this);
-      GAME.currentScene.removeChild(pipeManager.pipeInk);
-      pipeManager.pipeInk = void 0;
-      pipeManager.pipeInk = new PipeInk(color);
-      GAME.currentScene.addChild(pipeManager.pipeInk);
     }
+  },
+  onremovedfromscene: function(){
+    creater.stages[this.xId][this.yId] = null;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    //消えたやつは戻せるようにこの配列に追加
+    creater.noneCollisionStages[this.xId][this.yId] = this;
+    creater.currentStage[this.xId][this.yId] = null;
+
+    pipeManager.pipeEntity[this.color].parent.x = null;
+    pipeManager.pipeEntity[this.color].parent.y = null;
+    pipeManager.pipeStatus[this.color] = "nothing";
+
+    //親を消したら子供も同時に消す
+    if(pipeManager.childPipe[this.color] != null){
+      GAME.currentScene.removeChild(pipeManager.childPipe[this.color]);
+    }
+
+    this.replacePipeInk();
+  },
+  replacePipeInk: function replacePipeInk(){
+    GAME.currentScene.removeChild(pipeManager.pipeInk);
+    pipeManager.pipeInk = void 0;
+    pipeManager.pipeInk = new PipeInk(this.color);
+    GAME.currentScene.addChild(pipeManager.pipeInk);
+  },
+  //追加されたときに追加フラグ
+  onaddedtoscene: function(){
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
+    pipeManager.pipeEntity[this.color].parent.x = this.xId;
+    pipeManager.pipeEntity[this.color].parent.y = this.yId;
+    pipeManager.pipeStatus[this.color] = "parentPut";
+    this.registJSON();
+    creater.currentStage[this.xId][this.yId] = this;
+  },
+  registJSON: function registJSON(){
+    creater.stages[this.xId][this.yId] = {name:"pipe",color:this.color};
   }
 });
 
@@ -4887,13 +4766,13 @@ var EditChildPipe = Class.create(Sprite,{
     };
   },
   onaddedtoscene: function(){
+
+    //親が存在しないと存在できない
+    //親に関連を追加
+
     //戻すボタンで作られた時をのぞく
     if(!this.restoreFlg){
       //矢印を出現させ方向を決める
-      //LANGUAGE[COUNTRYCODE].pipeDirectionUpper
-      //LANGUAGE[COUNTRYCODE].pipeDirectionLefter
-      //LANGUAGE[COUNTRYCODE].pipeDirectionRighter
-      //LANGUAGE[COUNTRYCODE].pipeDirectionDowner
       this.directionArrow.up = new PipeDirectionArrow("",this.color);
       this.directionArrow.up.x = this.x + 20;
       this.directionArrow.up.y = this.y - 30 ;
@@ -4922,30 +4801,46 @@ var EditChildPipe = Class.create(Sprite,{
       this.directionArrow.down.setClassName("icon-arrow-down edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.down);
     }
+    pipeManager.pipeEntity[this.color].child.x = this.xId;
+    pipeManager.pipeEntity[this.color].child.y = this.yId;
+    pipeManager.pipeEntity[this.color].child.direction = this.direction;
+    pipeManager.childPipe[this.color] = void 0;
+    pipeManager.childPipe[this.color] = this;
+    return;
   },
   ontouchstart: function(){
-    //currentScene
-    //Stages
-    //pipeStatus
     //消しゴム
     if(creater.penColor == "eraser"){
       var color = this.color;
       creater.stages[this.xId][this.yId] = null;
       //これ
-      pipeManager.pipeEntity[color].child.x = null;
-      pipeManager.pipeEntity[color].child.y = null;
-      pipeManager.pipeEntity[color].child.direction = null;
-      pipeManager.pipeStatus[color] = "parentPut";
       pipeManager.childPipe[color] = null;
 
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
       //インクを子に戻す
       GAME.currentScene.removeChild(pipeManager.pipeInk);
+
       pipeManager.pipeInk = void 0;
       pipeManager.pipeInk = new ChildPipeInk(this.color);
       GAME.currentScene.removeChild(this);
       GAME.currentScene.addChild(pipeManager.pipeInk);
     }
+  },
+  onremovedfromscene: function(){
+    var color = this.color;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    creater.stages[this.xId][this.yId] = null;
+    creater.noneCollisionStages[this.xId][this.yId] = this;
+
+    //親があるかないかでステータスが変わる
+    if(pipeManager.pipeEntity[this.color].parent.x){
+      pipeManager.pipeStatus[color] = "parentPut";
+    }else{
+      pipeManager.pipeStatus[color] = "nothing";
+    }
+    pipeManager.pipeEntity[color].child.x = null;
+    pipeManager.pipeEntity[color].child.y = null;
+    pipeManager.pipeEntity[color].child.direction = null;
+    pipeManager.childPipe[color] = null;
   }
 });
 
@@ -5012,7 +4907,7 @@ var PipeManager =  function(){
     this.pipeEntity[color].parent.y = null;
     this.pipeEntity[color].child.y = null;
     this.pipeEntity[color].child.x = null;
-    this.pipeEntity[color].direction = null;
+    this.pipeEntity[color].child.direction = null;
     return;
   };
 
@@ -5065,6 +4960,29 @@ var PipeManager =  function(){
     }
     return false;
   };
+
+  //pipeStatusを
+  //pipeEntityの状況に順応させる
+  this.adaptPipeStatus = function adaptPipeStatus()
+  {
+    var colorArray = ["blue","red","green"];
+    for(var i = 0; i < 3; i++){
+      //親があるとき
+      if(this.pipeEntity[colorArray[i]].parent.x != null){
+        //子供の方向設定終わっている
+        if(this.pipeEntity[colorArray[i]].child.direction != null ){
+          this.pipeStatus[colorArray[i]] = "childPut";
+        //子供はあるが方向設定してない
+        }else if( this.pipeEntity[colorArray[i]].child.x != null && this.pipeEntity[colorArray[i]].child.direction == null ){
+          this.pipeStatus[colorArray[i]] = "noneDirection";
+        }
+      //親がない
+      }else{
+        this.pipeStatus[colorArray[i]] = "nothing";
+      }
+    }
+    this.pipeEntity.blue.parent.x != null;
+  }
 }
 
 var PipeDirectionArrow = Class.create(ExLabel,{
@@ -5133,12 +5051,13 @@ var ChildPipeInk = Class.create(Sprite,{
   }
 });
 
-var EditGoal = Class.create(Goal,{
+var EditGoal = Class.create(EditObj,{
   initialize: function(){
-    Goal.call(this,BOX_SIZE,BOX_SIZE);
+    EditObj.call(this,BOX_SIZE,BOX_SIZE);
 
     this._element = document.createElement('div');
     this._element.className = 'goal';
+    this.objName = 'goal';
     this.scaleX = 0.8;
     this.scaleY = 0.8;
     this.distance = 1;
@@ -5151,40 +5070,18 @@ var EditGoal = Class.create(Goal,{
   },
   run: function(){
 
-    playSound(GAME.assets['sound/goal.mp3'].clone());
-
+    this.playMySound();
     this.tl.clear();
-
     GAME.currentScene.removeChild(this);
-
-    creater.stages[this.xId][this.yId] = null;
-    creater.goalFlg = false;
-    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
   },
-  ontouchstart: function(){
-    //currentStage
-    //currentScene
-    //Stages
-    //消しゴム
-    if(creater.penColor == "eraser"){
-      var currentStageLength = creater.currentStage.length;
-      var noneCollisionStagesLength = creater.noneCollisionStages.length;
-
-      //currentStageから消す
-      for(var i = 0; i < currentStageLength; i++){
-        //自分を消す
-        //xId,yIdでやってるけど、ループまわさずやりたい
-        //グローバルにアクセスしまくってる現状
-        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
-          creater.currentStage.splice(i,1);
-          break;
-        }
-      }
-
-      creater.stages[this.xId][this.yId] = null;
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-      GAME.currentScene.removeChild(this);
-    }
+  //消えた時の処理をまとめる
+  onremovedfromscene: function(){
+    creater.stages[this.xId][this.yId] = null;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    //消えたやつは戻せるようにこの配列に追加
+    creater.noneCollisionStages[this.xId][this.yId] = this;
+    creater.goalFlg = false;
+    creater.currentStage[this.xId][this.yId] = null;
   }
 });
 
@@ -5215,14 +5112,15 @@ var StarInk = Class.create(Sprite,{
   }
 });
 
-var EditStar = Class.create(Sprite,{
+var EditStar = Class.create(EditObj,{
   initialize: function(){
-    Sprite.call(this,BOX_SIZE,BOX_SIZE);
+    EditObj.call(this,BOX_SIZE,BOX_SIZE);
 
     //星を描く
     this._element = document.createElement('div');
     this.image = WHITE_STAR;
     this.hited = false;
+    this.objName = 'star';
 
     //戻す用にxId,yId
     this.xId = -1;
@@ -5237,35 +5135,7 @@ var EditStar = Class.create(Sprite,{
       that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
     });
     this.image = YELLOW_STAR;
-    playSound(GAME.assets['sound/star.mp3'].clone());
-
-    creater.stages[this.xId][this.yId] = null;
-    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-  },
-  ontouchstart: function(){
-    //currentStage
-    //currentScene
-    //Stages
-    //消しゴム
-    if(creater.penColor == "eraser"){
-      var currentStageLength = creater.currentStage.length;
-      var noneCollisionStagesLength = creater.noneCollisionStages.length;
-
-      //currentStageから消す
-      for(var i = 0; i < currentStageLength; i++){
-        //自分を消す
-        //xId,yIdでやってるけど、ループまわさずやりたい
-        //グローバルにアクセスしまくってる現状
-        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
-          creater.currentStage.splice(i,1);
-          break;
-        }
-      }
-
-      creater.stages[this.xId][this.yId] = null;
-      GAME.currentScene.removeChild(this);
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-    }
+    this.playMySound();
   }
 });
 
@@ -5329,51 +5199,43 @@ var RestoreButton = Class.create(ExLabel,{
       creater.putStartFlg = true;
     }
 
-    //これは戻すたびに実体が増える前に解放する
-    creater.currentStage = void 0;
-    creater.currentStage = creater.copyStage.concat();
 
     var stageArrayLength = stageArray.length;
-    for(var i = 0; i < stageArrayLength; i++){
-      //戻す時に既に戻そうとする場所にオブジェクトがあったら
-      if(boxManager.boxArray[stageArray[i].xId][stageArray[i].yId].putedObjFlg){
-        continue;
-      }
 
-      //TODO ここクラス名使わずに判定したい
-      //親パイプのパイプマネージャー整理
-      if(stageArray[i]._element.className == "pipe"){
-        var parentPipeColor = stageArray[i].color;
-        //実行したり消したりした後に戻すと同色が２個以上出来る可能性があるから条件で防ぐ
-        if(pipeManager.pipeStatus[parentPipeColor] == "childPut" || pipeManager.pipeStatus[parentPipeColor] == "parentPut" || pipeManager.pipeStatus[parentPipeColor] == "noneDirection"){
+    for(var x = 0; x < 10; x++){
+      for(var y = 0; y < 10; y++){
+        //戻す時に既に戻そうとする場所にオブジェクトがあったら
+        if(boxManager.boxArray[x][y].putedObjFlg){
           continue;
         }
-
-        pipeManager.pipeEntity[parentPipeColor].parent.x = stageArray[i].xId;
-        pipeManager.pipeEntity[parentPipeColor].parent.y = stageArray[i].yId;
-        //stagearrayの順番は確定じゃないから子供が先に復活する場合もアル
-        if(pipeManager.pipeStatus != "childPut"){
-          pipeManager.pipeStatus[parentPipeColor] = "parentPut";
+        if(stageArray[x][y]){
+          //パイプだった場合
+          if(stageArray[x][y]._element.className == "pipe"){
+            var parentPipeColor = stageArray[x][y].color;
+            //実行したり消したりした後に戻すと同色が２個以上出来る可能性があるから条件で防ぐ
+            if(pipeManager.pipeStatus[parentPipeColor] == "childPut" || pipeManager.pipeStatus[parentPipeColor] == "parentPut" || pipeManager.pipeStatus[parentPipeColor] == "noneDirection"){
+              continue;
+            }
+            //stagearrayの順番は確定じゃないから子供が先に復活する場合もアル
+            if(pipeManager.pipeStatus != "childPut"){
+              pipeManager.pipeStatus[parentPipeColor] = "parentPut";
+              var childPipeColor = stageArray[x][y].color;
+            }
+            this.addCreatersStages(stageArray[x][y])
+            GAME.currentScene.addChild(stageArray[x][y]);
+          }//小パイプダッタ場合
+          else if(stageArray[x][y]._element.className.indexOf("pipeOut") != -1){
+            //子パイプの方向決めオブジェクトを出さないようにする
+            stageArray[x][y].restoreFlg = true;
+            pipeManager.pipeStatus[childPipeColor] = "childPut";
+            this.addCreatersStages(stageArray[x][y])
+            GAME.currentScene.addChild(stageArray[x][y]);
+          }else {
+            this.addCreatersStages(stageArray[x][y])
+            GAME.currentScene.addChild(stageArray[x][y]);
+          }
         }
-
       }
-      //子パイプの方向決めオブジェクトを出さないようにする
-      if(stageArray[i]._element.className.indexOf("pipeOut") != -1){
-        stageArray[i].restoreFlg = true;
-        //パイプマネージャーの不整合を直す
-        var childPipeColor = stageArray[i].color;
-        if(pipeManager.pipeStatus[childPipeColor] != "parentPut"){
-          continue;
-        }
-        pipeManager.pipeEntity[childPipeColor].child.x = stageArray[i].xId;
-        pipeManager.pipeEntity[childPipeColor].child.y = stageArray[i].yId;
-        pipeManager.pipeEntity[childPipeColor].child.direction = stageArray[i].direction;
-        //childpipeに登録
-        pipeManager.childPipe[childPipeColor] = stageArray[i];
-        pipeManager.pipeStatus[childPipeColor] = "childPut";
-      }
-      this.addCreatersStages(stageArray[i]);
-      GAME.currentScene.addChild(stageArray[i]);
     }
     //pipeInkを使ってない色のインクにかえる
     //全部使ってたらそのまま
@@ -5383,7 +5245,8 @@ var RestoreButton = Class.create(ExLabel,{
       pipeManager.pipeInk = void 0 
       pipeManager.pipeInk = new PipeInk(unUsedColor);
       GAME.currentScene.addChild(pipeManager.pipeInk);
-    } 
+    }
+    pipeManager.adaptPipeStatus();
   },
   setClassName: function(className){
     this._element.className = className;

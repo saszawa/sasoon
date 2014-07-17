@@ -34,13 +34,13 @@ var EditChildPipe = Class.create(Sprite,{
     };
   },
   onaddedtoscene: function(){
+
+    //親が存在しないと存在できない
+    //親に関連を追加
+
     //戻すボタンで作られた時をのぞく
     if(!this.restoreFlg){
       //矢印を出現させ方向を決める
-      //LANGUAGE[COUNTRYCODE].pipeDirectionUpper
-      //LANGUAGE[COUNTRYCODE].pipeDirectionLefter
-      //LANGUAGE[COUNTRYCODE].pipeDirectionRighter
-      //LANGUAGE[COUNTRYCODE].pipeDirectionDowner
       this.directionArrow.up = new PipeDirectionArrow("",this.color);
       this.directionArrow.up.x = this.x + 20;
       this.directionArrow.up.y = this.y - 30 ;
@@ -69,29 +69,45 @@ var EditChildPipe = Class.create(Sprite,{
       this.directionArrow.down.setClassName("icon-arrow-down edit_direction_arrow");
       GAME.currentScene.addChild(this.directionArrow.down);
     }
+    pipeManager.pipeEntity[this.color].child.x = this.xId;
+    pipeManager.pipeEntity[this.color].child.y = this.yId;
+    pipeManager.pipeEntity[this.color].child.direction = this.direction;
+    pipeManager.childPipe[this.color] = void 0;
+    pipeManager.childPipe[this.color] = this;
+    return;
   },
   ontouchstart: function(){
-    //currentScene
-    //Stages
-    //pipeStatus
     //消しゴム
     if(creater.penColor == "eraser"){
       var color = this.color;
       creater.stages[this.xId][this.yId] = null;
       //これ
-      pipeManager.pipeEntity[color].child.x = null;
-      pipeManager.pipeEntity[color].child.y = null;
-      pipeManager.pipeEntity[color].child.direction = null;
-      pipeManager.pipeStatus[color] = "parentPut";
       pipeManager.childPipe[color] = null;
 
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
       //インクを子に戻す
       GAME.currentScene.removeChild(pipeManager.pipeInk);
+
       pipeManager.pipeInk = void 0;
       pipeManager.pipeInk = new ChildPipeInk(this.color);
       GAME.currentScene.removeChild(this);
       GAME.currentScene.addChild(pipeManager.pipeInk);
     }
+  },
+  onremovedfromscene: function(){
+    var color = this.color;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    creater.stages[this.xId][this.yId] = null;
+    creater.noneCollisionStages[this.xId][this.yId] = this;
+
+    //親があるかないかでステータスが変わる
+    if(pipeManager.pipeEntity[this.color].parent.x){
+      pipeManager.pipeStatus[color] = "parentPut";
+    }else{
+      pipeManager.pipeStatus[color] = "nothing";
+    }
+    pipeManager.pipeEntity[color].child.x = null;
+    pipeManager.pipeEntity[color].child.y = null;
+    pipeManager.pipeEntity[color].child.direction = null;
+    pipeManager.childPipe[color] = null;
   }
 });

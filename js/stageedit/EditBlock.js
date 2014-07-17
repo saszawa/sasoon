@@ -1,12 +1,13 @@
-var EditBlock = Class.create(Block,{
+var EditBlock = Class.create(EditObj,{
   initialize: function(color){
-    Block.call(this,BOX_SIZE,BOX_SIZE);
+    EditObj.call(this,BOX_SIZE,BOX_SIZE);
 
     // DOMモード
     this._element = document.createElement('div');
     this._element.className = color;
 
     this.color = color;
+    this.objName = this.color;
 
     //戻す用にxId,yId
     this.xId = -1;
@@ -38,18 +39,7 @@ var EditBlock = Class.create(Block,{
       }
     };
   },
-  /**
-   * Block.run()
-   * 	4方向にBeamを出します
-   */
-  run: function(){
-    if( 0 < effectLevel){
-      var arc = new HitArc(this.color);
-      arc.x = this.x-128;
-      arc.y = this.y-128;
-      GAME.currentScene.addChild(arc);
-    }
-
+  beamFire: function beamFire(){
     var i = 0;
     for(var beam in this.beamStatus){
       if(DIRECTIONS[this.color][i]){
@@ -60,63 +50,9 @@ var EditBlock = Class.create(Block,{
           parentBlock:this,
           beamLength:BEAM_LENGTH
         }
-        GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+        this.parentNode.addChild(new EditBeam(this.beamStatus[beam],beamInit));
       }
       i++;
-    }
-
-    switch (this.color){
-      case "blue":
-        playSound(GAME.assets['sound/blue.mp3'].clone());
-        break;
-      case "green":
-        playSound(GAME.assets['sound/green.mp3'].clone());
-        break;
-      case "red":
-        playSound(GAME.assets['sound/red.mp3'].clone());
-        break;
-      case "purple":
-        playSound(GAME.assets['sound/purple.mp3'].clone());
-        break;
-      case "orange":
-        playSound(GAME.assets['sound/orange.mp3'].clone());
-        break;
-      case "white":
-        playSound(GAME.assets['sound/white.mp3'].clone());
-        break;
-    }
-
-    //	出したら消滅
-    GAME.currentScene.removeChild(this);
-    creater.stages[this.xId][this.yId] = null;
-    //currentStageから削除びーむが消してくれる
-    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
-  },
-  ontouchstart: function(){
-    //currentStage
-    //currentScene
-    //Stages
-    //消しゴム
-    if(creater.penColor == "eraser"){
-      var currentStageLength = creater.currentStage.length;
-      var noneCollisionStagesLength = creater.noneCollisionStages.length;
-      //これいじっちゃうと消すたびにこぴーが小さくなって見た目はあるのにデータがない感じになる
-//      creater.copyStage = void 0;
-//      creater.copyStage = creater.currentStage;
-
-      //currentStageから消す
-      for(var i = 0; i < currentStageLength; i++){
-        //自分を消す
-        //xId,yIdでやってるけど、ループまわさずやりたい
-        //グローバルにアクセスしまくってる現状
-        if(creater.currentStage[i].xId == this.xId && creater.currentStage[i].yId == this.yId){
-          creater.currentStage.splice(i,1);
-          break;
-        }
-      }
-      creater.stages[this.xId][this.yId] = null;
-      GAME.currentScene.removeChild(this);
-      boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
     }
   }
 });
