@@ -4055,9 +4055,6 @@ var EditBox = Class.create(Box,{
   putStar: function putStar(){
     //星を置く
     var star = new EditStar();
-    creater.currentStage.push(star);
-    creater.stages[this.xId][this.yId] = "star";
-    creater.starMany++;
     return star;
   },
   ontouchstart: function(e){
@@ -4110,24 +4107,14 @@ var EditBox = Class.create(Box,{
     else{
       //赤、緑、青、紫、オレンジ
       obj = new EditBlock(penColor);
-  //    this.putedObj = obj;
-//      creater.currentStage.push(this.putedObj);
-      //TODO 上書き機能
- //     creater.stages[this.xId][this.yId] = obj.color;
     }
 
     obj.x = this.x;
     obj.y = this.y;
-    //戻すようにxId,yIdを持たせる
+    //管理用ID
     obj.xId = this.xId;
     obj.yId = this.yId;
-    //戻す用
-    //startはcreater.startobjにまかす
-    if(!this.startObjFlg){
-//      creater.noneCollisionStages.push(obj);
-    }
     this.parentNode.addChild(obj);
-//    this.putedObjFlg = true;
   },
   ontouchmove: function(e){
     if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
@@ -4401,7 +4388,6 @@ var EditBeam = Class.create(Beam,{
           creater.currentStage[x][y].run();
           GAME.currentScene.removeChild(this);
         }
-        
       }
     }
 
@@ -5136,7 +5122,27 @@ var EditStar = Class.create(EditObj,{
     });
     this.image = YELLOW_STAR;
     this.playMySound();
-  }
+  },
+  //消えた時の処理をまとめる
+  onremovedfromscene: function(){
+    creater.stages[this.xId][this.yId] = null;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    //消えたやつは戻せるようにこの配列に追加
+    creater.noneCollisionStages[this.xId][this.yId] = this;
+    creater.currentStage[this.xId][this.yId] = null;
+    creater.starMany--;
+  },
+  //追加されたときに追加フラグ
+  onaddedtoscene: function(){
+    creater.starMany++;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
+    this.registJSON();
+    creater.currentStage[this.xId][this.yId] = this;
+    //三つ以上は置けない
+    if(creater.starMany > 3){
+      GAME.currentScene.removeChild(this);
+    }
+  },
 });
 
 var SendButton = Class.create(Sprite,{

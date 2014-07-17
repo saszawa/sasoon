@@ -22,5 +22,25 @@ var EditStar = Class.create(EditObj,{
     });
     this.image = YELLOW_STAR;
     this.playMySound();
-  }
+  },
+  //消えた時の処理をまとめる
+  onremovedfromscene: function(){
+    creater.stages[this.xId][this.yId] = null;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
+    //消えたやつは戻せるようにこの配列に追加
+    creater.noneCollisionStages[this.xId][this.yId] = this;
+    creater.currentStage[this.xId][this.yId] = null;
+    creater.starMany--;
+  },
+  //追加されたときに追加フラグ
+  onaddedtoscene: function(){
+    creater.starMany++;
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
+    this.registJSON();
+    creater.currentStage[this.xId][this.yId] = this;
+    //三つ以上は置けない
+    if(creater.starMany > 3){
+      GAME.currentScene.removeChild(this);
+    }
+  },
 });
