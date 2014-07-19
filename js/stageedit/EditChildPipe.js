@@ -35,8 +35,12 @@ var EditChildPipe = Class.create(Sprite,{
   },
   onaddedtoscene: function(){
 
-    //親が存在しないと存在できない
-    //親に関連を追加
+    console.log("chi put");
+    console.log(pipeManager.pipeStatus[this.color]);
+    //既に存在していたらできない 古いのを消す
+    if(pipeManager.pipeStatus[this.color] == "childPut" || pipeManager.pipeStatus[this.color] == "noneDirection"){
+      GAME.currentScene.removeChild(pipeManager.childPipe[this.color]);
+    }
 
     //戻すボタンで作られた時をのぞく
     if(!this.restoreFlg){
@@ -74,6 +78,9 @@ var EditChildPipe = Class.create(Sprite,{
     pipeManager.pipeEntity[this.color].child.direction = this.direction;
     pipeManager.childPipe[this.color] = void 0;
     pipeManager.childPipe[this.color] = this;
+
+    pipeManager.adaptPipeStatus();
+    pipeManager.adaptPipeInk();
     return;
   },
   ontouchstart: function(){
@@ -94,20 +101,19 @@ var EditChildPipe = Class.create(Sprite,{
     }
   },
   onremovedfromscene: function(){
-    var color = this.color;
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
     creater.stages[this.xId][this.yId] = null;
     creater.noneCollisionStages[this.xId][this.yId] = this;
 
     //親があるかないかでステータスが変わる
     if(pipeManager.pipeEntity[this.color].parent.x){
-      pipeManager.pipeStatus[color] = "parentPut";
+      pipeManager.pipeStatus[this.color] = "parentPut";
     }else{
-      pipeManager.pipeStatus[color] = "nothing";
+      pipeManager.pipeStatus[this.color] = "nothing";
     }
-    pipeManager.pipeEntity[color].child.x = null;
-    pipeManager.pipeEntity[color].child.y = null;
-    pipeManager.pipeEntity[color].child.direction = null;
-    pipeManager.childPipe[color] = null;
+    pipeManager.pipeEntity[this.color].child.x = null;
+    pipeManager.pipeEntity[this.color].child.y = null;
+    pipeManager.pipeEntity[this.color].child.direction = null;
+    pipeManager.childPipe[this.color] = null;
   }
 });

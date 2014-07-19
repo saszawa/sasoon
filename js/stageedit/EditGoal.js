@@ -29,5 +29,12 @@ var EditGoal = Class.create(EditObj,{
     creater.noneCollisionStages[this.xId][this.yId] = this;
     creater.goalFlg = false;
     creater.currentStage[this.xId][this.yId] = null;
-  }
+  },
+  //追加されたときに追加フラグ
+  onaddedtoscene: function(){
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
+    this.registJSON();
+    creater.currentStage[this.xId][this.yId] = this;
+    creater.goalFlg = true;
+  },
 });

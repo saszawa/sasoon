@@ -49,13 +49,6 @@ var EditBox = Class.create(Box,{
     var color = creater.pipeColor;
     var parentPipe = new EditPipe(color);
 
-    pipeManager.pipeStatus[color] = "parentPut";
-    creater.penColor = "childPipe";
-
-    GAME.currentScene.removeChild(pipeManager.pipeInk);
-    pipeManager.pipeInk = void 0;
-    pipeManager.pipeInk = new ChildPipeInk(color);
-    GAME.currentScene.addChild(pipeManager.pipeInk);
     return parentPipe;
   },
   //現状だと既にchildput場合にしか使わないかも
@@ -143,35 +136,13 @@ var EditBox = Class.create(Box,{
       var color = creater.pipeColor;
       var childPipe = new EditChildPipe(color);
 
-      var nextColor = this.getNextColor(color);
-      //消しゴムの実装により次の色が既にある可能性がある
-      if( pipeManager.pipeStatus[nextColor] == "childPut" ){
-        //インクを次の色にする
-        this.pipeNextAlreadyFlg = true;
-      }
-
       //自分にもxId yId登録
       childPipe.xId = this.xId;
       childPipe.yId = this.yId;
 
       //pipemanagerに登録
       pipeManager.pipeStatus[color] = "noneDirection";
-
-      //色を変える
-      color = this.rotateCreaterPipeColor(color);
-
-      creater.penColor = "parentPipe";
-
-      if(this.pipeNextAlreadyFlg){
-        this.itaratePipeInk(nextColor);
-      }else{
-        this.replacePipeInk(color);
-      }
-      //使ってない色のインクにかえるこれ合ったら上のいらん可能性たかい
-      var unUsedColor = pipeManager.getUnusedColor();
-      if(unUsedColor){
-        this.replacePipeInk(unUsedColor);
-      }
+      creater.penColor = "blue";
 
       return childPipe;
   },
@@ -187,10 +158,6 @@ var EditBox = Class.create(Box,{
       return;
     }
     var goal = new EditGoal();
-    creater.currentStage.push(goal);
-    //TODO 上書き機能
-    creater.stages[this.xId][this.yId] = "goal";
-    creater.goalFlg = true;
     return goal;
   },
   putStar: function putStar(){

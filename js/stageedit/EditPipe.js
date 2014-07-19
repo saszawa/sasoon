@@ -117,12 +117,23 @@ var EditPipe = Class.create(EditObj,{
   },
   //追加されたときに追加フラグ
   onaddedtoscene: function(){
+    pipeManager.pipeStatus[this.color] = "parentPut";
+    creater.penColor = "childPipe";
+
+//    GAME.currentScene.removeChild(pipeManager.pipeInk);
+//    pipeManager.pipeInk = void 0;
+//    pipeManager.pipeInk = new ChildPipeInk(this.color);
+//    GAME.currentScene.addChild(pipeManager.pipeInk);
+
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
     pipeManager.pipeEntity[this.color].parent.x = this.xId;
     pipeManager.pipeEntity[this.color].parent.y = this.yId;
     pipeManager.pipeStatus[this.color] = "parentPut";
     this.registJSON();
     creater.currentStage[this.xId][this.yId] = this;
+
+    pipeManager.adaptPipeStatus();
+    pipeManager.adaptPipeInk();
   },
   registJSON: function registJSON(){
     creater.stages[this.xId][this.yId] = {name:"pipe",color:this.color};

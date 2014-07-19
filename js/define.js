@@ -1006,6 +1006,8 @@ function browserLanguage() {
 
 var COUNTRYCODE = browserLanguage();
 
+var PIPE_COLOR_ARRAY = ["blue","red","green"];
+
 var VOLUME = 1.0;
 
 var creater;
