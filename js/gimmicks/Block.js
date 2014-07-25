@@ -67,26 +67,27 @@ var Block = Class.create(Sprite,{
       i++;
     }
 
-    switch (this.color){
-      case "blue":
-        playSound(GAME.assets['sound/blue.mp3'].clone());
-        break;
-      case "green":
-        playSound(GAME.assets['sound/green.mp3'].clone());
-        break;
-      case "red":
-        playSound(GAME.assets['sound/red.mp3'].clone());
-        break;
-      case "purple":
-        playSound(GAME.assets['sound/purple.mp3'].clone());
-        break;
-      case "orange":
-        playSound(GAME.assets['sound/orange.mp3'].clone());
-        break;
-      case "white":
-        playSound(GAME.assets['sound/white.mp3'].clone());
-        break;
-    }
+    playSound(this.color);
+ //   switch (this.color){
+ //     case "blue":
+ //     //  playSound(GAME.assets['sound/blue.mp3'].clone());
+ //       break;
+ //     case "green":
+////        playSound(GAME.assets['sound/green.mp3'].clone());
+ //       break;
+ //     case "red":
+ ////       playSound(GAME.assets['sound/red.mp3'].clone());
+ //       break;
+ //     case "purple":
+ //     //  playSound(GAME.assets['sound/purple.mp3'].clone());
+ //       break;
+ //     case "orange":
+////        playSound(GAME.assets['sound/orange.mp3'].clone());
+ //       break;
+ //     case "white":
+ ////       playSound(GAME.assets['sound/white.mp3'].clone());
+ //       break;
+ //   }
     //	出したら消滅
     this.parentNode.removeChild(this);
   }

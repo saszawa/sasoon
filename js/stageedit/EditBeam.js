@@ -1,6 +1,6 @@
-var Beam = Class.create(Sprite,{
+var EditBeam = Class.create(Beam,{
   initialize: function(direction ,init){
-    Sprite.call(this,BEAM_SIZE,BEAM_SIZE);
+    Beam.call(this,BEAM_SIZE,BEAM_SIZE);
 
     // DOMモード
     this._element = document.createElement('div');
@@ -23,20 +23,18 @@ var Beam = Class.create(Sprite,{
   onenterframe: function(){
     // 衝突検知
     // やっぱこうなるの・・・
-    var gimmicks = this.currentStage.length;
+//    var gimmicks = creater.currentStage.length;
     var distance = BOX_HALF+12;
-    for(var i = 0; i < gimmicks; i++){
-      if(!this.currentStage[i]){
-        GAME.currentScene.removeChild(this);
-      } else if(this.within(this.currentStage[i],this.currentStage[i].distance || distance) && this.currentStage[i] !== this.parentBlock && !this.parentNode.cleared){
-        // 発射！
-        this.currentStage[i].run();
 
-        // 当たったら消える
-        delete this.currentStage[i];
-        this.currentStage.splice(i,1);
-        GAME.currentScene.removeChild(this);
-        return;
+    //currentStage[10][10]
+    for(var x = 0; x < 10; x++){
+      for(var y = 0; y < 10; y++){
+        if(!creater.currentStage[x][y]){
+        }
+        else if(this.within(creater.currentStage[x][y], distance) && creater.currentStage[x][y] !== this.parentBlock){
+          creater.currentStage[x][y].run();
+          GAME.currentScene.removeChild(this);
+        }
       }
     }
 

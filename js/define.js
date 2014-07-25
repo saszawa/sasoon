@@ -18,6 +18,22 @@ var HIGH_SPECTRUM = 24;
 var LEVEL         = 0;
 
 
+// あらかじめ読み込んでおく
+var AUDIO_LIST = {
+  "start": new Audio("sound/start.mp3"),
+  "white": new Audio("sound/white.mp3"),
+  "goal": new Audio("sound/goal.mp3"),
+  "orange": new Audio("sound/orange.mp3"),
+  "purple": new Audio("sound/purple.mp3"),
+  "green": new Audio("sound/green.mp3"),
+  "red": new Audio("sound/red.mp3"),
+  "slanter": new Audio("sound/slanter.mp3"),
+  "pipe": new Audio("sound/pipe.mp3"),
+  "blue": new Audio("sound/blue.mp3"),
+  "star": new Audio("sound/star.mp3"),
+  "diffusioner": new Audio("sound/diffusioner.mp3")
+};
+
 var DIRECTIONS = {
   black:  [true ,true ,true ,true],
   white:  [true ,true ,true ,true],
@@ -1006,7 +1022,13 @@ function browserLanguage() {
 
 var COUNTRYCODE = browserLanguage();
 
+var PIPE_COLOR_ARRAY = ["blue","red","green"];
+
 var VOLUME = 1.0;
+
+var creater;
+var pipeManager;
+var boxManager;
 
 var userData;
 var stageBoxes = [];

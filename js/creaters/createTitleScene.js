@@ -15,6 +15,7 @@ function createTitleScene(){
     titleScene.addChild(gameStartLabel);
     titleScene.addChild(tutorialLabel);
     titleScene.addChild(optionMenuButton);
+    titleScene.addChild(stageEditLabel);
   });
 
   var titleBackAnim = new TitleBackAnim();
@@ -23,17 +24,17 @@ function createTitleScene(){
   // hidden プロパティおよび可視性の変更イベントの名前を設定
   var hidden, visibilityChange;
   if (typeof document.hidden !== "undefined") { // Opera 12.10 や Firefox 18 以降でサポート
-  	hidden = "hidden";
-  	visibilityChange = "visibilitychange";
+    hidden = "hidden";
+    visibilityChange = "visibilitychange";
   } else if (typeof document.mozHidden !== "undefined") {
-  	hidden = "mozHidden";
-  	visibilityChange = "mozvisibilitychange";
+    hidden = "mozHidden";
+    visibilityChange = "mozvisibilitychange";
   } else if (typeof document.msHidden !== "undefined") {
-  	hidden = "msHidden";
-  	visibilityChange = "msvisibilitychange";
+    hidden = "msHidden";
+    visibilityChange = "msvisibilitychange";
   } else if (typeof document.webkitHidden !== "undefined") {
-  	hidden = "webkitHidden";
-  	visibilityChange = "webkitvisibilitychange";
+    hidden = "webkitHidden";
+    visibilityChange = "webkitvisibilitychange";
   }
 
   if (!(typeof document.addEventListener === "undefined" || typeof hidden === "undefined")){
@@ -41,11 +42,11 @@ function createTitleScene(){
   }
 
   function handleVisibilityChange() {
-  	if (document[hidden]) {
-  		clearInterval(titleScene.loopTimer);
-  	} else if(GAME.currentScene === titleScene){
-  		titleBackAnim.startAnim();
-  	}
+    if (document[hidden]) {
+      clearInterval(titleScene.loopTimer);
+    } else if(GAME.currentScene === titleScene){
+      titleBackAnim.startAnim();
+    }
   }
 
   var touchStartLabel = createTouchStartLabel();
@@ -62,6 +63,13 @@ function createTitleScene(){
   var tutorialLabel = createTutorialLabel();
   tutorialLabel.on('touchend',function(){
     GAME.replaceScene(tutorialScene);
+  });
+
+  //stageエディット画面
+  var stageEditScene = createStageEditScene();
+  var stageEditLabel = createStageEditLabel();
+  stageEditLabel.on('touchend',function(){
+    GAME.replaceScene(stageEditScene);
   });
 
   var optionMenuButton = createOptionMenuButton();
