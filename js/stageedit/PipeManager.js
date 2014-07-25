@@ -125,7 +125,6 @@ var PipeManager =  function(){
 
   //pipeStatusに合わせてpipeInkを調節
   this.adaptPipeInk = function adaptPipeInk(){
-    console.log(pipeManager.pipeStatus);
     var colorArrayLength = PIPE_COLOR_ARRAY.length;
     //アル語
     //使うかもしれない配列
@@ -144,7 +143,6 @@ var PipeManager =  function(){
     if(mayUseColorLength == 0){
       return;
     }
-    console.log(mayUseColorArray);
     for(var j = 0; j < mayUseColorLength; j++)
     {
       //その中でparentPutを優先させる

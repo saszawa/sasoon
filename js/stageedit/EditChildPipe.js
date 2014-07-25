@@ -35,8 +35,6 @@ var EditChildPipe = Class.create(Sprite,{
   },
   onaddedtoscene: function(){
 
-    console.log("chi put");
-    console.log(pipeManager.pipeStatus[this.color]);
     //既に存在していたらできない 古いのを消す
     if(pipeManager.pipeStatus[this.color] == "childPut" || pipeManager.pipeStatus[this.color] == "noneDirection"){
       GAME.currentScene.removeChild(pipeManager.childPipe[this.color]);
