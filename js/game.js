@@ -1022,6 +1022,8 @@ function browserLanguage() {
 
 var COUNTRYCODE = browserLanguage();
 
+var PIPE_COLOR_ARRAY = ["blue","red","green"];
+
 var VOLUME = 1.0;
 
 var creater;
@@ -3932,13 +3934,6 @@ var EditBox = Class.create(Box,{
     var color = creater.pipeColor;
     var parentPipe = new EditPipe(color);
 
-    pipeManager.pipeStatus[color] = "parentPut";
-    creater.penColor = "childPipe";
-
-    GAME.currentScene.removeChild(pipeManager.pipeInk);
-    pipeManager.pipeInk = void 0;
-    pipeManager.pipeInk = new ChildPipeInk(color);
-    GAME.currentScene.addChild(pipeManager.pipeInk);
     return parentPipe;
   },
   //現状だと既にchildput場合にしか使わないかも
@@ -4026,35 +4021,13 @@ var EditBox = Class.create(Box,{
       var color = creater.pipeColor;
       var childPipe = new EditChildPipe(color);
 
-      var nextColor = this.getNextColor(color);
-      //消しゴムの実装により次の色が既にある可能性がある
-      if( pipeManager.pipeStatus[nextColor] == "childPut" ){
-        //インクを次の色にする
-        this.pipeNextAlreadyFlg = true;
-      }
-
       //自分にもxId yId登録
       childPipe.xId = this.xId;
       childPipe.yId = this.yId;
 
       //pipemanagerに登録
       pipeManager.pipeStatus[color] = "noneDirection";
-
-      //色を変える
-      color = this.rotateCreaterPipeColor(color);
-
-      creater.penColor = "parentPipe";
-
-      if(this.pipeNextAlreadyFlg){
-        this.itaratePipeInk(nextColor);
-      }else{
-        this.replacePipeInk(color);
-      }
-      //使ってない色のインクにかえるこれ合ったら上のいらん可能性たかい
-      var unUsedColor = pipeManager.getUnusedColor();
-      if(unUsedColor){
-        this.replacePipeInk(unUsedColor);
-      }
+      creater.penColor = "blue";
 
       return childPipe;
   },
@@ -4070,10 +4043,6 @@ var EditBox = Class.create(Box,{
       return;
     }
     var goal = new EditGoal();
-    creater.currentStage.push(goal);
-    //TODO 上書き機能
-    creater.stages[this.xId][this.yId] = "goal";
-    creater.goalFlg = true;
     return goal;
   },
   putStar: function putStar(){
@@ -4218,7 +4187,6 @@ var Creater =  function(color){
 
 function makeJSON(stages){
   var json = JSON.stringify(stages);
-  console.log(json);
 
   //実際にステージで使われる配列
   var objJSONArray = [];
@@ -4255,7 +4223,6 @@ function makeJSON(stages){
     }
   }
 
-  console.log(JSON.stringify(objJSONArray));
  
 }
 
@@ -4728,12 +4695,23 @@ var EditPipe = Class.create(EditObj,{
   },
   //追加されたときに追加フラグ
   onaddedtoscene: function(){
+    pipeManager.pipeStatus[this.color] = "parentPut";
+    creater.penColor = "childPipe";
+
+//    GAME.currentScene.removeChild(pipeManager.pipeInk);
+//    pipeManager.pipeInk = void 0;
+//    pipeManager.pipeInk = new ChildPipeInk(this.color);
+//    GAME.currentScene.addChild(pipeManager.pipeInk);
+
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
     pipeManager.pipeEntity[this.color].parent.x = this.xId;
     pipeManager.pipeEntity[this.color].parent.y = this.yId;
     pipeManager.pipeStatus[this.color] = "parentPut";
     this.registJSON();
     creater.currentStage[this.xId][this.yId] = this;
+
+    pipeManager.adaptPipeStatus();
+    pipeManager.adaptPipeInk();
   },
   registJSON: function registJSON(){
     creater.stages[this.xId][this.yId] = {name:"pipe",color:this.color};
@@ -4777,8 +4755,10 @@ var EditChildPipe = Class.create(Sprite,{
   },
   onaddedtoscene: function(){
 
-    //親が存在しないと存在できない
-    //親に関連を追加
+    //既に存在していたらできない 古いのを消す
+    if(pipeManager.pipeStatus[this.color] == "childPut" || pipeManager.pipeStatus[this.color] == "noneDirection"){
+      GAME.currentScene.removeChild(pipeManager.childPipe[this.color]);
+    }
 
     //戻すボタンで作られた時をのぞく
     if(!this.restoreFlg){
@@ -4816,6 +4796,9 @@ var EditChildPipe = Class.create(Sprite,{
     pipeManager.pipeEntity[this.color].child.direction = this.direction;
     pipeManager.childPipe[this.color] = void 0;
     pipeManager.childPipe[this.color] = this;
+
+    pipeManager.adaptPipeStatus();
+    pipeManager.adaptPipeInk();
     return;
   },
   ontouchstart: function(){
@@ -4836,21 +4819,20 @@ var EditChildPipe = Class.create(Sprite,{
     }
   },
   onremovedfromscene: function(){
-    var color = this.color;
     boxManager.boxArray[this.xId][this.yId].putedObjFlg = false;
     creater.stages[this.xId][this.yId] = null;
     creater.noneCollisionStages[this.xId][this.yId] = this;
 
     //親があるかないかでステータスが変わる
     if(pipeManager.pipeEntity[this.color].parent.x){
-      pipeManager.pipeStatus[color] = "parentPut";
+      pipeManager.pipeStatus[this.color] = "parentPut";
     }else{
-      pipeManager.pipeStatus[color] = "nothing";
+      pipeManager.pipeStatus[this.color] = "nothing";
     }
-    pipeManager.pipeEntity[color].child.x = null;
-    pipeManager.pipeEntity[color].child.y = null;
-    pipeManager.pipeEntity[color].child.direction = null;
-    pipeManager.childPipe[color] = null;
+    pipeManager.pipeEntity[this.color].child.x = null;
+    pipeManager.pipeEntity[this.color].child.y = null;
+    pipeManager.pipeEntity[this.color].child.direction = null;
+    pipeManager.childPipe[this.color] = null;
   }
 });
 
@@ -4924,11 +4906,10 @@ var PipeManager =  function(){
   //pipeStatusを見て、今使っていない色を返してくれる関数
   this.getUnusedColor = function getUnusedColor(){
     //pipeStatusまわす
-    var colorArray = ["blue","red","green"];
-    var colorArrayLength = colorArray.length;
+    var colorArrayLength = PIPE_COLOR_ARRAY.length;
     for(var i = 0; i < colorArrayLength; i++ ){
-      if(this.pipeStatus[colorArray[i]] == "nothing" ){
-        return colorArray[i];
+      if(this.pipeStatus[PIPE_COLOR_ARRAY[i]] == "nothing" ){
+        return PIPE_COLOR_ARRAY[i];
       }
     }
     return false;
@@ -4975,23 +4956,65 @@ var PipeManager =  function(){
   //pipeEntityの状況に順応させる
   this.adaptPipeStatus = function adaptPipeStatus()
   {
-    var colorArray = ["blue","red","green"];
-    for(var i = 0; i < 3; i++){
+    var colorArrayLength = PIPE_COLOR_ARRAY.length;
+    for(var i = 0; i < colorArrayLength; i++){
       //親があるとき
-      if(this.pipeEntity[colorArray[i]].parent.x != null){
+      if(this.pipeEntity[PIPE_COLOR_ARRAY[i]].parent.x != null){
         //子供の方向設定終わっている
-        if(this.pipeEntity[colorArray[i]].child.direction != null ){
-          this.pipeStatus[colorArray[i]] = "childPut";
+        if(this.pipeEntity[PIPE_COLOR_ARRAY[i]].child.direction != null ){
+          this.pipeStatus[PIPE_COLOR_ARRAY[i]] = "childPut";
         //子供はあるが方向設定してない
-        }else if( this.pipeEntity[colorArray[i]].child.x != null && this.pipeEntity[colorArray[i]].child.direction == null ){
-          this.pipeStatus[colorArray[i]] = "noneDirection";
+        }else if( this.pipeEntity[PIPE_COLOR_ARRAY[i]].child.x != null && this.pipeEntity[PIPE_COLOR_ARRAY[i]].child.direction == null ){
+          this.pipeStatus[PIPE_COLOR_ARRAY[i]] = "noneDirection";
         }
       //親がない
       }else{
-        this.pipeStatus[colorArray[i]] = "nothing";
+        this.pipeStatus[PIPE_COLOR_ARRAY[i]] = "nothing";
       }
     }
     this.pipeEntity.blue.parent.x != null;
+  }
+
+  //pipeStatusに合わせてpipeInkを調節
+  this.adaptPipeInk = function adaptPipeInk(){
+    var colorArrayLength = PIPE_COLOR_ARRAY.length;
+    //アル語
+    //使うかもしれない配列
+    var mayUseColorArray = [];
+    //絶対使わない配列
+    //
+    for(var i = 0; i < colorArrayLength; i++){
+      //まずは絶対使わないものを除去
+      if(pipeManager.pipeStatus[PIPE_COLOR_ARRAY[i]] != "childPut"){
+        mayUseColorArray.push( PIPE_COLOR_ARRAY[i] );
+      }
+    }
+    var mayUseColorLength = mayUseColorArray.length;
+  
+    //使える色が一個もなかったら
+    if(mayUseColorLength == 0){
+      return;
+    }
+    for(var j = 0; j < mayUseColorLength; j++)
+    {
+      //その中でparentPutを優先させる
+      if(pipeManager.pipeStatus[mayUseColorArray[j]] == "parentPut")
+      {
+        GAME.currentScene.removeChild(this.pipeInk);
+        this.pipeInk = void 0;
+        var childPipeInk = new  ChildPipeInk(mayUseColorArray[j]);
+        this.pipeInk = childPipeInk;
+        GAME.currentScene.addChild(childPipeInk);
+        break;
+      //なければnothing色にして次の色のステータスを見る
+      }else if(pipeManager.pipeStatus[mayUseColorArray[j]] == "nothing"){
+        GAME.currentScene.removeChild(this.pipeInk);
+        this.pipeInk = void 0;
+        var parentPipeInk = new PipeInk(mayUseColorArray[j]);
+        GAME.currentScene.addChild(parentPipeInk);
+        this.pipeInk = parentPipeInk;
+      }
+    }
   }
 }
 
@@ -5092,7 +5115,14 @@ var EditGoal = Class.create(EditObj,{
     creater.noneCollisionStages[this.xId][this.yId] = this;
     creater.goalFlg = false;
     creater.currentStage[this.xId][this.yId] = null;
-  }
+  },
+  //追加されたときに追加フラグ
+  onaddedtoscene: function(){
+    boxManager.boxArray[this.xId][this.yId].putedObjFlg = true;
+    this.registJSON();
+    creater.currentStage[this.xId][this.yId] = this;
+    creater.goalFlg = true;
+  },
 });
 
 var GoalInk = Class.create(Sprite,{
@@ -5267,6 +5297,9 @@ var RestoreButton = Class.create(ExLabel,{
         }
       }
     }
+
+    //Entityにステータスあわす
+    pipeManager.adaptPipeStatus();
     //pipeInkを使ってない色のインクにかえる
     //全部使ってたらそのまま
     var unUsedColor = pipeManager.getUnusedColor();
@@ -5276,7 +5309,19 @@ var RestoreButton = Class.create(ExLabel,{
       pipeManager.pipeInk = new PipeInk(unUsedColor);
       GAME.currentScene.addChild(pipeManager.pipeInk);
     }
+
+    var colorArray = ["blue", "red", "green"];
+    //親が存在しないと存在できない
+    //別の場所にもう一回置いて親子共々パイプが既にある場合もアルそのときに子供だけ復活してしまう
+    for(var i = 0; i < 3; i++ ){
+      if(!pipeManager.pipeEntity[colorArray[i]].parent.x){
+        GAME.currentScene.removeChild(pipeManager.childPipe[colorArray[i]]);
+      }
+    }
+    //Entityにステータスあわす
     pipeManager.adaptPipeStatus();
+    //ステータスに合わせてパイプインクの色をかえる
+    pipeManager.adaptPipeInk();
   },
   setClassName: function(className){
     this._element.className = className;

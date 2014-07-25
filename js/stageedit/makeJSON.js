@@ -1,6 +1,5 @@
 function makeJSON(stages){
   var json = JSON.stringify(stages);
-  console.log(json);
 
   //実際にステージで使われる配列
   var objJSONArray = [];
@@ -37,6 +36,5 @@ function makeJSON(stages){
     }
   }
 
-  console.log(JSON.stringify(objJSONArray));
  
 }

@@ -59,6 +59,9 @@ var RestoreButton = Class.create(ExLabel,{
         }
       }
     }
+
+    //Entityにステータスあわす
+    pipeManager.adaptPipeStatus();
     //pipeInkを使ってない色のインクにかえる
     //全部使ってたらそのまま
     var unUsedColor = pipeManager.getUnusedColor();
@@ -68,7 +71,19 @@ var RestoreButton = Class.create(ExLabel,{
       pipeManager.pipeInk = new PipeInk(unUsedColor);
       GAME.currentScene.addChild(pipeManager.pipeInk);
     }
+
+    var colorArray = ["blue", "red", "green"];
+    //親が存在しないと存在できない
+    //別の場所にもう一回置いて親子共々パイプが既にある場合もアルそのときに子供だけ復活してしまう
+    for(var i = 0; i < 3; i++ ){
+      if(!pipeManager.pipeEntity[colorArray[i]].parent.x){
+        GAME.currentScene.removeChild(pipeManager.childPipe[colorArray[i]]);
+      }
+    }
+    //Entityにステータスあわす
     pipeManager.adaptPipeStatus();
+    //ステータスに合わせてパイプインクの色をかえる
+    pipeManager.adaptPipeInk();
   },
   setClassName: function(className){
     this._element.className = className;

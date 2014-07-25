@@ -54,11 +54,10 @@ var PipeManager =  function(){
   //pipeStatusを見て、今使っていない色を返してくれる関数
   this.getUnusedColor = function getUnusedColor(){
     //pipeStatusまわす
-    var colorArray = ["blue","red","green"];
-    var colorArrayLength = colorArray.length;
+    var colorArrayLength = PIPE_COLOR_ARRAY.length;
     for(var i = 0; i < colorArrayLength; i++ ){
-      if(this.pipeStatus[colorArray[i]] == "nothing" ){
-        return colorArray[i];
+      if(this.pipeStatus[PIPE_COLOR_ARRAY[i]] == "nothing" ){
+        return PIPE_COLOR_ARRAY[i];
       }
     }
     return false;
@@ -105,22 +104,64 @@ var PipeManager =  function(){
   //pipeEntityの状況に順応させる
   this.adaptPipeStatus = function adaptPipeStatus()
   {
-    var colorArray = ["blue","red","green"];
-    for(var i = 0; i < 3; i++){
+    var colorArrayLength = PIPE_COLOR_ARRAY.length;
+    for(var i = 0; i < colorArrayLength; i++){
       //親があるとき
-      if(this.pipeEntity[colorArray[i]].parent.x != null){
+      if(this.pipeEntity[PIPE_COLOR_ARRAY[i]].parent.x != null){
         //子供の方向設定終わっている
-        if(this.pipeEntity[colorArray[i]].child.direction != null ){
-          this.pipeStatus[colorArray[i]] = "childPut";
+        if(this.pipeEntity[PIPE_COLOR_ARRAY[i]].child.direction != null ){
+          this.pipeStatus[PIPE_COLOR_ARRAY[i]] = "childPut";
         //子供はあるが方向設定してない
-        }else if( this.pipeEntity[colorArray[i]].child.x != null && this.pipeEntity[colorArray[i]].child.direction == null ){
-          this.pipeStatus[colorArray[i]] = "noneDirection";
+        }else if( this.pipeEntity[PIPE_COLOR_ARRAY[i]].child.x != null && this.pipeEntity[PIPE_COLOR_ARRAY[i]].child.direction == null ){
+          this.pipeStatus[PIPE_COLOR_ARRAY[i]] = "noneDirection";
         }
       //親がない
       }else{
-        this.pipeStatus[colorArray[i]] = "nothing";
+        this.pipeStatus[PIPE_COLOR_ARRAY[i]] = "nothing";
       }
     }
     this.pipeEntity.blue.parent.x != null;
+  }
+
+  //pipeStatusに合わせてpipeInkを調節
+  this.adaptPipeInk = function adaptPipeInk(){
+    var colorArrayLength = PIPE_COLOR_ARRAY.length;
+    //アル語
+    //使うかもしれない配列
+    var mayUseColorArray = [];
+    //絶対使わない配列
+    //
+    for(var i = 0; i < colorArrayLength; i++){
+      //まずは絶対使わないものを除去
+      if(pipeManager.pipeStatus[PIPE_COLOR_ARRAY[i]] != "childPut"){
+        mayUseColorArray.push( PIPE_COLOR_ARRAY[i] );
+      }
+    }
+    var mayUseColorLength = mayUseColorArray.length;
+  
+    //使える色が一個もなかったら
+    if(mayUseColorLength == 0){
+      return;
+    }
+    for(var j = 0; j < mayUseColorLength; j++)
+    {
+      //その中でparentPutを優先させる
+      if(pipeManager.pipeStatus[mayUseColorArray[j]] == "parentPut")
+      {
+        GAME.currentScene.removeChild(this.pipeInk);
+        this.pipeInk = void 0;
+        var childPipeInk = new  ChildPipeInk(mayUseColorArray[j]);
+        this.pipeInk = childPipeInk;
+        GAME.currentScene.addChild(childPipeInk);
+        break;
+      //なければnothing色にして次の色のステータスを見る
+      }else if(pipeManager.pipeStatus[mayUseColorArray[j]] == "nothing"){
+        GAME.currentScene.removeChild(this.pipeInk);
+        this.pipeInk = void 0;
+        var parentPipeInk = new PipeInk(mayUseColorArray[j]);
+        GAME.currentScene.addChild(parentPipeInk);
+        this.pipeInk = parentPipeInk;
+      }
+    }
   }
 }
