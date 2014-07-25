@@ -16,7 +16,7 @@ var Goal = Class.create(Sprite,{
 
 		this.parentNode.removeChild(this.parentNode.retryLabel);
 
-    playSound(GAME.assets['sound/goal.mp3'].clone());
+    playSound("goal");
 
 		var that = this;
 

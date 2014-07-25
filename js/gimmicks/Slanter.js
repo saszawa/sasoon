@@ -40,7 +40,7 @@ var Slanter = Class.create(Sprite,{
 			i++;
 		}
 
-    playSound(GAME.assets['sound/slanter.mp3'].clone());
+    playSound("slanter");
 		//	出したら消滅
 		this.parentNode.removeChild(this);
 	}

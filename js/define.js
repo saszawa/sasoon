@@ -3,6 +3,8 @@
  */
 var GAME;
 
+boombox.setup();
+
 // 定数
 var MOVE_PX       = 4;
 
@@ -17,6 +19,22 @@ var HIGH_SPECTRUM = 24;
 
 var LEVEL         = 0;
 
+
+// あらかじめ読み込んでおく
+var AUDIO_LIST = {
+  "start": new Audio("sound/start.mp3"),
+  "white": new Audio("sound/white.mp3"),
+  "goal": new Audio("sound/goal.mp3"),
+  "orange": new Audio("sound/orange.mp3"),
+  "purple": new Audio("sound/purple.mp3"),
+  "green": new Audio("sound/green.mp3"),
+  "red": new Audio("sound/red.mp3"),
+  "slanter": new Audio("sound/slanter.mp3"),
+  "pipe": new Audio("sound/pipe.mp3"),
+  "blue": new Audio("sound/blue.mp3"),
+  "star": new Audio("sound/star.mp3"),
+  "diffusioner": new Audio("sound/diffusioner.mp3")
+};
 
 var DIRECTIONS = {
   black:  [true ,true ,true ,true],

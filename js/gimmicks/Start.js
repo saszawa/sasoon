@@ -48,7 +48,9 @@ var Start = Class.create(Sprite,{
 			}
 			i++;
 		}
-    playSound(GAME.assets['sound/start.mp3'].clone());
+
+    playSound("start");
+
 		//	出したら消滅
 		this.parentNode.removeChild(this);
 	}
