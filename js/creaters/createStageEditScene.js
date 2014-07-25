@@ -133,7 +133,14 @@ function createStageEditScene(){
   eraserInk.setClassName('edit_button');
   stageEditScene.addChild(eraserInk);
 
-//  stageEditScene.addChild(optionMenuButton);
+  //TOPに戻るボタン
+  var backToTop = createBacktoTopLabel();
+  backToTop.y = 820;
+  stageEditScene.addChild(backToTop);
+  backToTop.on('touchend',function(){
+    var titleScene = createTitleScene();
+    GAME.replaceScene(titleScene);
+  });
 
   return stageEditScene;
 }
