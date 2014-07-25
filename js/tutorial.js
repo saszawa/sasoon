@@ -88,11 +88,11 @@ var TutoBlock = Class.create(Sprite,{
     }
 
     if(this.color == "start"){
-      playSound(GAME.assets['sound/start.mp3'].clone());
+      playSound('start');
     }else if(this.color == "blue"){
-      playSound(GAME.assets['sound/blue.mp3'].clone());
+      playSound('blue');
     }else if (this.color == "white"){
-      playSound(GAME.assets['sound/white.mp3'].clone());
+      playSound('white');
     }
 
     //最後の場合
@@ -196,7 +196,7 @@ var TutoGoal = Class.create(Sprite,{
     clearTimeout(this.parentNode.endTimer);
     this.parentNode.cleared = true;
 
-    playSound(GAME.assets['sound/goal.mp3'].clone());
+    playSound('goal');
 
     //どのシーンのゴールかで挙動変わる
     if(this.nextEndFlg){

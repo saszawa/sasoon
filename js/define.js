@@ -3,8 +3,6 @@
  */
 var GAME;
 
-boombox.setup();
-
 // 定数
 var MOVE_PX       = 4;
 
