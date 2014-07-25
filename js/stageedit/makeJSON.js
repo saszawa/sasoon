@@ -36,5 +36,6 @@ function makeJSON(stages){
     }
   }
 
- 
+  doPost(JSON.stringify(objJSONArray),'No Name');
+
 }
