@@ -64,7 +64,8 @@ var Pipe = Class.create(Sprite,{
       beamLength:BEAM_LENGTH
     }
     this.parentNode.addChild(new Beam(this.beamStatus[this.pipeStatus.direction],beamInit));
-    playSound(GAME.assets['sound/pipe.mp3'].clone());
+   
+    playSound("pipe");
     //	出したら消滅
     GAME.currentScene.removeChild(this.pipeOut);
     GAME.currentScene.removeChild(this);

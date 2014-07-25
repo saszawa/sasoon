@@ -3,6 +3,8 @@
  */
 var GAME;
 
+boombox.setup();
+
 // 定数
 var MOVE_PX       = 4;
 
@@ -17,6 +19,22 @@ var HIGH_SPECTRUM = 24;
 
 var LEVEL         = 0;
 
+
+// あらかじめ読み込んでおく
+var AUDIO_LIST = {
+  "start": new Audio("sound/start.mp3"),
+  "white": new Audio("sound/white.mp3"),
+  "goal": new Audio("sound/goal.mp3"),
+  "orange": new Audio("sound/orange.mp3"),
+  "purple": new Audio("sound/purple.mp3"),
+  "green": new Audio("sound/green.mp3"),
+  "red": new Audio("sound/red.mp3"),
+  "slanter": new Audio("sound/slanter.mp3"),
+  "pipe": new Audio("sound/pipe.mp3"),
+  "blue": new Audio("sound/blue.mp3"),
+  "star": new Audio("sound/star.mp3"),
+  "diffusioner": new Audio("sound/diffusioner.mp3")
+};
 
 var DIRECTIONS = {
   black:  [true ,true ,true ,true],
@@ -1126,6 +1144,8 @@ window.onload = function () {
   GAME = new Game(640, 960);
   GAME.preload('sound/white.mp3','sound/goal.mp3','sound/start.mp3','sound/orange.mp3','sound/purple.mp3','sound/green.mp3','sound/red.mp3','sound/slanter.mp3','sound/pipe.mp3','sound/blue.mp3','sound/star.mp3','sound/diffusioner.mp3');
   GAME.fps = 30;
+
+
   GAME.onload = function () {
 
     GAME.rootScene.backgroundColor = 'white';
@@ -2643,7 +2663,7 @@ var Result = Class.create(Group,{
       .delay(15*i)
       .scaleTo(1.3,1.3,10).and().rotateTo(144,10).then(function(){
         that.resultStars[cnt++].image = YELLOW_STAR;
-        playSound(GAME.assets['sound/star.mp3'].clone());
+        playSound("star");
       });
     }
     this.tl.delay(50 + i*15).then(function(){
@@ -2884,26 +2904,27 @@ var Block = Class.create(Sprite,{
       i++;
     }
 
-    switch (this.color){
-      case "blue":
-        playSound(GAME.assets['sound/blue.mp3'].clone());
-        break;
-      case "green":
-        playSound(GAME.assets['sound/green.mp3'].clone());
-        break;
-      case "red":
-        playSound(GAME.assets['sound/red.mp3'].clone());
-        break;
-      case "purple":
-        playSound(GAME.assets['sound/purple.mp3'].clone());
-        break;
-      case "orange":
-        playSound(GAME.assets['sound/orange.mp3'].clone());
-        break;
-      case "white":
-        playSound(GAME.assets['sound/white.mp3'].clone());
-        break;
-    }
+    playSound(this.color);
+ //   switch (this.color){
+ //     case "blue":
+ //     //  playSound(GAME.assets['sound/blue.mp3'].clone());
+ //       break;
+ //     case "green":
+////        playSound(GAME.assets['sound/green.mp3'].clone());
+ //       break;
+ //     case "red":
+ ////       playSound(GAME.assets['sound/red.mp3'].clone());
+ //       break;
+ //     case "purple":
+ //     //  playSound(GAME.assets['sound/purple.mp3'].clone());
+ //       break;
+ //     case "orange":
+////        playSound(GAME.assets['sound/orange.mp3'].clone());
+ //       break;
+ //     case "white":
+ ////       playSound(GAME.assets['sound/white.mp3'].clone());
+ //       break;
+ //   }
     //	出したら消滅
     this.parentNode.removeChild(this);
   }
@@ -3022,7 +3043,9 @@ var Start = Class.create(Sprite,{
 			}
 			i++;
 		}
-    playSound(GAME.assets['sound/start.mp3'].clone());
+
+    playSound("start");
+
 		//	出したら消滅
 		this.parentNode.removeChild(this);
 	}
@@ -3046,7 +3069,7 @@ var Goal = Class.create(Sprite,{
 
     this.parentNode.removeChild(this.parentNode.retryLabel);
 
-    playSound(GAME.assets['sound/goal.mp3'].clone());
+    playSound("goal");
 
     var that = this;
 
@@ -3089,7 +3112,7 @@ var Star = Class.create(Sprite,{
       that.tl.delay(5).rotateBy(72 ,40 ,EXPO_EASEOUT);
     });
     this.image = YELLOW_STAR;
-    playSound(GAME.assets['sound/star.mp3'].clone());
+    playSound("star");
     this.parentNode.star++;
   }
 });
@@ -3142,7 +3165,7 @@ var Diffusioner = Class.create(Sprite,{
       i++;
     }
 
-    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
+    playSound("diffusioner");
     //	出したら消滅
     this.parentNode.removeChild(this);
   }
@@ -3190,7 +3213,7 @@ var Slanter = Class.create(Sprite,{
       i++;
     }
 
-    playSound(GAME.assets['sound/slanter.mp3'].clone());
+    playSound("slanter");
     //	出したら消滅
     this.parentNode.removeChild(this);
   }
@@ -3306,7 +3329,8 @@ var Pipe = Class.create(Sprite,{
       beamLength:BEAM_LENGTH
     }
     this.parentNode.addChild(new Beam(this.beamStatus[this.pipeStatus.direction],beamInit));
-    playSound(GAME.assets['sound/pipe.mp3'].clone());
+   
+    playSound("pipe");
     //	出したら消滅
     GAME.currentScene.removeChild(this.pipeOut);
     GAME.currentScene.removeChild(this);
@@ -3784,10 +3808,12 @@ var VolumeSlider = Class.create(Sprite,{
   }
 });
 
-function playSound(sound){
-  sound.volume = VOLUME;
-  sound.play();
-  
+function playSound(soundName){
+  AUDIO_LIST[soundName].volume = VOLUME;
+  // サウンド再生
+  AUDIO_LIST[soundName].play();
+  // // 次呼ばれた時用に新たに生成
+  AUDIO_LIST[soundName] = new Audio( AUDIO_LIST[soundName].src );
 }
 
 var EditObj = Class.create(Sprite,{

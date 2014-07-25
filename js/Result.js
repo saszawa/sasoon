@@ -128,7 +128,7 @@ var Result = Class.create(Group,{
       .delay(15*i)
       .scaleTo(1.3,1.3,10).and().rotateTo(144,10).then(function(){
         that.resultStars[cnt++].image = YELLOW_STAR;
-        playSound(GAME.assets['sound/star.mp3'].clone());
+        playSound("star");
       });
     }
     this.tl.delay(50 + i*15).then(function(){

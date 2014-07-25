@@ -46,7 +46,7 @@ var Diffusioner = Class.create(Sprite,{
       i++;
     }
 
-    playSound(GAME.assets['sound/diffusioner.mp3'].clone());
+    playSound("diffusioner");
     //	出したら消滅
     this.parentNode.removeChild(this);
   }
