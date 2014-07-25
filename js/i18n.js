@@ -46,7 +46,8 @@ var LANGUAGE = {
     eraser:"消しゴム",
     enterPipeError: "ワープオブジェクトは対となる出口が設定されていないと投稿できません",
     enterStartError: "スタートが置かれていないステージは実行できません",
-    sameColorParentError: "既に置いてある色のワープオブジェクトは置く事が出来ません"
+    sameColorParentError: "既に置いてある色のワープオブジェクトは置く事が出来ません",
+    sendConfirm: "現在のステージを投稿します"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -95,6 +96,7 @@ var LANGUAGE = {
     eraser:"Eraser",
     enterPipeError: "Please check Warp Object's exit",
     enterStartError: "You should put Start Object!",
-    sameColorParentError: "Cannot put same color Warp Object!"
+    sameColorParentError: "Cannot put same color Warp Object!",
+    sendConfirm: "Post this stage data"
   }
 }

@@ -17,5 +17,4 @@ function doPost(stageString,userName){
   xmlHttp.open("POST", "php/stage/regist.php");
   xmlHttp.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
   xmlHttp.send(postData);
-
 }

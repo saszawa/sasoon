@@ -1085,7 +1085,8 @@ var LANGUAGE = {
     eraser:"消しゴム",
     enterPipeError: "ワープオブジェクトは対となる出口が設定されていないと投稿できません",
     enterStartError: "スタートが置かれていないステージは実行できません",
-    sameColorParentError: "既に置いてある色のワープオブジェクトは置く事が出来ません"
+    sameColorParentError: "既に置いてある色のワープオブジェクトは置く事が出来ません",
+    sendConfirm: "現在のステージを投稿します"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -1134,7 +1135,8 @@ var LANGUAGE = {
     eraser:"Eraser",
     enterPipeError: "Please check Warp Object's exit",
     enterStartError: "You should put Start Object!",
-    sameColorParentError: "Cannot put same color Warp Object!"
+    sameColorParentError: "Cannot put same color Warp Object!",
+    sendConfirm: "Post this stage data"
   }
 }
 
@@ -2520,7 +2522,14 @@ function createStageEditScene(){
   eraserInk.setClassName('edit_button');
   stageEditScene.addChild(eraserInk);
 
-//  stageEditScene.addChild(optionMenuButton);
+  //TOPに戻るボタン
+  var backToTop = createBacktoTopLabel();
+  backToTop.y = 820;
+  stageEditScene.addChild(backToTop);
+  backToTop.on('touchend',function(){
+    var titleScene = createTitleScene();
+    GAME.replaceScene(titleScene);
+  });
 
   return stageEditScene;
 }
@@ -4420,7 +4429,6 @@ function doPost(stageString,userName){
   xmlHttp.open("POST", "php/stage/regist.php");
   xmlHttp.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
   xmlHttp.send(postData);
-
 }
 
 var TestPlayButton = Class.create(ExLabel,{
@@ -5424,6 +5432,7 @@ var SendButton = Class.create(Sprite,{
       return;
     }
  
+    alert(LANGUAGE[COUNTRYCODE].sendConfirm);
     makeJSON(creater.stages);
   }
 });
