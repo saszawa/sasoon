@@ -1,7 +1,7 @@
 function createStageScene(){
 
   stageScene = new Scene();
-  stageScene.initStage = function(){
+  stageScene.initStage = function(mode){
     var that = this;
     this.star = 0;
 
@@ -9,6 +9,8 @@ function createStageScene(){
     clearTimeout(this.endTimer);
     this.endTimer = null;
     this.cleared = false;
+    this.STAGES = STAGES;
+    this.mode = mode;
 
     this.removeChild(this.retryLabel);
 
@@ -31,26 +33,46 @@ function createStageScene(){
     var timer = new Timer();
     stageScene.addChild(timer);
 
-    // ステージの読み込み
-    STAGES[LEVEL].forEach(function(blockInfo){
-      var block = StageBuilder(blockInfo);
-      block.x = blockInfo.x*BOX_SIZE;
-      block.y = blockInfo.y*BOX_SIZE;
-      currentStage.push(block);
-      that.addChild(block);
-    });
+    if(this.mode === 'normal'){
+      // ステージの読み込み
+      STAGES[LEVEL].forEach(function(blockInfo){
+        var block = StageBuilder(blockInfo);
+        block.x = blockInfo.x*BOX_SIZE;
+        block.y = blockInfo.y*BOX_SIZE;
+        currentStage.push(block);
+        that.STAGES = STAGES;
+        that.addChild(block);
+      });
+    } else if(this.mode === 'user') {
+      USER_STAGES[STAGE_ID][1].forEach(function(blockInfo){
+        var block = StageBuilder(blockInfo);
+        block.x = blockInfo.x*BOX_SIZE;
+        block.y = blockInfo.y*BOX_SIZE;
+        currentStage.push(block);
+        that.STAGES = USER_STAGES;
+        that.addChild(block);
+      });
+    }
 
   }
+  // リザルトの表示とセーブデータの保存
   stageScene.showResult = function(){
     var ResultGroup = new Result();
     this.addChild(ResultGroup);
     clearTimeout(this.endTimer);
 
+    if(this.mode === 'normal'){
 
-    if(typeof userData[LEVEL] === 'undefined' || userData[LEVEL] < this.star){
-      userData[LEVEL] = this.star;
+      if(typeof userData[LEVEL] === 'undefined' || userData[LEVEL] < this.star){
+        userData[LEVEL] = this.star;
+      }
+      localStorage.setItem(this.mode, JSON.stringify(userData));
+    } else if(this.mode === 'user'){
+      if(typeof userData[STAGE_ID] === 'undefined' || userData[STAGE_ID] < this.star){
+        userDataEdit[STAGE_ID] = this.star;
+      }
+      localStorage.setItem(this.mode, JSON.stringify(userDataEdit));
     }
-    localStorage.setItem("hal", JSON.stringify(userData));
 
   }
   stageScene.gameOver = function(){

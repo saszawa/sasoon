@@ -204,9 +204,20 @@ div.stageSelectText{
   1px 1px 0px $col-white,
   -1px 1px 0px $col-white,
   1px 2px 3px rgba(0, 0, 0, 0.5);
-  background: rgba(white,0.8) !important; // backbutton branch 変更分 (0609)
+  background: rgba(white,0.8) !important;
+  z-index:9999;
 }
-div.stageBox{
+div.stageSwitcher{
+  text-align: center;
+  font-size: 48px;
+  line-heght: 48px;
+  color: $col-white;
+  z-index:9999;
+}
+div.stageSwitcherBackground{
+  z-index:9998;
+}
+div.stageBox,div.userStageBox{
   text-align: center !important;
   font-size: 64px;
   line-height: 64px ;
@@ -231,6 +242,9 @@ div.stageBox{
       background: rgba(0,0,0,0.5);;
     }
   }
+}
+div.userStageBox{
+  font-size: 18px;
 }
 // backbutton branch 追加分 (0609)
 div.backToTopText{
@@ -451,7 +465,6 @@ div.pointerArrow:after{
 div.edit_underline{
   border-bottom: solid 1px #ddd;
 }
-
 div.edit_button{
   text-align: center;
   font-size: 15px;

@@ -20,6 +20,7 @@ module.exports = function(grunt) {
           'js/creaters/createStageEditScene.js',
           'js/StageGroup.js',
           'js/StageBox.js',
+          'js/UserStageBox.js',
           'js/Box.js',
           'js/HitArc.js',
           'js/Timer.js',
@@ -67,7 +68,8 @@ module.exports = function(grunt) {
           'js/stageedit/SendButton.js',
           'js/stageedit/RestoreButton.js',
           'js/stageedit/EraserInk.js',
-          'js/stageedit/BoxManager.js'
+          'js/stageedit/BoxManager.js',
+          'js/stageedit/UserStageList.js'
         ],
         dest: 'js/game.js'
       }

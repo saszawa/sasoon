@@ -139,7 +139,7 @@ var Result = Class.create(Group,{
         }).scaleTo(1,1,15,BOUNCE_EASEOUT);
       }
 
-      if(LEVEL !== STAGES.length - 1){
+      if(LEVEL !== GAME.currentScene.STAGES.length - 1){
         that.parentNode.addChild(that.nextStage);
         that.nextStage.tl.scaleTo(0,0,0).then(function(){
           that.nextStage._element.className = 'black changeBu';
