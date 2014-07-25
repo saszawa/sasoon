@@ -77,7 +77,7 @@ var EditPipe = Class.create(EditObj,{
     this.bloomArc(thisChildPipe);
     this.initPipeStatusEtc();
     this.beamFire(thisChildPipe);
-    playSound(GAME.assets['sound/pipe.mp3'].clone());
+    playSound('pipe');
 
     //	出したら消滅
     //子供も削除

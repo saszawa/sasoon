@@ -3875,7 +3875,7 @@ var EditObj = Class.create(Sprite,{
   },
   playMySound: function playMySound(){
     if(this.objName){
-      playSound(GAME.assets['sound/' + this.objName + '.mp3'].clone());
+      playSound(this.objName);
     }
   },
   registJSON: function registJSON(){
@@ -4320,7 +4320,7 @@ var EditStart = Class.create(Start,{
       i++;
     }
 
-    playSound(GAME.assets['sound/start.mp3'].clone());
+    playSound('start');
 
     //出したら消滅
     GAME.currentScene.removeChild(this);
@@ -4655,7 +4655,7 @@ var EditPipe = Class.create(EditObj,{
     this.bloomArc(thisChildPipe);
     this.initPipeStatusEtc();
     this.beamFire(thisChildPipe);
-    playSound(GAME.assets['sound/pipe.mp3'].clone());
+    playSound('pipe');
 
     //	出したら消滅
     //子供も削除

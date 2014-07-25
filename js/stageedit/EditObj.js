@@ -57,7 +57,7 @@ var EditObj = Class.create(Sprite,{
   },
   playMySound: function playMySound(){
     if(this.objName){
-      playSound(GAME.assets['sound/' + this.objName + '.mp3'].clone());
+      playSound(this.objName);
     }
   },
   registJSON: function registJSON(){

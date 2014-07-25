@@ -54,7 +54,7 @@ var EditStart = Class.create(Start,{
       i++;
     }
 
-    playSound(GAME.assets['sound/start.mp3'].clone());
+    playSound('start');
 
     //出したら消滅
     GAME.currentScene.removeChild(this);
