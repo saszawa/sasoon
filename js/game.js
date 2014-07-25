@@ -16,6 +16,7 @@ var LOW_SPECTRUM  = MOVE_PX;
 var HIGH_SPECTRUM = 24;
 
 var LEVEL         = 0;
+var STAGE_ID      = 1;
 
 
 // あらかじめ読み込んでおく
@@ -1008,7 +1009,7 @@ var TUTOSTAGES = [
   { x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
 ]
 ];
-
+var USER_STAGES;
 var tutoCurrentStage = [];
 
 function browserLanguage() {
@@ -1031,6 +1032,7 @@ var pipeManager;
 var boxManager;
 
 var userData;
+var userDataEdit;
 var stageBoxes = [];
 var stageGroup;
 var effectLevel = 1;
@@ -1141,7 +1143,7 @@ var tutorialScene = null;
 
 enchant();
 window.onload = function () {
-  GAME = new Game(640, 960);
+  GAME = new Game(640, 900);
   GAME.preload('sound/white.mp3','sound/goal.mp3','sound/start.mp3','sound/orange.mp3','sound/purple.mp3','sound/green.mp3','sound/red.mp3','sound/slanter.mp3','sound/pipe.mp3','sound/blue.mp3','sound/star.mp3','sound/diffusioner.mp3');
   GAME.fps = 30;
 
@@ -1290,7 +1292,7 @@ function createBacktoTopLabel(){
   var backToTop = new ExLabel(LANGUAGE[COUNTRYCODE].backToTop,BOX_SIZE*3,BOX_SIZE);
   backToTop.setClassName('backToTopText');
   backToTop.x = 0.5 * 64;
-  backToTop.y = 8.5 * 64;
+  backToTop.y = 800 - 32;
 
   return backToTop;
 }
@@ -1477,7 +1479,7 @@ function createOptionMenu(){
     for(var i = 0; i < STAGES.length;i++){
       allData.push(0);
     }
-    localStorage.setItem("hal", JSON.stringify(allData));
+    localStorage.setItem("normal", JSON.stringify(allData));
     alert(LANGUAGE[COUNTRYCODE].optionAllStageUnlock);
   });
   openAllStage.y = 460;
@@ -1485,6 +1487,45 @@ function createOptionMenu(){
 
   return menuGroup;
 }
+// 通常ステージ、ユーザーステージの切り替え
+function createStageSwitcherGroup(){
+  var stageSwitcherGroup = new Group();
+  stageSwitcherGroup._element = document.createElement('div');
+
+  var focusBackground = new Sprite(288,64);
+  focusBackground.backgroundColor = COLORS.green;
+  focusBackground._element = document.createElement('div');
+  focusBackground._element.className = 'stageSwitcherBackground';
+  focusBackground.x = 16;
+  stageSwitcherGroup.addChild(focusBackground);
+
+  var normalStage = new ExLabel('Normal',320);
+  normalStage.setClassName('stageSwitcher');
+  normalStage.x = 0;
+  normalStage.on('touchstart',function(e){
+    // stageSwitcherにイベント登録
+    var event = document.createEvent('MouseEvents');
+    event.initEvent('normalStageSelected',false,false);
+    stageSwitcherGroup.dispatchEvent(event);
+    focusBackground.tl.moveTo(16,focusBackground.y,10,QUART_EASEOUT);
+  });
+  stageSwitcherGroup.addChild(normalStage);
+
+  var userStage   = new ExLabel('User',320);
+  userStage.setClassName('stageSwitcher');
+  userStage.x = 320;
+  userStage.on('touchstart',function(e){
+    // stageSwitcherにイベント登録
+    var event = document.createEvent('MouseEvents');
+    event.initEvent('userStageSelected',false,false);
+    stageSwitcherGroup.dispatchEvent(event);
+    focusBackground.tl.moveTo(336,focusBackground.y,10,QUART_EASEOUT);
+  });
+  stageSwitcherGroup.addChild(userStage);
+
+  return stageSwitcherGroup;
+}
+
 // 現在の星の数を表すグループ
 function createPlayerStatus(data){
   var starCount = 0;
@@ -1495,7 +1536,7 @@ function createPlayerStatus(data){
   var playerStatusGroup = new Group();
   playerStatusGroup._element = document.createElement('div');
   playerStatusGroup.x = 7.5 * 64;
-  playerStatusGroup.y = 8.5 * 64;
+  playerStatusGroup.y = 800 - 32;
 
   var starsLabel = new ExLabel(' × '+starCount,BOX_SIZE*2,BOX_SIZE);
   starsLabel.setClassName('playerStars');
@@ -1965,7 +2006,7 @@ function createTutorialScene(){
 function createStageScene(){
 
   stageScene = new Scene();
-  stageScene.initStage = function(){
+  stageScene.initStage = function(mode){
     var that = this;
     this.star = 0;
 
@@ -1973,6 +2014,8 @@ function createStageScene(){
     clearTimeout(this.endTimer);
     this.endTimer = null;
     this.cleared = false;
+    this.STAGES = STAGES;
+    this.mode = mode;
 
     this.removeChild(this.retryLabel);
 
@@ -1995,26 +2038,46 @@ function createStageScene(){
     var timer = new Timer();
     stageScene.addChild(timer);
 
-    // ステージの読み込み
-    STAGES[LEVEL].forEach(function(blockInfo){
-      var block = StageBuilder(blockInfo);
-      block.x = blockInfo.x*BOX_SIZE;
-      block.y = blockInfo.y*BOX_SIZE;
-      currentStage.push(block);
-      that.addChild(block);
-    });
+    if(this.mode === 'normal'){
+      // ステージの読み込み
+      STAGES[LEVEL].forEach(function(blockInfo){
+        var block = StageBuilder(blockInfo);
+        block.x = blockInfo.x*BOX_SIZE;
+        block.y = blockInfo.y*BOX_SIZE;
+        currentStage.push(block);
+        that.STAGES = STAGES;
+        that.addChild(block);
+      });
+    } else if(this.mode === 'user') {
+      USER_STAGES[STAGE_ID][1].forEach(function(blockInfo){
+        var block = StageBuilder(blockInfo);
+        block.x = blockInfo.x*BOX_SIZE;
+        block.y = blockInfo.y*BOX_SIZE;
+        currentStage.push(block);
+        that.STAGES = USER_STAGES;
+        that.addChild(block);
+      });
+    }
 
   }
+  // リザルトの表示とセーブデータの保存
   stageScene.showResult = function(){
     var ResultGroup = new Result();
     this.addChild(ResultGroup);
     clearTimeout(this.endTimer);
 
+    if(this.mode === 'normal'){
 
-    if(typeof userData[LEVEL] === 'undefined' || userData[LEVEL] < this.star){
-      userData[LEVEL] = this.star;
+      if(typeof userData[LEVEL] === 'undefined' || userData[LEVEL] < this.star){
+        userData[LEVEL] = this.star;
+      }
+      localStorage.setItem(this.mode, JSON.stringify(userData));
+    } else if(this.mode === 'user'){
+      if(typeof userData[STAGE_ID] === 'undefined' || userData[STAGE_ID] < this.star){
+        userDataEdit[STAGE_ID] = this.star;
+      }
+      localStorage.setItem(this.mode, JSON.stringify(userDataEdit));
     }
-    localStorage.setItem("hal", JSON.stringify(userData));
 
   }
   stageScene.gameOver = function(){
@@ -2142,37 +2205,84 @@ function createSelectScene(){
   //==========================================================
   // select
   //==========================================================
-  //
   var selectScene = new Scene();
+  USER_STAGES = getUserStageList();
+  var stageGroup;                      // ステージ一覧のグループ
+  var userStageGroup;                  // ユーザー投稿のステージ一覧のグループ
+  var visibleStageGroup;               // スクロールさせるステージ
+  var isMoving = false;
+
+  // スクロールの処理
   selectScene.on('touchstart',function(e){
+    if(isMoving){ return false; }
     selectScene.startY = e.y;
   });
   selectScene.on('touchmove',function(e){
-    stageGroup.moveBy(0,e.y - selectScene.startY);
+    if(isMoving){ return false; }
+    visibleStageGroup.moveBy(visibleStageGroup.x,e.y - selectScene.startY);
     selectScene.startY = e.y;
   });
   selectScene.on('touchend',function(e){
-    var bottomMax = Math.floor(stageGroup.childNodes.length/4) * -160 + 320;
-    if(stageGroup.y > 0){
-      stageGroup.tl.moveTo(0,0,10,SIN_EASEOUT);
-    }else if(bottomMax > stageGroup.y){
-      stageGroup.tl.moveTo(0,bottomMax,10,SIN_EASEOUT);
+    if(isMoving){ return false; }
+    var bottomMax = Math.floor(visibleStageGroup.childNodes.length/4) * -160 + 320;
+    if(visibleStageGroup.y !== bottomMax && visibleStageGroup.y > 0){
+      visibleStageGroup.tl.moveTo(visibleStageGroup.x,0,10,SIN_EASEOUT);
+    }else if(visibleStageGroup.y !== 0 && bottomMax > visibleStageGroup.y){
+      visibleStageGroup.tl.moveTo(visibleStageGroup.x,bottomMax,10,SIN_EASEOUT);
     }
   });
 
+  // STAGE SELECT LABEL
+  var selectLabel = new ExLabel('STAGE SELECT',640,110);
+  selectLabel.setClassName('stageSelectText');
+  selectScene.addChild(selectLabel);
+
+  // ステージの切り替え、イベントを拾う
+  var stageSwitcher = createStageSwitcherGroup();
+  stageSwitcher.y = 110;
+  stageSwitcher.addEventListener('normalStageSelected',function(e){
+    // ステージのスライド
+    isMoving = true;
+    stageGroup.tl.moveTo(0,stageGroup.y,10);
+    userStageGroup.tl.moveTo(640,userStageGroup.y,10).then(function(){ isMoving = false;});
+    visibleStageGroup = stageGroup;
+  });
+
+  stageSwitcher.addEventListener('userStageSelected',function(e){
+    // ステージのスライド
+    isMoving = true;
+    stageGroup.tl.moveTo(-640,stageGroup.y,10).then(function(){ isMoving = false;});
+    userStageGroup.tl.moveTo(0,userStageGroup.y,10);
+    visibleStageGroup = userStageGroup;
+  });
+  selectScene.addChild(stageSwitcher);
+
+
+  // ローカルストレージからデータを取得
+  userData = JSON.parse(localStorage.getItem("normal"));
+  if(userData === null){
+    userData = [];
+  }
+
+  // 通常ステージ
+  stageGroup = new StageGroup();
+  selectScene.addChild(stageGroup);
+
+  userStageGroup = new Group();
+  userStageGroup._element = document.createElement('div');
+  selectScene.addChild(userStageGroup);
+
   selectScene.on('enter',function(e){
     // ローカルストレージからデータを取得
-    userData = JSON.parse(localStorage.getItem("hal"));
+    userData = JSON.parse(localStorage.getItem("normal"));
     if(userData === null){
       userData = [];
     }
 
-    stageGroup = new StageGroup();
-    selectScene.addChild(stageGroup);
-
+    // ステージ選択肢の作成
     var row = 1.5;
-    var column = 0
-    for(var i = 0,x=0,y=1.5 ;i < STAGES.length ;i++){
+    var column = 0;
+    for(var i = 0,x=0,y=2.5 ;i < STAGES.length ;i++){
 
       var star = 0;
       var isLock = true;
@@ -2201,17 +2311,56 @@ function createSelectScene(){
       row = y;
 
     }
+    // ユーザーステージ
+    // ローカルストレージからデータを取得
+    userDataEdit = JSON.parse(localStorage.getItem("user"));
+    if(userDataEdit === null){
+      userDataEdit = {};
+    }
 
-    var selectLabel = new ExLabel('STAGE SELECT',640,110);
-    selectLabel.setClassName('stageSelectText');
-    selectScene.addChild(selectLabel);
+
+    var row = 1.5;
+    var column = 0;
+    var i = 0,x=0,y=2.5
+    for(var id in USER_STAGES){
+      var star = 0;
+
+      if(typeof userDataEdit[id] === 'undefined'){
+        star = 0;
+      } else {
+        star = userDataEdit[id];
+      }
+
+      var userStageBox = new UserStageBox(id,star,USER_STAGES[id][0]);
+      userStageBox._element.className = 'userStageBox';
+      userStageBox.x = BOX_SIZE/4+x*BOX_SIZE*2.5;
+      userStageBox.y = y*BOX_SIZE*1.25;
+      userStageGroup.addChild(userStageBox);
+      x++;
+      if(x===4){x = 0;}
+      if(i%4 === 3){y += 2;}
+
+      column = x;
+      row = y;
+    }
+
+    if(visibleStageGroup === userStageGroup){
+      stageGroup.moveTo(-640,0);
+    }else{
+      // ユーザーステージの移動
+      userStageGroup.moveTo(640,userStageGroup.y);
+      visibleStageGroup = stageGroup;
+    }
   });
 
-  selectScene.selectedStage = function(level){
+
+  selectScene.selectedStage = function(level,mode){
     LEVEL = level;
+    STAGE_ID = level;
     GAME.replaceScene(stageScene);
-    stageScene.initStage();
+    stageScene.initStage(mode);
   }
+
 
   selectScene.initSelect = function(){
     var stageBoxesLen = stageBoxes.length;
@@ -2224,11 +2373,7 @@ function createSelectScene(){
   //stageScene作成
   var stageScene = createStageScene();
   stageScene.stageSelect = function(){
-    var stageBoxesLen = stageBoxes.length;
-    for(var i = 0; i < stageBoxesLen;i++){
-      stageGroup.removeChild(stageBoxes[i]);
-    }
-    stageBoxes = [];
+    selectScene.initSelect();
     GAME.replaceScene(selectScene);
   }
 
@@ -2429,8 +2574,31 @@ var StageBox = Class.create(Sprite,{
 		if(this.moved || this.isLock){
 			return;
 		}
-		GAME.currentScene.selectedStage(this.level);
+		GAME.currentScene.selectedStage(this.level,'normal');
 	}
+});
+
+var UserStageBox = Class.create(Sprite,{
+  initialize: function(stageId,star,user_name){
+    Sprite.call(this,BOX_SIZE*2,BOX_SIZE*2);
+    this._element = document.createElement('div');
+    this._element.innerHTML = user_name;
+    this.image = SCORE_STARS[star];
+    this.stageId = stageId;
+    this.moved = false;
+  },
+  ontouchstart: function(e){
+    this.startEvent = e;
+    this.moved = false;
+  },
+  ontouchmove: function(e){
+    if(Math.abs(this.startEvent.x - e.x) > 10 || Math.abs(this.startEvent.y - e.y) > 10){
+      this.moved = true;
+    }
+  },
+  ontouchend: function(e){
+    GAME.currentScene.selectedStage(this.stageId,'user');
+  }
 });
 
 var Box = Class.create(Sprite,{
@@ -2674,7 +2842,7 @@ var Result = Class.create(Group,{
         }).scaleTo(1,1,15,BOUNCE_EASEOUT);
       }
 
-      if(LEVEL !== STAGES.length - 1){
+      if(LEVEL !== GAME.currentScene.STAGES.length - 1){
         that.parentNode.addChild(that.nextStage);
         that.nextStage.tl.scaleTo(0,0,0).then(function(){
           that.nextStage._element.className = 'black changeBu';
@@ -4229,12 +4397,30 @@ function makeJSON(stages){
     }
   }
 
- 
+  doPost(JSON.stringify(objJSONArray),'No Name');
+
 }
 
-function doPost(action){
-  var submitType = document.createElement("input");
-  submitType.setAttribute("type","hidden");
+function doPost(stageString,userName){
+
+  userName = userName || '';
+  var postData = 'user_name='+userName+'&stage_jsarray='+stageString;
+
+  var xmlHttp = new XMLHttpRequest();
+  xmlHttp.onreadystatechange = function (){
+    if ((xmlHttp.readyState == 4) && (xmlHttp.status == 200)){
+      if(xmlHttp.responseText === 'SUCCESS'){
+
+      } else if(xmlHttp.responseText === 'FAILED'){
+
+      }
+    }
+  }
+
+  xmlHttp.open("POST", "php/stage/regist.php");
+  xmlHttp.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+  xmlHttp.send(postData);
+
 }
 
 var TestPlayButton = Class.create(ExLabel,{
@@ -5378,4 +5564,27 @@ var BoxManager = function(){
   for (var i = 0; i < 10; i++){
     this.boxArray[i] = new Array(10);
   }
+}
+
+function getUserStageList(order, as){
+  var postData = 'order='+order+'&as='+as;
+
+  var userStagesStr;
+
+  var xmlHttp = new XMLHttpRequest();
+
+  xmlHttp.open("GET", "php/stage/list.php",false);
+  xmlHttp.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
+  xmlHttp.send(null);
+
+  if (xmlHttp.status === 200){
+    userStagesStr = xmlHttp.responseText;
+  }
+
+   var userStages = {};
+   JSON.parse(userStagesStr).forEach(function(stage){
+    userStages[stage.id] = [stage.user_name,JSON.parse(stage.stage_jsarray)];
+   });
+
+   return userStages;
 }
