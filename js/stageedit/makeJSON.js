@@ -37,6 +37,6 @@ function makeJSON(stages){
     }
   }
 
-  console.log(JSON.stringify(objJSONArray));
- 
+  doPost(JSON.stringify(objJSONArray),'No Name');
+
 }

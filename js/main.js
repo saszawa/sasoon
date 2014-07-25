@@ -3,7 +3,7 @@ var tutorialScene = null;
 
 enchant();
 window.onload = function () {
-  GAME = new Game(640, 960);
+  GAME = new Game(640, 900);
   GAME.preload('sound/white.mp3','sound/goal.mp3','sound/start.mp3','sound/orange.mp3','sound/purple.mp3','sound/green.mp3','sound/red.mp3','sound/slanter.mp3','sound/pipe.mp3','sound/blue.mp3','sound/star.mp3','sound/diffusioner.mp3');
   GAME.fps = 30;
   GAME.onload = function () {

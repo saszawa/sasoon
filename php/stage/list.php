@@ -3,7 +3,7 @@
   // 共通設定の読み込み
   include_once('../setting.php');
 
-  $sql = 'SELECT * FROM User_Stages';
+  $sql = 'SELECT * FROM User_Stages WHERE permission = 1';
   $pdo->query('SET NAMES utf8');
   $stmt = $pdo->query($sql);
   $stages = array();
