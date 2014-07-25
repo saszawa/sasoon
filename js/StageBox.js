@@ -21,6 +21,6 @@ var StageBox = Class.create(Sprite,{
 		if(this.moved || this.isLock){
 			return;
 		}
-		GAME.currentScene.selectedStage(this.level);
+		GAME.currentScene.selectedStage(this.level,'normal');
 	}
 });

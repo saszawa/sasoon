@@ -19,7 +19,7 @@ function createBacktoTopLabel(){
   var backToTop = new ExLabel(LANGUAGE[COUNTRYCODE].backToTop,BOX_SIZE*3,BOX_SIZE);
   backToTop.setClassName('backToTopText');
   backToTop.x = 0.5 * 64;
-  backToTop.y = 8.5 * 64;
+  backToTop.y = 800 - 32;
 
   return backToTop;
 }
@@ -206,7 +206,7 @@ function createOptionMenu(){
     for(var i = 0; i < STAGES.length;i++){
       allData.push(0);
     }
-    localStorage.setItem("hal", JSON.stringify(allData));
+    localStorage.setItem("normal", JSON.stringify(allData));
     alert(LANGUAGE[COUNTRYCODE].optionAllStageUnlock);
   });
   openAllStage.y = 460;
@@ -214,6 +214,45 @@ function createOptionMenu(){
 
   return menuGroup;
 }
+// 通常ステージ、ユーザーステージの切り替え
+function createStageSwitcherGroup(){
+  var stageSwitcherGroup = new Group();
+  stageSwitcherGroup._element = document.createElement('div');
+
+  var focusBackground = new Sprite(288,64);
+  focusBackground.backgroundColor = COLORS.green;
+  focusBackground._element = document.createElement('div');
+  focusBackground._element.className = 'stageSwitcherBackground';
+  focusBackground.x = 16;
+  stageSwitcherGroup.addChild(focusBackground);
+
+  var normalStage = new ExLabel('Normal',320);
+  normalStage.setClassName('stageSwitcher');
+  normalStage.x = 0;
+  normalStage.on('touchstart',function(e){
+    // stageSwitcherにイベント登録
+    var event = document.createEvent('MouseEvents');
+    event.initEvent('normalStageSelected',false,false);
+    stageSwitcherGroup.dispatchEvent(event);
+    focusBackground.tl.moveTo(16,focusBackground.y,10,QUART_EASEOUT);
+  });
+  stageSwitcherGroup.addChild(normalStage);
+
+  var userStage   = new ExLabel('User',320);
+  userStage.setClassName('stageSwitcher');
+  userStage.x = 320;
+  userStage.on('touchstart',function(e){
+    // stageSwitcherにイベント登録
+    var event = document.createEvent('MouseEvents');
+    event.initEvent('userStageSelected',false,false);
+    stageSwitcherGroup.dispatchEvent(event);
+    focusBackground.tl.moveTo(336,focusBackground.y,10,QUART_EASEOUT);
+  });
+  stageSwitcherGroup.addChild(userStage);
+
+  return stageSwitcherGroup;
+}
+
 // 現在の星の数を表すグループ
 function createPlayerStatus(data){
   var starCount = 0;
@@ -224,7 +263,7 @@ function createPlayerStatus(data){
   var playerStatusGroup = new Group();
   playerStatusGroup._element = document.createElement('div');
   playerStatusGroup.x = 7.5 * 64;
-  playerStatusGroup.y = 8.5 * 64;
+  playerStatusGroup.y = 800 - 32;
 
   var starsLabel = new ExLabel(' × '+starCount,BOX_SIZE*2,BOX_SIZE);
   starsLabel.setClassName('playerStars');

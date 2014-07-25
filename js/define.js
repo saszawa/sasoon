@@ -16,6 +16,7 @@ var LOW_SPECTRUM  = MOVE_PX;
 var HIGH_SPECTRUM = 24;
 
 var LEVEL         = 0;
+var STAGE_ID      = 1;
 
 
 // あらかじめ読み込んでおく
@@ -1008,7 +1009,7 @@ var TUTOSTAGES = [
   { x:7 ,y:7 ,name: 'tutoGoal',color:'green'}
 ]
 ];
-
+var USER_STAGES;
 var tutoCurrentStage = [];
 
 function browserLanguage() {
@@ -1031,6 +1032,7 @@ var pipeManager;
 var boxManager;
 
 var userData;
+var userDataEdit;
 var stageBoxes = [];
 var stageGroup;
 var effectLevel = 1;
