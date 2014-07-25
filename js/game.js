@@ -4163,7 +4163,6 @@ var Creater =  function(color){
 
 function makeJSON(stages){
   var json = JSON.stringify(stages);
-  console.log(json);
 
   //実際にステージで使われる配列
   var objJSONArray = [];
@@ -4200,7 +4199,6 @@ function makeJSON(stages){
     }
   }
 
-  console.log(JSON.stringify(objJSONArray));
  
 }
 
@@ -4733,8 +4731,6 @@ var EditChildPipe = Class.create(Sprite,{
   },
   onaddedtoscene: function(){
 
-    console.log("chi put");
-    console.log(pipeManager.pipeStatus[this.color]);
     //既に存在していたらできない 古いのを消す
     if(pipeManager.pipeStatus[this.color] == "childPut" || pipeManager.pipeStatus[this.color] == "noneDirection"){
       GAME.currentScene.removeChild(pipeManager.childPipe[this.color]);
@@ -4957,7 +4953,6 @@ var PipeManager =  function(){
 
   //pipeStatusに合わせてpipeInkを調節
   this.adaptPipeInk = function adaptPipeInk(){
-    console.log(pipeManager.pipeStatus);
     var colorArrayLength = PIPE_COLOR_ARRAY.length;
     //アル語
     //使うかもしれない配列
@@ -4976,7 +4971,6 @@ var PipeManager =  function(){
     if(mayUseColorLength == 0){
       return;
     }
-    console.log(mayUseColorArray);
     for(var j = 0; j < mayUseColorLength; j++)
     {
       //その中でparentPutを優先させる
