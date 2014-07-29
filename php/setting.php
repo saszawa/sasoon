@@ -1,10 +1,10 @@
 <?php
 
-$db_name = 'TouchBloomy';
-$host_name = 'localhost';
+$db_name = 'secret';
+$host_name = 'secret';
 $dsn = "mysql:dbname={$db_name};host={$host_name};charset=utf8;";
-$user = 'root';
-$password = 'root';
+$user = 'yourUserName';
+$password = 'yourDBName';
 
 try{
   $pdo = new PDO($dsn, $user, $password);
