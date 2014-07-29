@@ -10,7 +10,7 @@ function createStageScene(){
     this.endTimer = null;
     this.cleared = false;
     this.STAGES = STAGES;
-    this.mode = mode;
+    this.mode = mode || 'normal';
 
     this.removeChild(this.retryLabel);
 
