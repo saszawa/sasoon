@@ -73,5 +73,11 @@ var EditStart = Class.create(Start,{
   },
   registJSON: function registJSON(){
     creater.stages[this.xId][this.yId] = this.objName;
+  },
+  ontouchstart: function (){
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      GAME.currentScene.removeChild(this);
+    }
   }
 });

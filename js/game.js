@@ -2017,7 +2017,7 @@ function createStageScene(){
     this.endTimer = null;
     this.cleared = false;
     this.STAGES = STAGES;
-    this.mode = mode;
+    this.mode = mode || 'normal';
 
     this.removeChild(this.retryLabel);
 
@@ -2213,6 +2213,7 @@ function createSelectScene(){
   var userStageGroup;                  // ユーザー投稿のステージ一覧のグループ
   var visibleStageGroup;               // スクロールさせるステージ
   var isMoving = false;
+
 
   // スクロールの処理
   selectScene.on('touchstart',function(e){
@@ -2767,7 +2768,7 @@ var Result = Class.create(Group,{
       arc.y = that.nextStage.y-128;
       that.parentNode.addChild(arc);
       LEVEL++;
-      that.parentNode.initStage();
+      that.parentNode.initStage(GAME.currentScene.mode);
       removeResult();
     });
 
@@ -2783,7 +2784,7 @@ var Result = Class.create(Group,{
       arc.y = that.prevStage.y-128;
       that.parentNode.addChild(arc);
       LEVEL--;
-      that.parentNode.initStage();
+      that.parentNode.initStage(GAME.currentScene.mode);
       removeResult();
     });
 
@@ -2808,7 +2809,7 @@ var Result = Class.create(Group,{
       arc.x = that.retry.x-128;
       arc.y = that.retry.y-128;
       that.parentNode.addChild(arc);
-      that.parentNode.initStage();
+      that.parentNode.initStage(GAME.currentScene.mode);
       removeResult();
     });
 
@@ -2844,14 +2845,14 @@ var Result = Class.create(Group,{
       });
     }
     this.tl.delay(50 + i*15).then(function(){
-      if(LEVEL){
+      if(LEVEL && GAME.currentScene.mode === 'normal'){
         that.parentNode.addChild(that.prevStage);
         that.prevStage.tl.scaleTo(0,0,0).then(function(){
           that.prevStage._element.className = 'black changeBu';
         }).scaleTo(1,1,15,BOUNCE_EASEOUT);
       }
 
-      if(LEVEL !== GAME.currentScene.STAGES.length - 1){
+      if(LEVEL !== GAME.currentScene.STAGES.length - 1 && GAME.currentScene.mode === 'normal'){
         that.parentNode.addChild(that.nextStage);
         that.nextStage.tl.scaleTo(0,0,0).then(function(){
           that.nextStage._element.className = 'black changeBu';
@@ -4388,26 +4389,35 @@ function makeJSON(stages){
       if(stages[xNum][yNum]){
         //スタートだった場合は最初に登録してあるので無視する
         if(stages[xNum][yNum] != "start"){
-          if( stages[xNum][yNum].name == "pipe"){
-            //親パイプだった場合に子パイプも整形する
-            var thePipeEntity = pipeManager.pipeEntity;
-            var theColor = stages[xNum][yNum].color;
-            pipeParentTmpObj = { x:thePipeEntity[theColor].parent.x, y:thePipeEntity[theColor].parent.y , color:theColor };
-            pipeChildTmpObj = { x:thePipeEntity[theColor].child.x , y:thePipeEntity[theColor].child.y, direction:thePipeEntity[theColor].child.direction };
-            //defineで使える形に直す
-            var pipeJSON = { x:pipeParentTmpObj.x, y:pipeParentTmpObj.y, name:'pipe', color:theColor, pipeStatus: { x:pipeChildTmpObj.x, y:pipeChildTmpObj.y, direction:pipeChildTmpObj.direction } };
-            objJSONArray.push(pipeJSON);
-          }else{
-            objJSON = { x:xNum, y:yNum, name:stages[xNum][yNum] };
-            objJSONArray.push(objJSON);
+          //小パイプも親の方で整形するので無視する
+          if(stages[xNum][yNum].name != "pipeOut"){
+            if( stages[xNum][yNum].name == "pipe"){
+              //親パイプだった場合に子パイプも整形する
+              var thePipeEntity = pipeManager.pipeEntity;
+              var theColor = stages[xNum][yNum].color;
+              pipeParentTmpObj = { x:thePipeEntity[theColor].parent.x, y:thePipeEntity[theColor].parent.y , color:theColor };
+              pipeChildTmpObj = { x:thePipeEntity[theColor].child.x , y:thePipeEntity[theColor].child.y, direction:thePipeEntity[theColor].child.direction };
+              //defineで使える形に直す
+              var pipeJSON = { x:pipeParentTmpObj.x, y:pipeParentTmpObj.y, name:'pipe', color:theColor, pipeStatus: { x:pipeChildTmpObj.x, y:pipeChildTmpObj.y, direction:pipeChildTmpObj.direction } };
+              objJSONArray.push(pipeJSON);
+            }else if(stages[xNum][yNum] == "diffusioner" || stages[xNum][yNum] == "slanter" || stages[xNum][yNum] == "star"){
+              //diffusionerかslanterの場合かstarの場合
+              objJSON = { x:xNum, y:yNum, name:stages[xNum][yNum] };
+              objJSONArray.push(objJSON);
+            }
+            else{
+              //blockの場合
+              objJSON = { x:xNum, y:yNum, name:'block',color:stages[xNum][yNum] };
+              objJSONArray.push(objJSON);
+            }
           }
         }
       }
     }
   }
-
+  
+  console.log(JSON.stringify(objJSONArray));
   doPost(JSON.stringify(objJSONArray),'No Name');
-
 }
 
 function doPost(stageString,userName){
@@ -4539,6 +4549,12 @@ var EditStart = Class.create(Start,{
   },
   registJSON: function registJSON(){
     creater.stages[this.xId][this.yId] = this.objName;
+  },
+  ontouchstart: function (){
+    //消しゴム
+    if(creater.penColor == "eraser"){
+      GAME.currentScene.removeChild(this);
+    }
   }
 });
 
@@ -4676,6 +4692,20 @@ var EditSlanter = Class.create(EditObj,{
       leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
     };
     this.color = "green";
+  },
+  beamFire: function beamFire(){
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 2
+      }
+      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      i++;
+    }
   }
 });
 

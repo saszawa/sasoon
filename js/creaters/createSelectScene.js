@@ -10,6 +10,7 @@ function createSelectScene(){
   var visibleStageGroup;               // スクロールさせるステージ
   var isMoving = false;
 
+
   // スクロールの処理
   selectScene.on('touchstart',function(e){
     if(isMoving){ return false; }

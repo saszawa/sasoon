@@ -55,7 +55,7 @@ var Result = Class.create(Group,{
       arc.y = that.nextStage.y-128;
       that.parentNode.addChild(arc);
       LEVEL++;
-      that.parentNode.initStage();
+      that.parentNode.initStage(GAME.currentScene.mode);
       removeResult();
     });
 
@@ -71,7 +71,7 @@ var Result = Class.create(Group,{
       arc.y = that.prevStage.y-128;
       that.parentNode.addChild(arc);
       LEVEL--;
-      that.parentNode.initStage();
+      that.parentNode.initStage(GAME.currentScene.mode);
       removeResult();
     });
 
@@ -96,7 +96,7 @@ var Result = Class.create(Group,{
       arc.x = that.retry.x-128;
       arc.y = that.retry.y-128;
       that.parentNode.addChild(arc);
-      that.parentNode.initStage();
+      that.parentNode.initStage(GAME.currentScene.mode);
       removeResult();
     });
 
@@ -132,14 +132,14 @@ var Result = Class.create(Group,{
       });
     }
     this.tl.delay(50 + i*15).then(function(){
-      if(LEVEL){
+      if(LEVEL && GAME.currentScene.mode === 'normal'){
         that.parentNode.addChild(that.prevStage);
         that.prevStage.tl.scaleTo(0,0,0).then(function(){
           that.prevStage._element.className = 'black changeBu';
         }).scaleTo(1,1,15,BOUNCE_EASEOUT);
       }
 
-      if(LEVEL !== GAME.currentScene.STAGES.length - 1){
+      if(LEVEL !== GAME.currentScene.STAGES.length - 1 && GAME.currentScene.mode === 'normal'){
         that.parentNode.addChild(that.nextStage);
         that.nextStage.tl.scaleTo(0,0,0).then(function(){
           that.nextStage._element.className = 'black changeBu';

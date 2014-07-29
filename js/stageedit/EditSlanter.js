@@ -18,5 +18,19 @@ var EditSlanter = Class.create(EditObj,{
       leftTop:  {moveX: -MOVE_PX ,moveY: -MOVE_PX}
     };
     this.color = "green";
+  },
+  beamFire: function beamFire(){
+    var i = 0;
+    for(var beam in this.beamStatus){
+      // 初期設定的な
+      var beamInit = {
+        x: this.x+BOX_SIZE/2-BEAM_SIZE/2,
+        y: this.y+BOX_SIZE/2-BEAM_SIZE/2,
+        parentBlock:this,
+        beamLength: 2
+      }
+      GAME.currentScene.addChild(new EditBeam(this.beamStatus[beam],beamInit));
+      i++;
+    }
   }
 });
