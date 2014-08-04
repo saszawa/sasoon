@@ -31,7 +31,7 @@ var SendButton = Class.create(Sprite,{
       return;
     }
  
-    alert(LANGUAGE[COUNTRYCODE].sendConfirm);
+
     makeJSON(creater.stages);
   }
 });
