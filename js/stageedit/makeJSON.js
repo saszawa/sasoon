@@ -33,6 +33,10 @@ function makeJSON(stages){
               //diffusionerかslanterの場合かstarの場合
               objJSON = { x:xNum, y:yNum, name:stages[xNum][yNum] };
               objJSONArray.push(objJSON);
+            }else if(stages[xNum][yNum] == "goal"){
+              //goalの場合
+                objJSON = { x:xNum, y:yNum, name:'goal'};
+                objJSONArray.push(objJSON);
             }
             else{
               //blockの場合
@@ -44,6 +48,11 @@ function makeJSON(stages){
       }
     }
   }
-  
+ 
+  console.log(JSON.stringify(objJSONArray));
+  // 入力欄付きのダイアログボックスを表示する
+  var result = prompt(LANGUAGE[COUNTRYCODE].canInputName,LANGUAGE[COUNTRYCODE].yourName);
+
+  input_return.value = result;
   doPost(JSON.stringify(objJSONArray),'No Name');
 }

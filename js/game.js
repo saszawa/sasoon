@@ -1086,7 +1086,9 @@ var LANGUAGE = {
     enterPipeError: "ワープオブジェクトは対となる出口が設定されていないと投稿できません",
     enterStartError: "スタートが置かれていないステージは実行できません",
     sameColorParentError: "既に置いてある色のワープオブジェクトは置く事が出来ません",
-    sendConfirm: "現在のステージを投稿します"
+    sendConfirm: "現在のステージを投稿します",
+    canInputName: "名前を入力できます",
+    yourName: "あなたの名前"
   },
   en:{
     title:"Touch<br /><span>Bloomy</span>",
@@ -1136,7 +1138,9 @@ var LANGUAGE = {
     enterPipeError: "Please check Warp Object's exit",
     enterStartError: "You should put Start Object!",
     sameColorParentError: "Cannot put same color Warp Object!",
-    sendConfirm: "Post this stage data"
+    sendConfirm: "Post this stage data",
+    canInputName: "You can Input your name",
+    yourName: "your name"
   }
 }
 
@@ -4404,6 +4408,10 @@ function makeJSON(stages){
               //diffusionerかslanterの場合かstarの場合
               objJSON = { x:xNum, y:yNum, name:stages[xNum][yNum] };
               objJSONArray.push(objJSON);
+            }else if(stages[xNum][yNum] == "goal"){
+              //goalの場合
+                objJSON = { x:xNum, y:yNum, name:'goal'};
+                objJSONArray.push(objJSON);
             }
             else{
               //blockの場合
@@ -4415,8 +4423,12 @@ function makeJSON(stages){
       }
     }
   }
-  
+ 
   console.log(JSON.stringify(objJSONArray));
+  // 入力欄付きのダイアログボックスを表示する
+  var result = prompt(LANGUAGE[COUNTRYCODE].canInputName,LANGUAGE[COUNTRYCODE].yourName);
+
+  input_return.value = result;
   doPost(JSON.stringify(objJSONArray),'No Name');
 }
 
@@ -5462,7 +5474,7 @@ var SendButton = Class.create(Sprite,{
       return;
     }
  
-    alert(LANGUAGE[COUNTRYCODE].sendConfirm);
+
     makeJSON(creater.stages);
   }
 });
