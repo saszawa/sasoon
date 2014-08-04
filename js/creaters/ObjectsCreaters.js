@@ -198,19 +198,6 @@ function createOptionMenu(){
   });
   menuGroup.addChild(deleteDataLabel);
 
-  // 全ステージを出現ボタン
-  var openAllStage = new ExLabel('<button id="allStage" class="btn-long">'+LANGUAGE[COUNTRYCODE].optionAllStage+'</button>');
-  openAllStage.setClassName('openAllStage optionLayer');
-  openAllStage.on('touchend',function(){
-    var allData = [];
-    for(var i = 0; i < STAGES.length;i++){
-      allData.push(0);
-    }
-    localStorage.setItem("normal", JSON.stringify(allData));
-    alert(LANGUAGE[COUNTRYCODE].optionAllStageUnlock);
-  });
-  openAllStage.y = 460;
-  menuGroup.addChild(openAllStage);
 
   return menuGroup;
 }
