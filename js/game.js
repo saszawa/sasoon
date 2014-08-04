@@ -1477,19 +1477,6 @@ function createOptionMenu(){
   });
   menuGroup.addChild(deleteDataLabel);
 
-  // 全ステージを出現ボタン
-  var openAllStage = new ExLabel('<button id="allStage" class="btn-long">'+LANGUAGE[COUNTRYCODE].optionAllStage+'</button>');
-  openAllStage.setClassName('openAllStage optionLayer');
-  openAllStage.on('touchend',function(){
-    var allData = [];
-    for(var i = 0; i < STAGES.length;i++){
-      allData.push(0);
-    }
-    localStorage.setItem("normal", JSON.stringify(allData));
-    alert(LANGUAGE[COUNTRYCODE].optionAllStageUnlock);
-  });
-  openAllStage.y = 460;
-  menuGroup.addChild(openAllStage);
 
   return menuGroup;
 }
@@ -3999,8 +3986,11 @@ function playSound(soundName){
     AUDIO_LIST[soundName].volume = VOLUME;
     // サウンド再生
     AUDIO_LIST[soundName].play();
+    //一回からにする
+    var src = AUDIO_LIST[soundName].src;
+    AUDIO_LIST[soundName] = void 0;
     // // 次呼ばれた時用に新たに生成
-    AUDIO_LIST[soundName] = new Audio( AUDIO_LIST[soundName].src );
+    AUDIO_LIST[soundName] = new Audio( src );
   }
 }
 
@@ -4427,8 +4417,6 @@ function makeJSON(stages){
   console.log(JSON.stringify(objJSONArray));
   // 入力欄付きのダイアログボックスを表示する
   var result = prompt(LANGUAGE[COUNTRYCODE].canInputName,LANGUAGE[COUNTRYCODE].yourName);
-
-  input_return.value = result;
   doPost(JSON.stringify(objJSONArray),'No Name');
 }
 
