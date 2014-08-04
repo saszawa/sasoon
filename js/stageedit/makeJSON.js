@@ -52,7 +52,5 @@ function makeJSON(stages){
   console.log(JSON.stringify(objJSONArray));
   // 入力欄付きのダイアログボックスを表示する
   var result = prompt(LANGUAGE[COUNTRYCODE].canInputName,LANGUAGE[COUNTRYCODE].yourName);
-
-  input_return.value = result;
   doPost(JSON.stringify(objJSONArray),'No Name');
 }
