@@ -1,28 +1,25 @@
 sasoon
 ======
 
-http://touchbloomy.com
-左記URLのブラウザゲーム　TouchBloomy　のソースコードのリポジトリです。
+![](http://getgold.jp/files/2014/08/00118.jpg)
 
-対応ブラウザ: GoogleChrome, Safari
+ブラウザゲーム　[TouchBloomy](http://touchbloomy.com)　のソースコードのリポジトリです。
+
+##対応ブラウザ
+
+- GoogleChrome
+- Safari
 
 このリポジトリに関するお問い合わせは
-吉村　智志
-satoshi.yoshimura.so@gmail.com
+**[吉村　智志](satoshi.yoshimura.so@gmail.com)**
 まで
 
 
-
-
-
-
-
+##License
 
 このリポジトリの内容はGPLライセンスが適用されています。
 
-GNU 一般公衆利用許諾契約書
-http://www.opensource.jp/gpl/gpl.ja.html
-
+[GNU 一般公衆利用許諾契約書](http://www.opensource.jp/gpl/gpl.ja.html)
 
 TouchBloomy This is browser game.
 Copyright (C) 2014  Satoshi Yoshimura
@@ -41,6 +38,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
+----
 
 このプログラムはフリーソフトウェアです。あなたはこれを、フリーソフトウェ
 ア財団によって発行された GNU 一般公衆利用許諾契約書(バージョン2か、希
