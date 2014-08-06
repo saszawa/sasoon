@@ -11,7 +11,8 @@ sasoon
 - Safari
 
 このリポジトリに関するお問い合わせは
-**[吉村　智志](satoshi.yoshimura.so@gmail.com)**
+吉村　智志
+satoshi.yoshimura.so@gmail.com
 まで
 
 
