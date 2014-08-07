@@ -50,6 +50,7 @@ var Beam = Class.create(Sprite,{
          this.opacity -= 0.1;
          if(this.opacity < 0){
            GAME.currentScene.removeChild(this);
+           delete this;
          }
        }
   }
