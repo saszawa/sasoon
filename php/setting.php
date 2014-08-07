@@ -4,7 +4,7 @@ $db_name = 'TouchBloomy';
 $host_name = 'localhost';
 $dsn = "mysql:dbname={$db_name};host={$host_name};charset=utf8;";
 $user = 'root';
-$password = '';
+$password = 'root';
 
 try{
   $pdo = new PDO($dsn, $user, $password);
