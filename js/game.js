@@ -987,8 +987,34 @@ var STAGES = [
 ]
 
 
-
 ];
+/*
+,
+[
+{"x":3,"y":4,"name":"start"},
+{"x":0,"y":2,"name":"block","color":"purple"},
+{"x":0,"y":4,"name":"block","color":"blue"},
+{"x":1,"y":3,"name":"star"},
+{"x":1,"y":4,"name":"slanter"},
+{"x":1,"y":5,"name":"slanter"},
+{"x":2,"y":2,"name":"block","color":"purple"},
+{"x":2,"y":3,"name":"slanter"},
+{"x":2,"y":6,"name":"diffusioner"},
+{"x":3,"y":1,"name":"star"},
+{"x":4,"y":2,"name":"block","color":"blue"},
+{"x":4,"y":3,"name":"block","color":"purple"},
+{"x":4,"y":4,"name":"pipe","color":"blue","pipeStatus":{"x":2,"y":4,"direction":"right"}},
+{"x":4,"y":6,"name":"block","color":"red"},
+{"x":5,"y":4,"name":"pipe","color":"green","pipeStatus":{"x":7,"y":4,"direction":"right"}},
+{"x":6,"y":2,"name":"block","color":"green"},
+{"x":6,"y":3,"name":"block","color":"purple"},
+{"x":6,"y":4,"name":"goal"},
+{"x":6,"y":6,"name":"block","color":"purple"},
+{"x":8,"y":4,"name":"slanter"},
+{"x":9,"y":4,"name":"star"},
+{"x":9,"y":6,"name":"block","color":"orange"}
+]
+*/
 // pipeの使い方
 // { x:4 ,y:2 ,name: 'pipe' ,pipeStatus:{x:5 ,y:7 ,direction:'right'} },
 //チュートリアル用のステージ配列
@@ -2999,6 +3025,7 @@ var Beam = Class.create(Sprite,{
          this.opacity -= 0.1;
          if(this.opacity < 0){
            GAME.currentScene.removeChild(this);
+           delete this;
          }
        }
   }
@@ -4413,11 +4440,13 @@ function makeJSON(stages){
       }
     }
   }
- 
+
   console.log(JSON.stringify(objJSONArray));
   // 入力欄付きのダイアログボックスを表示する
   var result = prompt(LANGUAGE[COUNTRYCODE].canInputName,LANGUAGE[COUNTRYCODE].yourName);
-  doPost(JSON.stringify(objJSONArray),'No Name');
+  result = result || "No Name";
+  console.log(result);
+  doPost(JSON.stringify(objJSONArray),result);
 }
 
 function doPost(stageString,userName){
