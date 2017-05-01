@@ -194,6 +194,7 @@ function createOptionMenu(){
   	if(window.confirm(LANGUAGE[COUNTRYCODE].optionDeleteConf)){
       localStorage.clear();
       alert(LANGUAGE[COUNTRYCODE].optionDeleteComp);
+      location.reload();
   	}
   });
   menuGroup.addChild(deleteDataLabel);
@@ -371,6 +372,15 @@ function createSurfaces(){
   ctxY.beginPath();
   ctxY.fillStyle = COLORS.yellow;
   drawStar(BOX_SIZE/2,BOX_SIZE/2,5,BOX_SIZE/2,BOX_SIZE/3,ctxY);
+  ctxY.closePath();
+  ctxY.fill();
+
+  //エディターの解放前の星の数用
+  LOCK_STAR = new Surface(BOX_SIZE,BOX_SIZE);
+  var ctxY = LOCK_STAR.context;
+  ctxY.beginPath();
+  ctxY.fillStyle = COLORS.yellow;
+  drawStar(BOX_SIZE/4,BOX_SIZE/4,5,BOX_SIZE/4,BOX_SIZE/6,ctxY);
   ctxY.closePath();
   ctxY.fill();
 

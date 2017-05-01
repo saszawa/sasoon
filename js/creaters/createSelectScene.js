@@ -117,7 +117,6 @@ function createSelectScene(){
       userDataEdit = {};
     }
 
-
     var row = 1.5;
     var column = 0;
     var i = 0,x=0,y=2.5

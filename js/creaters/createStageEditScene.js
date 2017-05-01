@@ -1,4 +1,15 @@
 function createStageEditScene(){
+
+  // ローカルストレージからデータを取得
+  userData = JSON.parse(localStorage.getItem("normal"));
+  if(userData === null){
+    userData = [];
+  }
+  var dataLength = userData.length;
+  if(dataLength < 10){
+    return;
+  }
+
   var stageEditScene = new Scene();
 
   boxManager = new BoxManager();
@@ -36,11 +47,18 @@ function createStageEditScene(){
 //  optionMenuButton.x = 500;
 //  optionMenuButton.y = 600; 
 //  optionMenuButton.menuOpen = false;
+  //
 
   //パレットの作成  //
   //この辺グループかクラスにしたい
 //  var pallet = new ExLabel();
   //選択用Blockを置いていく
+  //星の数を計算
+  var starNum = 0;
+  for(var i = 0; i < dataLength; i++){
+    starNum = starNum + userData[i];
+  }
+
   var blueInk = new BlockInk('blue');
   blueInk.x = 10;
   blueInk.y = 670;
@@ -59,11 +77,28 @@ function createStageEditScene(){
   var orangeInk = new BlockInk('orange');
   orangeInk.x = 250;
   orangeInk.y = 670;
-  stageEditScene.addChild(orangeInk);
+  orangeInk._element.className = "orange edit_lock";
+  //ロック用ラベル 上にかぶせる
+  var lockLabelOrange = new ExLabel("x30",64,64);
+  lockLabelOrange.x = 250;
+  lockLabelOrange.y = 670;
+  lockLabelOrange.setClassName("edit_lock");
+  stageEditScene.addChild(lockLabelOrange)
 
   var purpleInk = new BlockInk('purple');
   purpleInk.x = 330;
   purpleInk.y = 670;
+  purpleInk._element.className = "purple edit_lock";
+  
+  //70個でオレンジ、紫解放
+  if(starNum >= 70 ){
+    orangeInk.isRelease = true;
+    orangeInk._element.className = "orange";
+    stageEditScene.removeChild(lockLabelOrange);
+    purpleInk.isRelease = true;
+    purpleInk._element.className = "purple";
+  }
+  stageEditScene.addChild(orangeInk);
   stageEditScene.addChild(purpleInk);
 
   var startInk = new BlockInk('start');
@@ -71,22 +106,31 @@ function createStageEditScene(){
   startInk.y = 750;
   stageEditScene.addChild(startInk);
 
-  var slanterInk = new SlanterInk('green');
-  slanterInk.x = 250;
-  slanterInk.y = 750;
-  stageEditScene.addChild(slanterInk);
+  //星100個でスランター
+  if(starNum >= 100){
+    var slanterInk = new SlanterInk('green');
+    slanterInk.x = 250;
+    slanterInk.y = 750;
+    stageEditScene.addChild(slanterInk);
+  }
 
-  var diffusionerInk = new DiffusionerInk();
-  diffusionerInk.x = 330;
-  diffusionerInk.y = 750;
-  stageEditScene.addChild(diffusionerInk);
+  //星120個で王将
+  if(starNum >= 120 ){
+    var diffusionerInk = new DiffusionerInk();
+    diffusionerInk.x = 330;
+    diffusionerInk.y = 750;
+    stageEditScene.addChild(diffusionerInk);
+  }
 
-  var pipeInk = new PipeInk('blue');
-  pipeInk.x = 410;
-  pipeInk.y = 670;
-  //パイプは親置いたら子供置けるようにインク変えるのでその対応
-  pipeManager.pipeInk = pipeInk;
-  stageEditScene.addChild(pipeInk);
+  //150でパイプ
+  if(starNum >= 150){
+    var pipeInk = new PipeInk('blue');
+    pipeInk.x = 410;
+    pipeInk.y = 670;
+    //パイプは親置いたら子供置けるようにインク変えるのでその対応
+    pipeManager.pipeInk = pipeInk;
+    stageEditScene.addChild(pipeInk);
+  }
 
   var goalInk = new GoalInk();
   goalInk.x = 10;

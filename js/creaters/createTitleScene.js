@@ -4,6 +4,13 @@ function createTitleScene(){
   var titleLabel = createTitleLabel();
   titleScene.addChild(titleLabel);
 
+  // ローカルストレージからデータを取得
+  userData = JSON.parse(localStorage.getItem("normal"));
+  if(userData === null){
+    userData = [];
+  }
+  var dataLength = userData.length;
+
   titleScene.on('enter',function(){
     titleBackAnim.startAnim();
   });
@@ -15,7 +22,9 @@ function createTitleScene(){
     titleScene.addChild(gameStartLabel);
     titleScene.addChild(tutorialLabel);
     titleScene.addChild(optionMenuButton);
-    titleScene.addChild(stageEditLabel);
+    if(dataLength > 10 ){
+      titleScene.addChild(stageEditLabel);
+    }
   });
 
   var titleBackAnim = new TitleBackAnim();
@@ -65,12 +74,17 @@ function createTitleScene(){
     GAME.replaceScene(tutorialScene);
   });
 
-  //stageエディット画面
-  var stageEditScene = createStageEditScene();
-  var stageEditLabel = createStageEditLabel();
-  stageEditLabel.on('touchend',function(){
-    GAME.replaceScene(stageEditScene);
-  });
+
+  //10以上越してたらエディター解放
+  if(dataLength > 10 ){
+    //stageエディット画面
+    var stageEditScene = createStageEditScene();
+    var stageEditLabel = createStageEditLabel();
+    stageEditLabel.on('touchend',function(){
+      GAME.replaceScene(stageEditScene);
+    });
+  }
+
 
   var optionMenuButton = createOptionMenuButton();
   var optionMenu = createOptionMenu();

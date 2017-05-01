@@ -479,3 +479,20 @@ div.edit_direction_arrow{
   font-size: 24px;
   color: #f4d03f;
 }
+
+
+.edit_lock{
+  font-family:'WebHostingHub-Glyphs';
+  content:'\f0be';
+  text-align: center;
+  position: absolute;
+  color: $col-white;
+  top: 0;
+  left: 0;
+  width: 64px;
+  height: 64px;
+  line-height: 64px;
+  background: rgba(0,0,0,0.5);
+  z-index:9998;
+}
+
